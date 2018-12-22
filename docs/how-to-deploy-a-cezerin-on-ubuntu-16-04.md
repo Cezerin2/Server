@@ -9,7 +9,7 @@
 * [Turn off Developer Mode](#7-turn-off-developer-mode)
 
 ## 1. Create droplet
-I'll use [DigitalOcean](https://www.digitalocean.com/) to deploy Cezerin.
+I'll use [DigitalOcean](https://www.digitalocean.com/) to deploy Cezerin2.
 
 1. Click **Create droplet**
  - Choose an image: `Ubuntu 16.04.4 x64`
@@ -61,7 +61,7 @@ docker run -d \
 -e DB_PORT=27017 \
 -e DB_NAME=shop \
 -v /var/www/store/content:/var/www/cezerin/public/content \
-cezerin/cezerin:latest
+cezerin2/cezerin2:latest
 ```
 Check logs
 ```shell
@@ -69,7 +69,7 @@ docker logs store
 ```
 
 ## 5. Preparing Database
-Run `npm run setup` on Cezerin container to add default data and create indexes.
+Run `npm run setup` on Cezerin2 container to add default data and create indexes.
 
 ```shell
 sudo docker exec store bash -c "npm run setup"

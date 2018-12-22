@@ -48,7 +48,7 @@ docker run --name store-db -d -p 27017:27017 -v /var/www/store-db:/data/db mongo
 1. Clone a Git repository
     ```shell
     cd /var/www
-    git clone https://github.com/cezerin/cezerin
+    git clone https://github.com/cezerin2/cezerin2
     ```
 2. Change setting
     ```

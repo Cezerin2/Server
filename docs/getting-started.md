@@ -12,7 +12,7 @@
 - MongoDB >= 3.2
 
 ```shell
-git clone https://github.com/cezerin/cezerin.git cezerin
+git clone https://github.com/cezerin2/cezerin2.git cezerin
 cd cezerin
 npm install
 npm run build

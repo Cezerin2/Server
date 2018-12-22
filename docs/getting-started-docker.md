@@ -5,14 +5,14 @@
 
 ## Docker
 
-We'll use `cezerin/cezerin` image. [About image](https://github.com/cezerin/docker-cezerin).
+We'll use `cezerin/cezerin` image. [About image](https://github.com/cezerin2/docker-cezerin2).
 
 1. Run MongoDB
 ```shell
 docker run --name store-db -v /var/www/store-db:/data/db -d mongo:latest
 ```
 
-2. Run Cezerin
+2. Run Cezerin2
 ```shell
 docker run -d \
 --name store \
@@ -24,7 +24,7 @@ docker run -d \
 -e DB_USER=user \
 -e DB_PASS=password \
 -v /var/www/store:/var/www/cezerin \
-cezerin/cezerin:latest
+cezerin2/cezerin2:latest
 ```
 
 Open http://localhost to see your store.  
@@ -40,7 +40,7 @@ version: '3'
 
 services:
   app:
-    image: cezerin/cezerin
+    image: cezerin2/cezerin2
     environment:
       - DB_HOST=db
       - DB_PORT=27017
@@ -64,5 +64,5 @@ services:
     restart: always
 ```
 
-`/var/www/store` - folder with Cezerin  
+`/var/www/store` - folder with Cezerin2 
 `/var/www/store-db` - folder with MongoDB data
