@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import CezerinClient from 'cezerin-client';
+import CezerinClient from 'cezerin2-client';
 import serverSettings from './settings';
 
 const TOKEN_PAYLOAD = { email: 'store', scopes: ['admin'] };
