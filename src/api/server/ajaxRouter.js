@@ -1,6 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import CezerinClient from 'cezerin-client';
+import CezerinClient from 'cezerin2-client';
 import serverSettings from './lib/settings';
 const ajaxRouter = express.Router();
 
