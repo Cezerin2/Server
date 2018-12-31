@@ -26,10 +26,47 @@ const ItemImage = ({ images }) => {
 };
 
 const ItemPrice = ({ product, settings }) => {
-	let priceFormatted = helper.formatCurrency(product.price, settings);
-	let priceOldFormatted = product.on_sale
-		? helper.formatCurrency(product.regular_price, settings)
-		: '';
+	let priceFormatted;
+	let priceOldFormatted;
+
+	if (product.price_range) {
+		priceFormatted = `${helper.formatCurrency(
+			product.min_price,
+			settings
+		)} - ${helper.formatCurrency(product.max_price, settings)}`;
+		if (product.on_sale) {
+			if (product.regular_price_range) {
+				priceOldFormatted = `${helper.formatCurrency(
+					product.regular_min_price,
+					settings
+				)} - ${helper.formatCurrency(product.regular_max_price, settings)}`;
+			} else {
+				priceOldFormatted = helper.formatCurrency(
+					product.regular_price,
+					settings
+				);
+			}
+		} else {
+			priceOldFormatted = '';
+		}
+	} else {
+		priceFormatted = helper.formatCurrency(product.price, settings);
+		if (product.on_sale) {
+			if (product.regular_price_range) {
+				priceOldFormatted = `${helper.formatCurrency(
+					product.regular_min_price,
+					settings
+				)} - ${helper.formatCurrency(product.regular_max_price, settings)}`;
+			} else {
+				priceOldFormatted = helper.formatCurrency(
+					product.regular_price,
+					settings
+				);
+			}
+		} else {
+			priceOldFormatted = '';
+		}
+	}
 
 	return (
 		<div>

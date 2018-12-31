@@ -35,6 +35,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 			const { productId } = ownProps.match.params;
 			dispatch(updateVariant(productId, variantId, { price: value }));
 		},
+		onSalePriceChange: (variantId, value) => {
+			const { productId } = ownProps.match.params;
+			dispatch(updateVariant(productId, variantId, { sale_price: value }));
+		},
 		onStockChange: (variantId, value) => {
 			const { productId } = ownProps.match.params;
 			dispatch(updateVariant(productId, variantId, { stock_quantity: value }));

@@ -81,6 +81,7 @@ class ProductVariantsService {
 			id: new ObjectID(),
 			sku: parse.getString(data.sku),
 			price: parse.getNumberIfPositive(data.price) || 0,
+			sale_price: parse.getNumberIfPositive(data.sale_price) || 0,
 			stock_quantity: parse.getNumberIfPositive(data.stock_quantity) || 0,
 			weight: parse.getNumberIfPositive(data.weight) || 0,
 			options: []
@@ -102,6 +103,11 @@ class ProductVariantsService {
 
 		if (data.price !== undefined) {
 			variant['variants.$.price'] = parse.getNumberIfPositive(data.price) || 0;
+		}
+
+		if (data.sale_price !== undefined) {
+			variant['variants.$.sale_price'] =
+				parse.getNumberIfPositive(data.sale_price) || 0;
 		}
 
 		if (data.stock_quantity !== undefined) {

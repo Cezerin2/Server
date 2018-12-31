@@ -17,6 +17,8 @@ const validate = values => {
 	const errors = {};
 	const requiredFields = ['name'];
 	const numberFields = [
+		'regular_max_price',
+		'sale_max_price',
 		'regular_price',
 		'sale_price',
 		'stock_quantity',
@@ -88,6 +90,8 @@ const ProductInventoryForm = ({
 	initialValues,
 	settings
 }) => {
+	const hasVariable = initialValues !== null ? initialValues.variable : false;
+
 	return (
 		<form onSubmit={handleSubmit}>
 			<Paper className="paper-box" zDepth={1}>
@@ -97,26 +101,52 @@ const ProductInventoryForm = ({
 							<div className="blue-title">{messages.products_pricing}</div>
 							<div className="row">
 								<div className="col-xs-6">
-									<Field
-										name="regular_price"
-										component={TextField}
-										floatingLabelText={
-											messages.products_regularPrice +
-											` (${settings.currency_symbol})`
-										}
-										fullWidth={true}
-									/>
+									{hasVariable && initialValues.max_price > 0 ? (
+										<Field
+											name="regular_max_price"
+											component={TextField}
+											floatingLabelText={
+												messages.products_regularPrice +
+												` (${settings.currency_symbol})`
+											}
+											fullWidth={true}
+											disabled={hasVariable}
+										/>
+									) : (
+										<Field
+											name="regular_price"
+											component={TextField}
+											floatingLabelText={
+												messages.products_regularPrice +
+												` (${settings.currency_symbol})`
+											}
+											fullWidth={true}
+										/>
+									)}
 								</div>
 								<div className="col-xs-6">
-									<Field
-										name="sale_price"
-										component={TextField}
-										floatingLabelText={
-											messages.products_salePrice +
-											` (${settings.currency_symbol})`
-										}
-										fullWidth={true}
-									/>
+									{hasVariable && initialValues.max_price > 0 ? (
+										<Field
+											name="sale_max_price"
+											component={TextField}
+											floatingLabelText={
+												messages.products_regularPrice +
+												` (${settings.currency_symbol})`
+											}
+											fullWidth={true}
+											disabled={hasVariable}
+										/>
+									) : (
+										<Field
+											name="sale_price"
+											component={TextField}
+											floatingLabelText={
+												messages.products_salePrice +
+												` (${settings.currency_symbol})`
+											}
+											fullWidth={true}
+										/>
+									)}
 								</div>
 								<div className="col-xs-6">
 									<Field

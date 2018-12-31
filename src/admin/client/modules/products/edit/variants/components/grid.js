@@ -52,6 +52,7 @@ const VariantRow = ({
 	options,
 	onSkuChange,
 	onPriceChange,
+	onSalePriceChange,
 	onStockChange,
 	onWeightChange,
 	onOptionChange,
@@ -111,6 +112,15 @@ const VariantRow = ({
 					type="number"
 					placeholder="0"
 					variantId={variant.id}
+					value={variant.sale_price}
+					onChange={onSalePriceChange}
+				/>
+			</div>
+			<div className={style.gridCol}>
+				<VariantInput
+					type="number"
+					placeholder="0"
+					variantId={variant.id}
 					value={variant.stock_quantity}
 					onChange={onStockChange}
 				/>
@@ -152,6 +162,7 @@ const ProductVariantsGrid = ({
 	productId,
 	onSkuChange,
 	onPriceChange,
+	onSalePriceChange,
 	onStockChange,
 	onWeightChange,
 	onOptionChange
@@ -180,6 +191,7 @@ const ProductVariantsGrid = ({
 					options={options}
 					onSkuChange={onSkuChange}
 					onPriceChange={onPriceChange}
+					onSalePriceChange={onSalePriceChange}
 					onStockChange={onStockChange}
 					onWeightChange={onWeightChange}
 					onOptionChange={onOptionChange}
@@ -194,6 +206,7 @@ const ProductVariantsGrid = ({
 				<div className={style.gridHeadRow}>
 					<div className={style.gridCol}>{messages.products_sku}</div>
 					<div className={style.gridCol}>{messages.products_price}</div>
+					<div className={style.gridCol}>{messages.products_salePrice}</div>
 					<div className={style.gridCol}>{messages.products_stock}</div>
 					<div className={style.gridCol}>{messages.products_weight}</div>
 					{headRowCols}

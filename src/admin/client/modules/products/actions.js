@@ -177,7 +177,7 @@ const getFilter = (state, offset = 0) => {
 	let filter = {
 		limit: 50,
 		fields:
-			'id,name,category_id,category_ids,category_name,sku,images,enabled,discontinued,stock_status,stock_quantity,price,on_sale,regular_price,url',
+			'id,name,category_id,category_ids,category_name,sku,images,enabled,discontinued,stock_status,stock_quantity,price,on_sale,regular_price,price_range,min_price,max_price,regular_min_price,regular_max_price,url',
 		search: searchTerm,
 		offset: offset,
 		sort: sortOrder

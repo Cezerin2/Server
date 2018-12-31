@@ -112,7 +112,7 @@ export default class ConfirmationDialog extends React.Component {
 				enabled: true,
 				discontinued: false,
 				fields:
-					'id,name,category_id,category_name,sku,enabled,discontinued,price,on_sale,regular_price',
+					'id,name,category_id,category_name,sku,enabled,discontinued,price,on_sale,regular_price,price_range,min_price,max_price,regular_min_price,regular_max_price',
 				search: value
 			})
 			.then(productsResponse => {

@@ -169,7 +169,7 @@ class ProductsArray extends React.Component {
 				.list({
 					limit: 50,
 					fields:
-						'id,name,enabled,discontinued,price,on_sale,regular_price,images',
+						'id,name,enabled,discontinued,price,on_sale,regular_price,images,price_range,min_price,max_price,regular_min_price,regular_max_price',
 					ids: ids
 				})
 				.then(productsResponse => {

@@ -335,6 +335,8 @@ class ProductsService {
 		let salePrice = '$sale_price';
 		let regularPrice = '$regular_price';
 		let costPrice = '$cost_price';
+		let variantsPrice = '$variants.price';
+		let variantsSalePrice = '$variants.sale_price';
 
 		let project = {
 			category_ids: 1,
@@ -344,12 +346,263 @@ class ProductsService {
 			date_created: 1,
 			date_updated: 1,
 			cost_price: costPrice,
-			regular_price: regularPrice,
-			sale_price: salePrice,
+			regular_price: {
+				$cond: {
+					if: {
+						$and: [
+							{
+								$gt: [
+									{
+										$size: { $ifNull: ['$variants', []] }
+									},
+									0
+								]
+							},
+							{
+								$gt: [
+									{
+										$max: variantsPrice
+									},
+									0
+								]
+							}
+						]
+					},
+					then: { $max: variantsPrice },
+					else: regularPrice
+				}
+			},
+			sale_price: {
+				$cond: {
+					if: {
+						$and: [
+							{
+								$gt: [
+									{
+										$size: { $ifNull: ['$variants', []] }
+									},
+									0
+								]
+							},
+							{
+								$gt: [
+									{
+										$max: variantsSalePrice
+									},
+									0
+								]
+							}
+						]
+					},
+					then: { $max: variantsSalePrice },
+					else: salePrice
+				}
+			},
 			date_sale_from: 1,
 			date_sale_to: 1,
 			images: 1,
-			prices: 1,
+			max_price: {
+				$cond: {
+					if: {
+						$gt: [
+							{
+								$size: { $ifNull: ['$variants', []] }
+							},
+							0
+						]
+					},
+					then: {
+						$cond: {
+							if: {
+								$and: [
+									{
+										$lt: [new Date(), '$date_sale_to']
+									},
+									{
+										$gt: [new Date(), '$date_sale_from']
+									},
+									{
+										$gt: [
+											{
+												$max: variantsSalePrice
+											},
+											0
+										]
+									}
+								]
+							},
+							then: {
+								$max: variantsSalePrice
+							},
+							else: {
+								$max: variantsPrice
+							}
+						}
+					},
+					else: null
+				}
+			},
+			min_price: {
+				$cond: {
+					if: {
+						$gt: [
+							{
+								$size: { $ifNull: ['$variants', []] }
+							},
+							0
+						]
+					},
+					then: {
+						$cond: {
+							if: {
+								$and: [
+									{
+										$lt: [new Date(), '$date_sale_to']
+									},
+									{
+										$gt: [new Date(), '$date_sale_from']
+									},
+									{
+										$gt: [
+											{
+												$min: variantsSalePrice
+											},
+											0
+										]
+									}
+								]
+							},
+							then: {
+								$min: variantsSalePrice
+							},
+							else: {
+								$min: variantsPrice
+							}
+						}
+					},
+					else: null
+				}
+			},
+			regular_max_price: {
+				$cond: {
+					if: {
+						$gt: [
+							{
+								$size: { $ifNull: ['$variants', []] }
+							},
+							0
+						]
+					},
+					then: {
+						$max: variantsPrice
+					},
+					else: null
+				}
+			},
+			regular_min_price: {
+				$cond: {
+					if: {
+						$gt: [
+							{
+								$size: { $ifNull: ['$variants', []] }
+							},
+							0
+						]
+					},
+					then: {
+						$min: variantsPrice
+					},
+					else: null
+				}
+			},
+			price_range: {
+				$cond: {
+					if: {
+						$and: [
+							{
+								$lt: [new Date(), '$date_sale_to']
+							},
+							{
+								$gt: [new Date(), '$date_sale_from']
+							},
+							{
+								$gt: [
+									{
+										$min: variantsSalePrice
+									},
+									0
+								]
+							}
+						]
+					},
+					then: {
+						$and: [
+							{
+								$gt: [
+									{
+										$size: { $ifNull: ['$variants', []] }
+									},
+									1
+								]
+							},
+							{
+								$ne: [
+									{
+										$min: variantsSalePrice
+									},
+									{
+										$max: variantsSalePrice
+									}
+								]
+							}
+						]
+					},
+					else: {
+						$and: [
+							{
+								$gt: [
+									{
+										$size: { $ifNull: ['$variants', []] }
+									},
+									1
+								]
+							},
+							{
+								$ne: [
+									{
+										$min: variantsPrice
+									},
+									{
+										$max: variantsPrice
+									}
+								]
+							}
+						]
+					}
+				}
+			},
+			regular_price_range: {
+				$and: [
+					{
+						$gt: [
+							{
+								$size: { $ifNull: ['$variants', []] }
+							},
+							1
+						]
+					},
+					{
+						$ne: [
+							{
+								$min: variantsPrice
+							},
+							{
+								$max: variantsPrice
+							}
+						]
+					}
+				]
+			},
 			quantity_inc: 1,
 			quantity_min: 1,
 			meta_description: 1,
@@ -404,8 +657,58 @@ class ProductsService {
 							}
 						]
 					},
-					then: salePrice,
-					else: regularPrice
+					then: {
+						$cond: {
+							if: {
+								$and: [
+									{
+										$gt: [
+											{
+												$size: { $ifNull: ['$variants', []] }
+											},
+											0
+										]
+									},
+									{
+										$gt: [
+											{
+												$max: variantsPrice
+											},
+											0
+										]
+									}
+								]
+							},
+							then: { $max: variantsSalePrice },
+							else: salePrice
+						}
+					},
+					else: {
+						$cond: {
+							if: {
+								$and: [
+									{
+										$gt: [
+											{
+												$size: { $ifNull: ['$variants', []] }
+											},
+											0
+										]
+									},
+									{
+										$gt: [
+											{
+												$max: variantsPrice
+											},
+											0
+										]
+									}
+								]
+							},
+							then: { $max: variantsPrice },
+							else: regularPrice
+						}
+					}
 				}
 			},
 			stock_status: {

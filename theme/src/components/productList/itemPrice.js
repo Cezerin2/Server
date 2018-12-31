@@ -5,6 +5,12 @@ import * as helper from '../../lib/helper';
 const FormattedCurrency = ({ number, settings }) =>
 	helper.formatCurrency(number, settings);
 
+const FormattedRangeCurrency = ({ min_price, max_price, settings }) =>
+	`${helper.formatCurrency(min_price, settings)} - ${helper.formatCurrency(
+		max_price,
+		settings
+	)}`;
+
 const ItemPrice = ({ product, settings }) => {
 	const priceStyle = {};
 	if (themeSettings.list_price_size && themeSettings.list_price_size > 0) {
@@ -23,6 +29,41 @@ const ItemPrice = ({ product, settings }) => {
 	if (product.stock_status === 'out_of_stock') {
 		return <div className="product-price">{text.outOfStock}</div>;
 	}
+
+	if (product.price_range) {
+		if (product.on_sale) {
+			return (
+				<div className="product-price">
+					<span className="product-new-price">
+						<FormattedRangeCurrency
+							settings={settings}
+							min_price={product.min_price}
+							max_price={product.max_price}
+						/>
+					</span>
+					<div class="row">
+						<del className="product-old-price-range">
+							<FormattedRangeCurrency
+								settings={settings}
+								min_price={product.regular_min_price}
+								max_price={product.regular_max_price}
+							/>
+						</del>
+					</div>
+				</div>
+			);
+		}
+		return (
+			<div className="product-price" style={priceStyle}>
+				<FormattedRangeCurrency
+					settings={settings}
+					min_price={product.min_price}
+					max_price={product.max_price}
+				/>
+			</div>
+		);
+	}
+
 	if (product.on_sale) {
 		return (
 			<div className="product-price">
