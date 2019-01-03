@@ -32,8 +32,7 @@ export default class PayPalButton extends React.Component {
 			{
 				// Set your environment
 				env: formSettings.env, // sandbox | production
-				// Show the buyer a 'Pay Now' button in the checkout flow
-				commit: true,
+
 				// Specify the style of the button
 				style: {
 					label: 'pay',
@@ -58,6 +57,15 @@ export default class PayPalButton extends React.Component {
 										total: formSettings.amount,
 										currency: formSettings.currency
 									}
+									//TODO currently there is an issue with with PayPal SDK, when adding
+									//a thir party payee rather than the app's owner, it will cause an error
+									//to solve this issue, a call to PayPal REST API must be implement on
+									//the server side
+									//**This feature is required if you want to build PayPal for your client */
+									//https://github.com/paypal/paypal-checkout/issues/464
+									// payee:{
+									// 	email: {receiver email here}
+									// }
 								}
 							]
 						},
@@ -67,9 +75,41 @@ export default class PayPalButton extends React.Component {
 					});
 				},
 				// Wait for the payment to be authorized by the customer
+
 				onAuthorize: function(data, actions) {
-					return actions.payment.execute().then(function() {
-						onPayment();
+					// Get the payment details
+
+					return actions.payment.get().then(function(data) {
+						if (
+							data.state.toLowerCase() === 'created' &&
+							data.payer.status.toLowerCase() === 'verified'
+						) {
+							// Display a confirmation button
+							document.querySelector('#paypal-button-container').style.display =
+								'none';
+							document.querySelector('#confirm').style.display = 'block';
+
+							// Listen for click on confirm button
+
+							document
+								.querySelector('#confirmButton')
+								.addEventListener('click', function() {
+									// Disable the button and show a loading indicator
+
+									document.querySelector('#confirmButton').innerText = '';
+									document.querySelector('#confirmButton').className =
+										'loading-process';
+									document.querySelector('#confirm').disabled = true;
+
+									// Execute the payment
+
+									return actions.payment.execute().then(function(res) {
+										if (res.state.toLowerCase() === 'approved') {
+											onPayment();
+										}
+									});
+								});
+						}
 					});
 				}
 			},
@@ -91,6 +131,18 @@ export default class PayPalButton extends React.Component {
 		return (
 			<div>
 				<div id="paypal-button-container" />
+				<div
+					id="confirm"
+					className="checkout-button-wrap"
+					style={{ display: 'none' }}
+				>
+					<button
+						id="confirmButton"
+						className="checkout-button button confirm-checkout"
+					>
+						Confirm Purchase
+					</button>
+				</div>
 			</div>
 		);
 	}
