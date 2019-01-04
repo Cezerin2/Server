@@ -78,7 +78,6 @@
   "products_stockPreorder": "Is preorder",
   "products_stockBackorder": "Allow backorders",
   "products_stockQuantity": "Stock quantity",
-  "products_discontinued": "Discontinued",
   "products_weight": "Weight",
   "products_dateSaleFrom": "Sale from",
   "products_dateSaleTo": "Sale to",
