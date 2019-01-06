@@ -661,11 +661,15 @@ class OrdersService {
 				subject: subject,
 				html: body
 			}),
-			mailer.send({
-				to: copyTo,
-				subject: subject,
-				html: body
-			})
+			() => {
+				if ((copyTo != null || copyTo != undefined) && copyTo.length > 0) {
+					mailer.send({
+						to: copyTo,
+						subject: subject,
+						html: body
+					});
+				}
+			}
 		]);
 	}
 
