@@ -1,10 +1,8 @@
-process.env.NODE_ENV = 'test';
-
-// Import the test dependencies
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import 'chai/register-should';
 import server from '../../src/api/server';
+import settings from '../../src/api/server/lib/settings';
 
 // Import the database
 import { db } from '../../src/api/server/lib/mongo';
@@ -64,7 +62,7 @@ describe('Products', () => {
 
 		// Create a Test Admin user for testing, adjust this e-mail address to
 		// match an existing user.
-		let existingAdminEmail = 'admin@test.com';
+		let existingAdminEmail = settings.existingAdminEmail;
 
 		chai
 			.request(server)

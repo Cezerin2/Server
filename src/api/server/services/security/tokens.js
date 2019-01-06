@@ -313,7 +313,7 @@ class SecurityTokensService {
 					requestFrom
 				})
 			};
-			const extractedToken = link.substr(19);
+			const extractedToken = link.substr(40);
 			const emailSent = await mailer.send(message);
 			return {
 				sent: emailSent,
