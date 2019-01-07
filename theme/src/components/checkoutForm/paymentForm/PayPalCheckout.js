@@ -57,15 +57,6 @@ export default class PayPalButton extends React.Component {
 										total: formSettings.amount,
 										currency: formSettings.currency
 									}
-									//TODO currently there is an issue with with PayPal SDK, when adding
-									//a thir party payee rather than the app's owner, it will cause an error
-									//to solve this issue, a call to PayPal REST API must be implement on
-									//the server side
-									//**This feature is required if you want to build PayPal for your client */
-									//https://github.com/paypal/paypal-checkout/issues/464
-									// payee:{
-									// 	email: {receiver email here}
-									// }
 								}
 							]
 						},
