@@ -129,9 +129,9 @@ export default class PayPalButton extends React.Component {
 				>
 					<button
 						id="confirmButton"
-						className="checkout-button button confirm-checkout"
+						className="checkout-button button confirm-checkout is-primary"
 					>
-						Confirm Purchase
+						Confirm
 					</button>
 				</div>
 			</div>
