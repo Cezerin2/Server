@@ -163,6 +163,8 @@ ajaxRouter.post('/cart/items', (req, res, next) => {
 				orderDraft.shipping_address.state =
 					storeSettings.default_shipping_state;
 				orderDraft.shipping_address.city = storeSettings.default_shipping_city;
+				orderDraft.item_tax_included = storeSettings.tax_included;
+				orderDraft.tax_rate = storeSettings.tax_rate;
 				return orderDraft;
 			})
 			.then(orderDraft => {

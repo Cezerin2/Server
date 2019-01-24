@@ -106,6 +106,8 @@
   "settings_checkout": "Оформление заказа",
   "settings_emails": "Электронная почта",
   "settings_taxes": "Налоги",
+  "settings_taxIncluded": "Tax Included",
+  "settings_taxRate": "Tax Rate",
   "settings_security": "Безопасность",
   "settings_currencyFormatting": "Формат валюты",
   "settings_currencySymbol": "Символ валюты",

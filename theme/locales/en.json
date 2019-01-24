@@ -7,6 +7,8 @@
   "shipping": "Shipping",
   "discount": "Discount",
   "total": "Total",
+  "tax": "Tax",
+  "taxIncluded": "Tax (Included)",
   "remove": "Remove",
   "qty": "Qty",
   "price": "Price",

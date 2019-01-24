@@ -106,6 +106,8 @@
   "settings_checkout": "结账",
   "settings_emails": "电子邮件",
   "settings_taxes": "税",
+  "settings_taxIncluded": "Tax Included",
+  "settings_taxRate": "Tax Rate",
   "settings_security": "安全",
   "settings_currencyFormatting": "货币格式",
   "settings_currencySymbol": "货币符号",

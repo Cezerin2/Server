@@ -7,6 +7,8 @@
   "shipping": "Доставка",
   "discount": "Скидка",
   "total": "Сумма",
+  "tax": "Tax",
+  "taxIncluded": "Tax (Included)",
   "remove": "Удалить",
   "qty": "Количество",
   "price": "Цена",

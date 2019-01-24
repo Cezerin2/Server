@@ -7,6 +7,8 @@
   "shipping": "Versand",
   "discount": "Rabatt",
   "total": "Summe",
+  "tax": "Tax",
+  "taxIncluded": "Tax (Included)",
   "remove": "Entfernen",
   "qty": "Menge",
   "price": "Preis",

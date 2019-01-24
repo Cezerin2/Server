@@ -39,6 +39,17 @@ class GeneralSettings extends React.Component {
 			);
 		}
 
+		let taxItems = [];
+		for (const key in data.taxs) {
+			taxItems.push(
+				<MenuItem
+					value={key}
+					key={key}
+					primaryText={`${key} - ${data.taxs[key]}`}
+				/>
+			);
+		}
+
 		let timezoneItems = [];
 		for (const key in data.timezones) {
 			const utc = data.timezones[key].utc;
@@ -166,6 +177,42 @@ class GeneralSettings extends React.Component {
 									<MenuItem value={3} primaryText="100.000" />
 									<MenuItem value={4} primaryText="100.0000" />
 								</Field>
+							</div>
+						</div>
+
+						<Divider
+							style={{
+								marginTop: 10,
+								marginBottom: 10
+							}}
+						/>
+
+						<Field
+							component={CustomToggle}
+							name="tax_included"
+							label={messages.settings_taxIncluded}
+							style={{ paddingTop: 16, paddingBottom: 16 }}
+						/>
+
+						<Divider
+							style={{
+								marginTop: 10,
+								marginBottom: 10
+							}}
+						/>
+
+						<div className="row between-xs middle-xs">
+							<div className="col-xs-12 col-sm-6">
+								{messages.settings_taxRate}
+							</div>
+							<div className="col-xs-12 col-sm-6">
+								<Field
+									component={TextField}
+									fullWidth={true}
+									name="tax_rate"
+									type="number"
+									placeholder="0"
+								/>
 							</div>
 						</div>
 

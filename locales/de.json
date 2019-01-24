@@ -106,6 +106,8 @@
   "settings_checkout": "Checkout",
   "settings_emails": "E-Mails",
   "settings_taxes": "Steuern",
+  "settings_taxIncluded": "Tax Included",
+  "settings_taxRate": "Tax Rate",
   "settings_security": "Sicherheit",
   "settings_currencyFormatting": "Währungsformat",
   "settings_currencySymbol": "Währungssymbol",

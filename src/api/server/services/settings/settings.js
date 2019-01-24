@@ -20,6 +20,8 @@ class SettingsService {
 			thousand_separator: ',',
 			decimal_separator: '.',
 			decimal_number: 2,
+			tax_rate: 0,
+			tax_included: true,
 			timezone: 'Asia/Singapore',
 			date_format: 'MMMM D, YYYY',
 			time_format: 'h:mm a',
@@ -113,6 +115,14 @@ class SettingsService {
 		if (data.decimal_number !== undefined) {
 			settings.decimal_number =
 				parse.getNumberIfPositive(data.decimal_number) || 0;
+		}
+
+		if (data.tax_rate !== undefined) {
+			settings.tax_rate = parse.getNumberIfPositive(data.tax_rate) || 0;
+		}
+
+		if (data.tax_included !== undefined) {
+			settings.tax_included = parse.getBooleanIfValid(data.tax_included, true);
 		}
 
 		if (data.timezone !== undefined) {

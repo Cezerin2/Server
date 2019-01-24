@@ -7,6 +7,8 @@
   "shipping": "运送",
   "discount": "折扣",
   "total": "总数",
+  "tax": "Tax",
+  "taxIncluded": "Tax (Included)",
   "remove": "移除",
   "qty": "数量",
   "price": "价格",
