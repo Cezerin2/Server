@@ -21,7 +21,8 @@ module.exports = {
 	storeBaseUrl: '*',
 
 	// used by API
-	adminLoginUrl: '/admin/login',
+	adminBaseURL: process.env.ADMIN_BASE_URL || 'http://localhost',
+	adminLoginPath: process.env.ADMIN_LOGIN_PATH || '/admin/login',
 
 	apiListenPort: 3001,
 	storeListenPort: 3000,
