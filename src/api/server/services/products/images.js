@@ -30,7 +30,7 @@ class ProductImagesService {
 					if (product && product.images && product.images.length > 0) {
 						let images = product.images.map(image => {
 							image.url = url.resolve(
-								generalSettings.domain,
+								settings.assetsBaseURL,
 								settings.productsUploadUrl +
 									'/' +
 									product._id +
