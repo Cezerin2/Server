@@ -95,7 +95,7 @@ class ProductsService {
 		]);
 
 		const domain = generalSettings.domain || '';
-		const assetsBaseURL = settings.assetsBaseURL;
+		const assetsBaseURL = settings.assetsBaseURL || domain;
 		const ids = this.getArrayFromCSV(parse.getString(params.ids));
 		const sku = this.getArrayFromCSV(parse.getString(params.sku));
 
