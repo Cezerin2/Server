@@ -1,6 +1,6 @@
 # Cezerin - Ecommerce Progressive Web Apps
 
-[![CircleCI](https://circleci.com/gh/cezerin2/cezerin2/tree/master.svg?style=svg)](https://circleci.com/gh/cezerin2/cezerin2/tree/master)
+[![CircleCI](https://circleci.com/gh/cezerin/cezerin/tree/master.svg?style=svg)](https://circleci.com/gh/cezerin/cezerin/tree/master)
 
 Cezerin2 is React and Node.js based eCommerce platform. Allows creating a Progressive Web Apps. This is based from cezerin after project went dead. (https://github.com/cezerin/cezerin)
 
@@ -12,6 +12,16 @@ Built with:
 * Babel
 * WebPack 4
 * MongoDB
+
+## Links
+- [GitHub](https://github.com/cezerin2/cezerin2)
+- [Community Site](https://cezerin.org)
+- [Demo Store](https://store.cezerin.com)
+- [Slack #cezerin2](https://join.slack.com/t/cezerin2/shared_invite/enQtNTE5NzYxMzA5ODc5LTVkZjM4ODUwMmNlMmMyZTkxYjg5N2QxZmQ5NjA1NTg3OWM2ZjU1NzVmNWM0N2E3ZmJjM2Q3MjQ5OGFmNTBmYjg)
+- [Forum](https://groups.google.com/forum/#!forum/cezerin)
+- [Docs](https://github.com/cezerin2/cezerin2/blob/master/docs/getting-started.md)
+- [Facebook](https://facebook.com/cezerin)
+- [Twitter](https://twitter.com/cezerin2)
 
 ## Dashboard
 Client-side dashboard use JSON Web Token (JWT) to access REST API.
