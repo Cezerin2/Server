@@ -30,13 +30,14 @@ class ProductCategoriesService {
 		const projection = utils.getProjectionFromFields(params.fields);
 		const generalSettings = await SettingsService.getSettings();
 		const domain = generalSettings.domain;
+		const assetsBaseURL = settings.assetsBaseURL;
 		const items = await db
 			.collection('productCategories')
 			.find(filter, { projection: projection })
 			.sort({ position: 1 })
 			.toArray();
 		const result = items.map(category =>
-			this.changeProperties(category, domain)
+			this.changeProperties(category, domain, assetsBaseURL)
 		);
 		return result;
 	}
@@ -265,7 +266,7 @@ class ProductCategoriesService {
 		});
 	}
 
-	changeProperties(item, domain) {
+	changeProperties(item, domain, assetsBaseURL) {
 		if (item) {
 			item.id = item._id.toString();
 			item._id = undefined;
@@ -281,7 +282,7 @@ class ProductCategoriesService {
 
 			if (item.image) {
 				item.image = url.resolve(
-					domain,
+					assetsBaseURL,
 					`${settings.categoriesUploadUrl}/${item.id}/${item.image}`
 				);
 			}
