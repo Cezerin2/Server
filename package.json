@@ -99,7 +99,7 @@
     "response-time": "^2.3.2",
     "sass-loader": "^7.1.0",
     "sitemap": "^1.13.0",
-    "slug": "^0.9.1",
+    "slug": "^0.9.3",
     "stripe": "^6.7.0",
     "ua-parser-js": "^0.7.18",
     "webpack": "^4.17.1",
