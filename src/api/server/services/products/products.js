@@ -95,10 +95,13 @@ class ProductsService {
 		]);
 
 		const domain = generalSettings.domain || '';
+		const assetsBaseURL = settings.assetsBaseURL || domain;
 		const ids = this.getArrayFromCSV(parse.getString(params.ids));
 		const sku = this.getArrayFromCSV(parse.getString(params.sku));
 
-		let items = itemsResult.map(item => this.changeProperties(item, domain));
+		let items = itemsResult.map(item =>
+			this.changeProperties(item, domain, assetsBaseURL)
+		);
 		items = this.sortItemsByArrayOfIdsIfNeed(items, ids, sortQuery);
 		items = this.sortItemsByArrayOfSkuIfNeed(items, sku, sortQuery);
 		items = items.filter(item => !!item);
@@ -949,11 +952,15 @@ class ProductsService {
 		}
 	}
 
-	getSortedImagesWithUrls(item, domain) {
+	getSortedImagesWithUrls(item, assetsBaseURL) {
 		if (item.images && item.images.length > 0) {
 			return item.images
 				.map(image => {
-					image.url = this.getImageUrl(domain, item.id, image.filename || '');
+					image.url = this.getImageUrl(
+						assetsBaseURL,
+						item.id,
+						image.filename || ''
+					);
 					return image;
 				})
 				.sort((a, b) => a.position - b.position);
@@ -962,20 +969,20 @@ class ProductsService {
 		}
 	}
 
-	getImageUrl(domain, productId, imageFileName) {
+	getImageUrl(assetsBaseURL, productId, imageFileName) {
 		return url.resolve(
-			domain,
+			assetsBaseURL,
 			`${settings.productsUploadUrl}/${productId}/${imageFileName}`
 		);
 	}
 
-	changeProperties(item, domain) {
+	changeProperties(item, domain, assetsBaseURL) {
 		if (item) {
 			if (item.id) {
 				item.id = item.id.toString();
 			}
 
-			item.images = this.getSortedImagesWithUrls(item, domain);
+			item.images = this.getSortedImagesWithUrls(item, assetsBaseURL);
 
 			if (item.category_id) {
 				item.category_id = item.category_id.toString();

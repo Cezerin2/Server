@@ -13,15 +13,36 @@ import ajaxRouter from './ajaxRouter';
 import apiRouter from './apiRouter';
 const app = express();
 
+const STATIC_OPTIONS = {
+	maxAge: 31536000000 // One year
+};
+
 security.applyMiddleware(app);
 app.set('trust proxy', 1);
 app.use(helmet());
+
+app.get('/images/:entity/:id/:size/:filename', (req, res, next) => {
+	// A stub of image resizing (can be done with Nginx)
+	const newUrl = `/images/${req.params.entity}/${req.params.id}/${
+		req.params.filename
+	}`;
+	req.url = newUrl;
+	next();
+});
+app.use(express.static('public/content', STATIC_OPTIONS));
+
 app.all('*', (req, res, next) => {
 	// CORS headers
-	res.header(
-		'Access-Control-Allow-Origin',
-		security.getAccessControlAllowOrigin()
-	);
+	var allowedOrigins = security.getAccessControlAllowOrigin();
+	var origin = req.headers.origin;
+	if (allowedOrigins === '*') {
+		res.setHeader('Access-Control-Allow-Origin', allowedOrigins);
+	} else {
+		if (allowedOrigins.indexOf(origin) > -1) {
+			res.setHeader('Access-Control-Allow-Origin', origin);
+		}
+	}
+
 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
 	res.header('Access-Control-Allow-Credentials', 'true');
 	res.header(
