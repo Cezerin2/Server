@@ -31,20 +31,20 @@
       "url": "https://github.com/sonufrienko"
     }
   ],
-  "main": "src/api/server/index.js",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/cezerin2/cezerin2"
   },
   "scripts": {
-    "setup": "node -r esm src/api/server/setup.js",
+    "setup": "node -r esm src/setup.js",
     "theme:install": "./scripts/theme-install.sh",
     "theme:export": "./scripts/theme-export.sh",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --write \"src/**/*.js\" \"theme/**/*.js\"",
     "precommit": "lint-staged",
-    "start": "node -r esm src/api/server/index.js"
+    "start": "node -r esm src/index.js"
   },
   "lint-staged": {
     "*.js": [
