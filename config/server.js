@@ -18,7 +18,7 @@ module.exports = {
 	storeBaseUrl: process.env.STORE_URL || `http://localhost:3000`,
 
 	// used by API
-	adminBaseURL: process.env.ADMIN_BASE_URL || 'http://localhost:3003',
+	adminBaseURL: process.env.ADMIN_BASE_URL || 'http://localhost:3002',
 	adminLoginPath: process.env.ADMIN_LOGIN_PATH || '/admin/login',
 
 	// used by API to service assets

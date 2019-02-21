@@ -30,7 +30,7 @@ ADD . /var/www/cezerin2
 
 # Nginx config
 COPY nginx/nginx.conf /etc/nginx/
-COPY nginx/default.conf /etc/nginx/conf.d/
+COPY nginx/default.conf.template /etc/nginx/conf.d/
 
 # script to run Nginx and PM2
 COPY docker-entrypoint.sh /usr/local/bin/
