@@ -2,7 +2,7 @@ FROM node:8
 LABEL maintainer "Nitin Goyal <nitingoyal.dev@gmail.com>, Luke Busstra <luke.busstra@gmail.com>"
 
 ENV NGINX_CODENAME stretch
-ENV API_PORT 80
+ENV API_PORT 3001
 
 # install requirements
 RUN echo "deb http://nginx.org/packages/debian/ ${NGINX_CODENAME} nginx" >> /etc/apt/sources.list \
@@ -30,7 +30,7 @@ ADD . /var/www/cezerin2
 
 # Nginx config
 COPY nginx/nginx.conf /etc/nginx/
-COPY nginx/default.conf /etc/nginx/conf.d/
+COPY nginx/default.conf.template /etc/nginx/conf.d/
 
 # script to run Nginx and PM2
 COPY docker-entrypoint.sh /usr/local/bin/
