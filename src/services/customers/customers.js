@@ -4,6 +4,8 @@ import utils from '../../lib/utils';
 import parse from '../../lib/parse';
 import webhooks from '../../lib/webhooks';
 import CustomerGroupsService from './customerGroups';
+import AuthHeader from '../../lib/auth-header';
+import security from '../../lib/security';
 
 class CustomersService {
 	constructor() {}
@@ -188,6 +190,9 @@ class CustomersService {
 		customer.email = parse.getString(data.email).toLowerCase();
 		customer.mobile = parse.getString(data.mobile).toLowerCase();
 		customer.full_name = parse.getString(data.full_name);
+		customer.first_name = parse.getString(data.first_name);
+		customer.last_name = parse.getString(data.last_name);
+		customer.password = parse.getString(data.password);
 		customer.gender = parse.getString(data.gender).toLowerCase();
 		customer.group_id = parse.getObjectIDIfValid(data.group_id);
 		customer.tags = parse.getArrayIfValid(data.tags) || [];
@@ -234,6 +239,18 @@ class CustomersService {
 
 		if (data.full_name !== undefined) {
 			customer.full_name = parse.getString(data.full_name);
+		}
+
+		if (data.first_name !== undefined) {
+			customer.first_name = parse.getString(data.first_name);
+		}
+
+		if (data.last_name !== undefined) {
+			customer.last_name = parse.getString(data.last_name);
+		}
+
+		if (data.password !== undefined) {
+			customer.password = parse.getString(data.password);
 		}
 
 		if (data.gender !== undefined) {
@@ -501,6 +518,38 @@ class CustomersService {
 					}
 				);
 			});
+	}
+
+	logout() {
+		// remove user from local storage to log user out
+		localStorage.removeItem('user');
+	}
+
+	getAll() {
+		const requestOptions = {
+			method: 'GET',
+			//headers: authHeader()
+		};
+
+		return fetch(`${security.storeBaseUrl}/users`, requestOptions).then(handleResponse);
+	}
+
+	handleResponse(response) {
+		return response.text().then(text => {
+			const data = text && JSON.parse(text);
+			if (!response.ok) {
+				if (response.status === 401) {
+					// auto logout if 401 response returned from api
+					logout();
+					location.reload(true);
+				}
+
+				const error = (data && data.message) || response.statusText;
+				return Promise.reject(error);
+			}
+
+			return data;
+		});
 	}
 }
 

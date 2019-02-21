@@ -50,6 +50,36 @@ const addAllPages = async db => {
 		enabled: true,
 		is_system: false
 	});
+	await addPage(db, {
+		slug: 'login',
+		meta_title: 'Login or Register',
+		enabled: true,
+		is_system: true
+	});
+	await addPage(db, {
+		slug: 'register',
+		meta_title: 'Login or Register',
+		enabled: true,
+		is_system: true
+	});
+	await addPage(db, {
+		slug: 'customer-account',
+		meta_title: 'Customer Account',
+		enabled: true,
+		is_system: true
+	});
+	await addPage(db, {
+		slug: 'forgot-password',
+		meta_title: 'Forgot Password',
+		enabled: true,
+		is_system: true
+	});
+	await addPage(db, {
+		slug: 'reset-password',
+		meta_title: 'Reset Password',
+		enabled: true,
+		is_system: true
+	});
 };
 
 const addAllProducts = async db => {
@@ -142,7 +172,7 @@ const addAllProducts = async db => {
 	}
 };
 
-const addEmailTemplates = async db => {
+const addOrderConfirmationEmailTemplates = async db => {
 	const emailTemplatesCount = await db
 		.collection('emailTemplates')
 		.countDocuments({ name: 'order_confirmation' });
@@ -201,6 +231,112 @@ const addEmailTemplates = async db => {
 			  </tr>
 			</table>
 		  
+		  </div>`
+		});
+
+		winston.info('- Added email template for Order Confirmation');
+	}
+};
+
+const addForgotPasswordEmailTemplates_en = async db => {
+	const emailTemplatesCount = await db
+		.collection('emailTemplates')
+		.countDocuments({ name: 'forgot_password_en' });
+	const emailTemplatesNotExists = emailTemplatesCount === 0;
+	if (emailTemplatesNotExists) {
+		await db.collection('emailTemplates').insertOne({
+			name: 'forgot_password_en',
+			link: 'reset password',
+			subject: `Password Reset on `,
+			body: `<div style="line-height: 30px">
+			<div><b>You requested on {{shop_name}} a password reset.</b><div>
+			<div><b>Please click on the link bellow to get back to {{shop_name}} to reset your password.</b><div>
+			<div><b>Link:</b> {{forgot_password_link}}<div>
+
+		  </div>`
+		});
+
+		winston.info('- Added email template for Order Confirmation');
+	}
+};
+
+const addForgotPasswordEmailTemplates_de = async db => {
+	const emailTemplatesCount = await db
+		.collection('emailTemplates')
+		.countDocuments({ name: 'forgot_password_de' });
+	const emailTemplatesNotExists = emailTemplatesCount === 0;
+	if (emailTemplatesNotExists) {
+		await db.collection('emailTemplates').insertOne({
+			name: 'forgot_password_de',
+			link: 'passwort erneuern',
+			subject: `Passwort Erneuern auf `,
+			body: `<div style="line-height: 30px">
+			<div><b><h2>{{shop_name}}</h2></b><div>
+			<div><b>Wir haben Ihre Bitte um Zurücksetzung des mit dieser E-Mail-Adresse verbundenen Passworts erhalten.</b><div>
+			<div><b>Klicken Sie auf den folgenden Link, um Ihr Passwort zurückzusetzen:</b><br />{{forgot_password_link}}<div>
+			<br />
+			<div><b>Bei Fragen kontaktieren Sie gerne unseren Kundenservice.</b></div>
+			<br />
+			<div><b>Beste Grüße</b></div>
+			<br />
+			<div><b><h3>{{shop_name}}</h3></b><div>
+		  </div>`
+		});
+
+		winston.info('- Added email template for Order Confirmation');
+	}
+};
+
+const addRegisterDoiEmailTemplates_en = async db => {
+	const emailTemplatesCount = await db
+		.collection('emailTemplates')
+		.countDocuments({ name: 'register_doi_en' });
+	const emailTemplatesNotExists = emailTemplatesCount === 0;
+	if (emailTemplatesNotExists) {
+		await db.collection('emailTemplates').insertOne({
+			name: 'register_doi_en',
+			link: 'register now',
+			subject: `Registration on `,
+			body: `<div style="line-height: 30px">
+			<div><b>You requested on {{shop_name}} to set up a new account.</b><div>
+			<div><b>Please click on the link bellow to get finish the account setup.</b><div>
+			<div><b>Link:</b><br />
+			{{register_doi_link}}
+			<br />
+			<div><b>If you have any questions please dont hasitate and call our customerservice.</b></div>
+			<br />
+			<div><b>Best regards</b></div>
+			<br />
+			<div><b><h3>{{shop_name}}</h3></b><div>
+
+		  </div>`
+		});
+
+		winston.info('- Added email template for Order Confirmation');
+	}
+};
+
+const addRegisterDoiEmailTemplates_de = async db => {
+	const emailTemplatesCount = await db
+		.collection('emailTemplates')
+		.countDocuments({ name: 'register_doi_de' });
+	const emailTemplatesNotExists = emailTemplatesCount === 0;
+	if (emailTemplatesNotExists) {
+		await db.collection('emailTemplates').insertOne({
+			name: 'register_doi_de',
+			link: 'jetzt registrieren',
+			subject: `Neuanmeldung auf `,
+			body: `<div style="line-height: 30px">
+			<div><b><h2>{{shop_name}}</h2></b><div>
+			<div><b>Sie sind dabei auf {{shop_name}} ein neues Konto zu eröffnen.</b><div>
+			<div><b>Klicken Sie auf den folgenden Link, um die neu Anmeldung zu bestätigen und Ihr Konto zu eröffnen:</b><br />
+			{{register_doi_link}}
+			<br />
+			<div><b>Bei Fragen kontaktieren Sie gerne unseren Kundenservice.</b></div>
+			<br />
+			<div><b>Beste Grüße</b></div>
+			<br />
+			<div><b><h3>{{shop_name}}</h3></b><div>
 		  </div>`
 		});
 
@@ -310,8 +446,11 @@ const createAllIndexes = async db => {
 
 	if (customersIndexes.length === 1) {
 		await createIndex(db, 'customers', { group_id: 1 });
-		await createIndex(db, 'customers', { email: 1 });
+		await createIndex(db, 'customers', { email: 1 }, { unique: true });
 		await createIndex(db, 'customers', { mobile: 1 });
+		await createIndex(db, 'customers', { first_name: 1 });
+		await createIndex(db, 'customers', { last_name: 1 });
+		await createIndex(db, 'customers', { password: 1 });
 		await createIndex(
 			db,
 			'customers',
@@ -335,6 +474,9 @@ const createAllIndexes = async db => {
 		await createIndex(db, 'orders', { customer_id: 1 });
 		await createIndex(db, 'orders', { email: 1 });
 		await createIndex(db, 'orders', { mobile: 1 });
+		await createIndex(db, 'orders', { first_name: 1 });
+		await createIndex(db, 'orders', { last_name: 1 });
+		await createIndex(db, 'orders', { password: 1 });
 		await createIndex(
 			db,
 			'orders',
@@ -407,7 +549,11 @@ const addSettings = async (db, { domain }) => {
 	await db.createCollection('orders');
 	await addAllPages(db);
 	await addAllProducts(db);
-	await addEmailTemplates(db);
+	await addOrderConfirmationEmailTemplates(db);
+	await addForgotPasswordEmailTemplates_en(db);
+	await addForgotPasswordEmailTemplates_de(db);
+	await addRegisterDoiEmailTemplates_en(db);
+	await addRegisterDoiEmailTemplates_de(db);
 	await addShippingMethods(db);
 	await addPaymentMethods(db);
 	await createAllIndexes(db);

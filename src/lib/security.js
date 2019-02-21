@@ -94,7 +94,7 @@ const applyMiddleware = app => {
 };
 
 const getAccessControlAllowOrigin = () => {
-	return [settings.storeBaseUrl, settings.adminBaseURL] || '*';
+	return settings.storeBaseUrl || '*';
 };
 
 export default {
