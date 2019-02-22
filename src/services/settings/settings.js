@@ -11,9 +11,9 @@ import parse from '../../lib/parse';
 class SettingsService {
 	constructor() {
 		this.defaultSettings = {
-			store_name: '',
+			store_name: 'Cezerin',
 			domain: '',
-			logo_file: null,
+			logo_file: 'logo.png',
 			language: 'en',
 			currency_code: 'USD',
 			currency_symbol: '$',
