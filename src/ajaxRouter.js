@@ -4,7 +4,7 @@ import { ObjectID } from 'mongodb';
 import CezerinClient from 'cezerin2-client';
 import handlebars from 'handlebars';
 import serverSettings from './lib/settings';
-import serverConfigs from '../../../config/server';
+import serverConfigs from '../config/server';
 import { db } from './lib/mongo';
 import AuthHeader from './lib/auth-header';
 import mailer from './lib/mailer';
@@ -143,29 +143,34 @@ ajaxRouter.post('/reset-password', async (req, res, next) => {
 		status: false,
 		id: null,
 		verified: false
-	}
+	};
 
-	const userId = 'token' in req.body ? AuthHeader.decodeUserLoginAuth(req.body.token) : AuthHeader.decodeUserLoginAuth(req.body.id).userId.userId;
+	const userId =
+		'token' in req.body
+			? AuthHeader.decodeUserLoginAuth(req.body.token)
+			: AuthHeader.decodeUserLoginAuth(req.body.id).userId.userId;
 
 	const filter = {
 		id: userId
-	}
+	};
 
 	const customerDraft = {
 		password: req.body.password
-	}
+	};
 
 	// update customer password after checking customer id
 	if ('id' in req.body) {
-		await api.customers.update(userId, customerDraft).then(({ status, json }) => {
-			data.status = true;
-			data.id = userId;
-			data.verified = true;
-			res.status(status).send(data);
-		});
+		await api.customers
+			.update(userId, customerDraft)
+			.then(({ status, json }) => {
+				data.status = true;
+				data.id = userId;
+				data.verified = true;
+				res.status(status).send(data);
+			});
 		return false;
 	}
-	
+
 	if ('name' in userId && userId.name.indexOf('JsonWebTokenErro') !== -1) {
 		res.send(data);
 		return false;
@@ -185,24 +190,35 @@ ajaxRouter.post('/reset-password', async (req, res, next) => {
 ajaxRouter.post('/forgot-password', async (req, res, next) => {
 	const filter = {
 		email: req.body.email
-	}
+	};
 	const data = {
 		status: true
-	}
+	};
 
 	// send forgot password email
 	async function sendEmail(userId) {
 		const countryCode = undefined;
-		const [emailTemp] = await Promise.all([EmailTemplatesService.getEmailTemplate(`forgot_password_${serverConfigs.language}`)]);
+		const [emailTemp] = await Promise.all([
+			EmailTemplatesService.getEmailTemplate(
+				`forgot_password_${serverConfigs.language}`
+			)
+		]);
 		await handlebars.registerHelper('forgot_password_link', function(obj) {
-			var url  = `${serverConfigs.storeBaseUrl}${countryCode !== undefined ? `/${countryCode}/` : '/'}reset-password?token=${AuthHeader.encodeUserLoginAuth(userId)}`;
+			var url = `${serverConfigs.storeBaseUrl}${
+				countryCode !== undefined ? `/${countryCode}/` : '/'
+			}reset-password?token=${AuthHeader.encodeUserLoginAuth(userId)}`;
 			var text = emailTemp.link;
 			if (text == undefined) {
 				text = url;
 			}
-			return new handlebars.SafeString( `<a style="position: relative;text-transform: uppercase;border: 1px solid #ccc;color: #000;padding: 5px;text-decoration: none;" value="${text}" href="${url}"> ${text} </a>` );
+			return new handlebars.SafeString(
+				`<a style="position: relative;text-transform: uppercase;border: 1px solid #ccc;color: #000;padding: 5px;text-decoration: none;" value="${text}" href="${url}"> ${text} </a>`
+			);
 		});
-		const [bodyTemplate, settings] = await Promise.all([handlebars.compile(emailTemp.body), SettingsService.getSettings()]);
+		const [bodyTemplate, settings] = await Promise.all([
+			handlebars.compile(emailTemp.body),
+			SettingsService.getSettings()
+		]);
 		await Promise.all([
 			mailer.send({
 				to: req.body.email,
@@ -210,7 +226,8 @@ ajaxRouter.post('/forgot-password', async (req, res, next) => {
 				html: bodyTemplate({
 					shop_name: settings.store_name
 				})
-			}), res.send(data)
+			}),
+			res.send(data)
 		]);
 	}
 
@@ -234,10 +251,10 @@ ajaxRouter.post('/customer-account', async (req, res, next) => {
 	};
 
 	customerData.token = AuthHeader.decodeUserLoginAuth(req.body.token);
-	const userId = JSON.stringify(customerData.token.userId).replace(/["']/g, "");
+	const userId = JSON.stringify(customerData.token.userId).replace(/["']/g, '');
 	const filter = {
 		customer_id: userId
-	}
+	};
 
 	// retrieve customer data
 	await api.customers.retrieve(userId).then(({ status, json }) => {
@@ -251,7 +268,7 @@ ajaxRouter.post('/customer-account', async (req, res, next) => {
 	await api.orders.list(filter).then(({ status, json }) => {
 		customerData.order_statuses = json;
 		let objJsonB64 = JSON.stringify(customerData);
-		objJsonB64 = Buffer.from(objJsonB64).toString("base64");
+		objJsonB64 = Buffer.from(objJsonB64).toString('base64');
 		res.status(status).send(JSON.stringify(objJsonB64));
 	});
 });
@@ -265,43 +282,50 @@ ajaxRouter.post('/login', async (req, res, next) => {
 		order_statuses: null,
 		cartLayer: req.body.cartLayer !== undefined ? req.body.cartLayer : false
 	};
-			
+
 	// check if customer exists in database and grant or denie access
-	await db.collection('customers').find({email: req.body.email, password: AuthHeader.decodeUserPassword(req.body.password).password}).limit(1).next(function getCustomerData(error, result) {
-		if (error) {
-			//alert
-			throw error;
-		}
-		if (!result){
-			api.customers.list().then(({ status, json }) => {
-				customerData.loggedin_failed = true;
-				let objJsonB64 = JSON.stringify(customerData);
-				objJsonB64 = Buffer.from(objJsonB64).toString("base64");
-				res.status(status).send(JSON.stringify(objJsonB64));
-			});
-			return;
-		}
-
-		customerData.token = AuthHeader.encodeUserLoginAuth(result._id);
-		customerData.authenticated = true;
-
-		// retrieve all customer and orders data for the myaccount settings
-		api.customers.retrieve(result._id).then(({ status, json }) => {
-			customerData.customer_settings = json;
-			customerData.customer_settings.password = '*******';
-
-			const filter = {
-				customer_id: json.id
+	await db
+		.collection('customers')
+		.find({
+			email: req.body.email,
+			password: AuthHeader.decodeUserPassword(req.body.password).password
+		})
+		.limit(1)
+		.next(function getCustomerData(error, result) {
+			if (error) {
+				//alert
+				throw error;
 			}
-			api.orders.list(filter).then(({ status, json }) => {
-				customerData.order_statuses = json;
-			
-				let objJsonB64 = JSON.stringify(customerData);
-				objJsonB64 = Buffer.from(objJsonB64).toString("base64");
-				res.status(status).send(JSON.stringify(objJsonB64));
+			if (!result) {
+				api.customers.list().then(({ status, json }) => {
+					customerData.loggedin_failed = true;
+					let objJsonB64 = JSON.stringify(customerData);
+					objJsonB64 = Buffer.from(objJsonB64).toString('base64');
+					res.status(status).send(JSON.stringify(objJsonB64));
+				});
+				return;
+			}
+
+			customerData.token = AuthHeader.encodeUserLoginAuth(result._id);
+			customerData.authenticated = true;
+
+			// retrieve all customer and orders data for the myaccount settings
+			api.customers.retrieve(result._id).then(({ status, json }) => {
+				customerData.customer_settings = json;
+				customerData.customer_settings.password = '*******';
+
+				const filter = {
+					customer_id: json.id
+				};
+				api.orders.list(filter).then(({ status, json }) => {
+					customerData.order_statuses = json;
+
+					let objJsonB64 = JSON.stringify(customerData);
+					objJsonB64 = Buffer.from(objJsonB64).toString('base64');
+					res.status(status).send(JSON.stringify(objJsonB64));
+				});
 			});
 		});
-	});
 });
 
 ajaxRouter.post('/register', async (req, res, next) => {
@@ -310,10 +334,10 @@ ajaxRouter.post('/register', async (req, res, next) => {
 		status: false,
 		isRightToken: true,
 		isCustomerSaved: false
-	}
+	};
 	const filter = {
 		email: req.body.email
-	}
+	};
 
 	// check if url params contains token
 	const requestToken = 'token' in req.body ? req.body.token : false;
@@ -329,20 +353,31 @@ ajaxRouter.post('/register', async (req, res, next) => {
 		}
 
 		(async () => {
-			// decode token parts and check if valid email is the second part of them 
-			const firstName = await AuthHeader.decodeUserLoginAuth(requestTokenArray[0]).userId;
-			const lastName = await AuthHeader.decodeUserLoginAuth(requestTokenArray[1]).userId;
-			const eMail = await AuthHeader.decodeUserLoginAuth(requestTokenArray[2]).userId;
-			const passWord = await AuthHeader.decodeUserPassword(requestTokenArray[3]).password;
+			// decode token parts and check if valid email is the second part of them
+			const firstName = await AuthHeader.decodeUserLoginAuth(
+				requestTokenArray[0]
+			).userId;
+			const lastName = await AuthHeader.decodeUserLoginAuth(
+				requestTokenArray[1]
+			).userId;
+			const eMail = await AuthHeader.decodeUserLoginAuth(requestTokenArray[2])
+				.userId;
+			const passWord = await AuthHeader.decodeUserPassword(requestTokenArray[3])
+				.password;
 
-			if (requestTokenArray.length < 1 || !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(eMail)) {
-			//if (requestTokenArray.length < 1) {
+			if (
+				requestTokenArray.length < 1 ||
+				!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+					eMail
+				)
+			) {
+				//if (requestTokenArray.length < 1) {
 				data.isRightToken = false;
 				res.status('200').send(data);
 				return false;
 			}
 
-			// check once if customer email is existig in database 
+			// check once if customer email is existig in database
 			filter.email = eMail;
 			await api.customers.list(filter).then(({ status, json }) => {
 				if (json.total_count > 0) {
@@ -359,7 +394,7 @@ ajaxRouter.post('/register', async (req, res, next) => {
 				last_name: lastName,
 				email: eMail,
 				password: passWord
-			}
+			};
 
 			await api.customers.create(customerDraft).then(({ status, json }) => {
 				data.isCustomerSaved = true;
@@ -374,17 +409,34 @@ ajaxRouter.post('/register', async (req, res, next) => {
 	async function registerCustomer() {
 		if (data.status) {
 			const countryCode = undefined;
-			const [emailTemp] = await Promise.all([EmailTemplatesService.getEmailTemplate(`register_doi_${serverConfigs.language}`)]);
+			const [emailTemp] = await Promise.all([
+				EmailTemplatesService.getEmailTemplate(
+					`register_doi_${serverConfigs.language}`
+				)
+			]);
 			await handlebars.registerHelper('register_doi_link', function(obj) {
-				var url  = `${serverConfigs.storeBaseUrl}${countryCode !== undefined ? `/${countryCode}/` : '/'}register?token=${tokenConcatString}`;
+				var url = `${serverConfigs.storeBaseUrl}${
+					countryCode !== undefined ? `/${countryCode}/` : '/'
+				}register?token=${tokenConcatString}`;
 				var text = emailTemp.link;
 				if (text == undefined) {
 					text = url;
 				}
-				return new handlebars.SafeString( `<a style="position: relative;text-transform: uppercase;border: 1px solid #ccc;color: #000;padding: 5px;text-decoration: none;" value="${text}" href="${url}"> ${text} </a>` );
+				return new handlebars.SafeString(
+					`<a style="position: relative;text-transform: uppercase;border: 1px solid #ccc;color: #000;padding: 5px;text-decoration: none;" value="${text}" href="${url}"> ${text} </a>`
+				);
 			});
-			const [bodyTemplate, settings] = await Promise.all([handlebars.compile(emailTemp.body), SettingsService.getSettings()]);
-			const tokenConcatString = `${AuthHeader.encodeUserLoginAuth(req.body.first_name)}xXx${AuthHeader.encodeUserLoginAuth(req.body.last_name)}xXx${AuthHeader.encodeUserLoginAuth(req.body.email)}xXx${req.body.password}`;
+			const [bodyTemplate, settings] = await Promise.all([
+				handlebars.compile(emailTemp.body),
+				SettingsService.getSettings()
+			]);
+			const tokenConcatString = `${AuthHeader.encodeUserLoginAuth(
+				req.body.first_name
+			)}xXx${AuthHeader.encodeUserLoginAuth(
+				req.body.last_name
+			)}xXx${AuthHeader.encodeUserLoginAuth(req.body.email)}xXx${
+				req.body.password
+			}`;
 			await Promise.all([
 				mailer.send({
 					to: req.body.email,
@@ -392,11 +444,12 @@ ajaxRouter.post('/register', async (req, res, next) => {
 					html: bodyTemplate({
 						shop_name: settings.store_name
 					})
-				}), res.status('200').send(data)
+				}),
+				res.status('200').send(data)
 			]);
 		}
 		return false;
-	};
+	}
 	// check if customer exist in database
 	if (!requestToken) {
 		await api.customers.list(filter).then(({ status, json }) => {
@@ -413,7 +466,7 @@ ajaxRouter.post('/register', async (req, res, next) => {
 ajaxRouter.put('/customer-account', async (req, res, next) => {
 	const customerData = req.body;
 	const token = AuthHeader.decodeUserLoginAuth(req.body.token);
-	const userId = JSON.stringify(token.userId).replace(/["']/g, "");
+	const userId = JSON.stringify(token.userId).replace(/["']/g, '');
 
 	const customerDataObj = {
 		token: '',
@@ -427,7 +480,7 @@ ajaxRouter.put('/customer-account', async (req, res, next) => {
 		last_name: customerData.last_name,
 		email: customerData.email,
 		password: AuthHeader.decodeUserPassword(customerData.password).password
-	}
+	};
 
 	// update customer profile and addresses
 	await api.customers.update(userId, customerDraft).then(({ status, json }) => {
@@ -440,20 +493,24 @@ ajaxRouter.put('/customer-account', async (req, res, next) => {
 		customerDataObj.token = AuthHeader.encodeUserLoginAuth(userId);
 		customerData.authenticated = false;
 		db.collection('orders').updateMany(
-			{customer_id: ObjectID(json.id)},
-			{ $set: { 
-				shipping_address: customerData.shipping_address,
-				billing_address: customerData.billing_address
-			}}, function(error, result) {
+			{ customer_id: ObjectID(json.id) },
+			{
+				$set: {
+					shipping_address: customerData.shipping_address,
+					billing_address: customerData.billing_address
+				}
+			},
+			function(error, result) {
 				if (error) {
 					//alert
 					throw error;
 				}
 				customerDataObj.order_statuses = status;
 				let objJsonB64 = JSON.stringify(customerDataObj);
-				objJsonB64 = Buffer.from(objJsonB64).toString("base64");
+				objJsonB64 = Buffer.from(objJsonB64).toString('base64');
 				res.status(status).send(JSON.stringify(objJsonB64));
-		});
+			}
+		);
 	});
 });
 
