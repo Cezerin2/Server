@@ -12,23 +12,19 @@ const dbUrl =
 
 module.exports = {
 	// used by Store (server side)
-	apiBaseUrl: `http://localhost:3001/api/v1`,
-
-	// used by Store (server and client side)
-	ajaxBaseUrl: `http://localhost:3001/ajax`,
+	apiBaseUrl: process.env.API_BASE_URL || `http://localhost:3001/api/v1`,
 
 	// Access-Control-Allow-Origin
-	storeBaseUrl: `http://localhost:3000`,
+	storeBaseUrl: process.env.STORE_URL || `http://localhost:3000`,
 
 	// used by API
-	adminBaseURL: process.env.ADMIN_BASE_URL || 'http://localhost:3003',
+	adminBaseURL: process.env.ADMIN_BASE_URL || 'http://localhost:3002',
 	adminLoginPath: process.env.ADMIN_LOGIN_PATH || '/admin/login',
 
 	// used by API to service assets
-	assetsBaseURL: process.env.ASSETS_BASE_URL || '',
+	assetsBaseURL: process.env.ASSETS_BASE_URL || 'http://localhost:3001',
 
-	apiListenPort: 3001,
-	storeListenPort: process.env.STORE_PORT || 3000,
+	apiListenPort: process.env.API_PORT || 3001,
 
 	// used by API
 	mongodbServerUrl: dbUrl,
@@ -44,10 +40,10 @@ module.exports = {
 	},
 
 	// key to sign tokens
-	jwtSecretKey: '-',
+	jwtSecretKey: process.env.JWT_SECRET_KEY || '-',
 
 	// key to sign store cookies
-	cookieSecretKey: '-',
+	cookieSecretKey: process.env.COOKIE_SECRET_KEY || '-',
 
 	// path to uploads
 	categoriesUploadPath: 'public/content/images/categories',
@@ -62,7 +58,7 @@ module.exports = {
 	themeAssetsUploadUrl: '/assets/images',
 
 	// store UI language
-	language: 'en',
+	language: process.env.LANGUAGE || 'en',
 
 	// used by API
 	orderStartNumber: 1000,
