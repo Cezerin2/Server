@@ -11,8 +11,9 @@ import parse from '../../lib/parse';
 class SettingsService {
 	constructor() {
 		this.defaultSettings = {
+			store_name: 'Cezerin',
 			domain: '',
-			logo_file: null,
+			logo_file: 'logo.png',
 			language: 'en',
 			currency_code: 'USD',
 			currency_symbol: '$',
@@ -23,7 +24,7 @@ class SettingsService {
 			timezone: 'Asia/Singapore',
 			date_format: 'MMMM D, YYYY',
 			time_format: 'h:mm a',
-			default_shipping_country: 'SG',
+			default_shipping_country: '',
 			default_shipping_state: '',
 			default_shipping_city: '',
 			default_product_sorting: 'stock_status,price,position',
@@ -81,6 +82,10 @@ class SettingsService {
 		}
 
 		let settings = {};
+
+		if (data.store_name !== undefined) {
+			settings.store_name = parse.getString(data.store_name);
+		}
 
 		if (data.language !== undefined) {
 			settings.language = parse.getString(data.language);
