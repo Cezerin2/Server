@@ -602,11 +602,21 @@ ajaxRouter.put('/cart/items/:item_id', (req, res, next) => {
 
 ajaxRouter.put('/cart/checkout', (req, res, next) => {
 	const order_id = req.signedCookies.order_id;
+	
 	if (order_id) {
 		api.orders
 			.checkout(order_id)
 			.then(cartResponse => fillCartItems(cartResponse))
 			.then(({ status, json }) => {
+				let paths = '';
+				// generate pdp landing url for the ordered product. More than 1 product in ordered will return comma separated url.
+				[].slice.call(json.items).forEach((items) => {
+					paths += json.items.length < 2 ? `${serverSettings.storeBaseUrl}${items.path}` : `${serverSettings.storeBaseUrl}${items.path},`;
+				});
+				const data = {
+					landing_url: paths
+				}
+				api.orders.update(order_id, data);
 				res.clearCookie('order_id');
 				res.status(status).send(json);
 			});
