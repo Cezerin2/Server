@@ -30,13 +30,13 @@ module.exports = {
 	mongodbServerUrl: dbUrl,
 
 	smtpServer: {
-		host: '',
-		port: 0,
+		host: 'smtp.gmail.com',
+		port: 465,
 		secure: true,
-		user: '',
-		pass: '',
-		fromName: '',
-		fromAddress: ''
+		user: 'lortschi',
+		pass: 'M0rpheus1979**',
+		fromName: 'lortschi',
+		fromAddress: 'lortschi@gmail.com'
 	},
 
 	// key to sign tokens
