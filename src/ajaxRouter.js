@@ -468,50 +468,79 @@ ajaxRouter.put('/customer-account', async (req, res, next) => {
 	const token = AuthHeader.decodeUserLoginAuth(req.body.token);
 	const userId = JSON.stringify(token.userId).replace(/["']/g, '');
 
+	// setup objects and filter
 	const customerDataObj = {
 		token: '',
 		authenticated: false,
 		customer_settings: null,
 		order_statuses: null
 	};
-	// create customer draft object for update
-	const customerDraft = {
+	const customerDraftObj = {
+		full_name: `${customerData.first_name} ${customerData.last_name}`,
 		first_name: customerData.first_name,
 		last_name: customerData.last_name,
 		email: customerData.email,
-		password: AuthHeader.decodeUserPassword(customerData.password).password
+		password: AuthHeader.decodeUserPassword(customerData.password).password,
+		addresses: [customerData.billing_address, customerData.shipping_address]
 	};
-
+	const filter = {
+		email: customerData.email
+	};
 	// update customer profile and addresses
-	await api.customers.update(userId, customerDraft).then(({ status, json }) => {
-		if (json.total_count < 1) {
-			res.status(status).send(json);
-			return false;
+	await api.customers.list(filter).then(({ status, json }) => {
+		// if customer email exists already do not update
+		if (json.total_count > 0) {
+			delete customerDraftObj.email;
 		}
-		customerDataObj.customer_settings = json;
-		customerDataObj.customer_settings.password = '*******';
-		customerDataObj.token = AuthHeader.encodeUserLoginAuth(userId);
-		customerData.authenticated = false;
-		db.collection('orders').updateMany(
-			{ customer_id: ObjectID(json.id) },
+	});
+	try {
+		// update customer
+		await db.collection('customers').updateMany(
+			{ _id: ObjectID(userId) },
 			{
-				$set: {
-					shipping_address: customerData.shipping_address,
-					billing_address: customerData.billing_address
-				}
+				$set: customerDraftObj
 			},
-			function(error, result) {
+			{ ordered: false },
+			async function(error, result) {
 				if (error) {
 					//alert
-					throw error;
+					res.status('200').send(error);
 				}
-				customerDataObj.order_statuses = status;
-				let objJsonB64 = JSON.stringify(customerDataObj);
-				objJsonB64 = Buffer.from(objJsonB64).toString('base64');
-				res.status(status).send(JSON.stringify(objJsonB64));
+				customerDataObj.customer_settings = result;
+				customerDataObj.customer_settings.password = '*******';
+				customerDataObj.token = AuthHeader.encodeUserLoginAuth(userId);
+				customerData.authenticated = false;
+
+				if (customerData.saved_addresses === 0) {
+					let objJsonB64 = JSON.stringify(customerDataObj);
+					objJsonB64 = Buffer.from(objJsonB64).toString('base64');
+					res.status('200').send(JSON.stringify(objJsonB64));
+					return false;
+				}
+
+				// update orders
+				await db.collection('orders').updateMany(
+					{ customer_id: ObjectID(userId) },
+					{
+						$set: {
+							shipping_address: customerData.shipping_address,
+							billing_address: customerData.billing_address
+						}
+					},
+					function(error, result) {
+						if (error) {
+							//alert
+							res.status('200').send(error);
+						}
+						customerDataObj.order_statuses = result;
+						let objJsonB64 = JSON.stringify(customerDataObj);
+						objJsonB64 = Buffer.from(objJsonB64).toString('base64');
+						res.status('200').send(JSON.stringify(objJsonB64));
+					}
+				);
 			}
 		);
-	});
+	} catch (error) {}
 });
 
 ajaxRouter.post('/cart/items', (req, res, next) => {
@@ -602,11 +631,24 @@ ajaxRouter.put('/cart/items/:item_id', (req, res, next) => {
 
 ajaxRouter.put('/cart/checkout', (req, res, next) => {
 	const order_id = req.signedCookies.order_id;
+
 	if (order_id) {
 		api.orders
 			.checkout(order_id)
 			.then(cartResponse => fillCartItems(cartResponse))
 			.then(({ status, json }) => {
+				let paths = '';
+				// generate pdp landing url for the ordered product. More than 1 product in ordered will return comma separated url.
+				[].slice.call(json.items).forEach(items => {
+					paths +=
+						json.items.length < 2
+							? `${serverSettings.storeBaseUrl}${items.path}`
+							: `${serverSettings.storeBaseUrl}${items.path},`;
+				});
+				const data = {
+					landing_url: paths
+				};
+				api.orders.update(order_id, data);
 				res.clearCookie('order_id');
 				res.status(status).send(json);
 			});

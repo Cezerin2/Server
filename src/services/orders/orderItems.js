@@ -247,6 +247,7 @@ class OrderItemsService {
 		if (item.custom_price && item.custom_price > 0) {
 			// product with custom price - can set on client side
 			return {
+				'items.$.product_image': product.images,
 				'items.$.sku': product.sku,
 				'items.$.name': product.name,
 				'items.$.variant_name': item.custom_note || '',
@@ -269,6 +270,7 @@ class OrderItemsService {
 
 			if (variant) {
 				return {
+					'items.$.product_image': product.images,
 					'items.$.sku': variant.sku,
 					'items.$.name': product.name,
 					'items.$.variant_name': variantName,
@@ -286,6 +288,7 @@ class OrderItemsService {
 		} else {
 			// normal product
 			return {
+				'items.$.product_image': product.images,
 				'items.$.sku': product.sku,
 				'items.$.name': product.name,
 				'items.$.variant_name': '',
@@ -338,7 +341,9 @@ class OrderItemsService {
 	}
 
 	getValidDocumentForInsert(data) {
-		let item = {
+		const productImage = parse.getObjectIDIfValid(data.product_id)
+		const item = {
+			product_image: [],
 			id: new ObjectID(),
 			product_id: parse.getObjectIDIfValid(data.product_id),
 			variant_id: parse.getObjectIDIfValid(data.variant_id),
