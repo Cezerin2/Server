@@ -33,14 +33,24 @@ app.use(express.static('public/content', STATIC_OPTIONS));
 
 app.all('*', (req, res, next) => {
 	// CORS headers
-	var allowedOrigins = security.getAccessControlAllowOrigin();
+	//var allowedOrigins = security.getAccessControlAllowOrigin();
+	//var origin = req.headers.origin;
+	//if (allowedOrigins === '*') {
+	//res.setHeader('Access-Control-Allow-Origin', allowedOrigins);
+	//} else {
+	//if (allowedOrigins.indexOf(origin) > -1) {
+	//res.setHeader('Access-Control-Allow-Origin', origin);
+	//}
+	//}
+	var allowedOrigins = [
+		'http://localhost:3000',
+		'http://localhost:3001',
+		'http://localhost:3003'
+	];
 	var origin = req.headers.origin;
-	if (allowedOrigins === '*') {
-		res.setHeader('Access-Control-Allow-Origin', allowedOrigins);
-	} else {
-		if (allowedOrigins.indexOf(origin) > -1) {
-			res.setHeader('Access-Control-Allow-Origin', origin);
-		}
+
+	if (allowedOrigins.indexOf(origin) > -1) {
+		res.setHeader('Access-Control-Allow-Origin', origin);
 	}
 
 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
