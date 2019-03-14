@@ -287,7 +287,7 @@ ajaxRouter.post('/login', async (req, res, next) => {
 	await db
 		.collection('customers')
 		.find({
-			email: req.body.email,
+			email: (req.body.email).toLowerCase(),
 			password: AuthHeader.decodeUserPassword(req.body.password).password
 		})
 		.limit(1)
@@ -392,7 +392,7 @@ ajaxRouter.post('/register', async (req, res, next) => {
 				full_name: `${firstName} ${lastName}`,
 				first_name: firstName,
 				last_name: lastName,
-				email: eMail,
+				email: (eMail).toLowerCase(),
 				password: passWord
 			};
 
