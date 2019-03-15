@@ -316,6 +316,9 @@ ajaxRouter.post('/login', async (req, res, next) => {
 
 			bcrypt.compare(inputPassword, customerPassword, function(err, result) {
 				if (result == true) {
+					customerData.token = AuthHeader.encodeUserLoginAuth(result._id);
+					customerData.authenticated = true;
+
 					api.customers.retrieve(result._id).then(({ status, json }) => {
 						customerData.customer_settings = json;
 						customerData.customer_settings.password = '*******';
@@ -330,15 +333,12 @@ ajaxRouter.post('/login', async (req, res, next) => {
 							res.status(status).send(JSON.stringify(objJsonB64));
 						});
 					});
-				} else {
-					api.customers.list().then(({ status, json }) => {
-						customerData.loggedin_failed = true;
-						let objJsonB64 = JSON.stringify(customerData);
-						objJsonB64 = Buffer.from(objJsonB64).toString('base64');
-						res.status(status).send(JSON.stringify(objJsonB64));
-					});
-					return;
+					return true;
 				}
+				let objJsonB64 = JSON.stringify(customerData);
+				objJsonB64 = Buffer.from(objJsonB64).toString('base64');
+				res.status(200).send(JSON.stringify(objJsonB64));
+				return;
 			});
 		});
 });
