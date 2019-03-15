@@ -10,9 +10,9 @@ import AuthHeader from './lib/auth-header';
 import mailer from './lib/mailer';
 import EmailTemplatesService from './services/settings/emailTemplates';
 import SettingsService from './services/settings/settings';
-
 import bcrypt from 'bcrypt';
-const saltRounds = 15;
+
+const saltRounds = 10;
 const ajaxRouter = express.Router();
 const TOKEN_PAYLOAD = { email: 'store', scopes: ['admin'] };
 const STORE_ACCESS_TOKEN = jwt.sign(TOKEN_PAYLOAD, serverSettings.jwtSecretKey);
@@ -189,7 +189,7 @@ ajaxRouter.post('/reset-password', async (req, res, next) => {
 
 ajaxRouter.post('/forgot-password', async (req, res, next) => {
 	const filter = {
-		email: req.body.email
+		email: req.body.email.toLowerCase()
 	};
 	const data = {
 		status: true
@@ -311,14 +311,11 @@ ajaxRouter.post('/login', async (req, res, next) => {
 			var customerPassword = result.password;
 			var inputPassword = AuthHeader.decodeUserPassword(req.body.password)
 				.password;
-			console.log(customerPassword);
-			console.log(inputPassword);
 
-			bcrypt.compare(inputPassword, customerPassword, function(err, result) {
-				if (result == true) {
+			bcrypt.compare(inputPassword, customerPassword, function(err, out) {
+				if (out == true) {
 					customerData.token = AuthHeader.encodeUserLoginAuth(result._id);
 					customerData.authenticated = true;
-
 					api.customers.retrieve(result._id).then(({ status, json }) => {
 						customerData.customer_settings = json;
 						customerData.customer_settings.password = '*******';
@@ -335,6 +332,7 @@ ajaxRouter.post('/login', async (req, res, next) => {
 					});
 					return true;
 				}
+				customerData.loggedin_failed = true;
 				let objJsonB64 = JSON.stringify(customerData);
 				objJsonB64 = Buffer.from(objJsonB64).toString('base64');
 				res.status(200).send(JSON.stringify(objJsonB64));
@@ -401,22 +399,24 @@ ajaxRouter.post('/register', async (req, res, next) => {
 					return false;
 				}
 			});
+			// generate password-hash
+			const salt = bcrypt.genSaltSync(saltRounds);
+			const hashPassword = bcrypt.hashSync(passWord, salt);
 
-			await bcrypt.hash(passWord, saltRounds, function(err, hash) {
-				const customerDraft = {
-					full_name: `${firstName} ${lastName}`,
-					first_name: firstName,
-					last_name: lastName,
-					email: eMail.toLowerCase(),
-					password: hash
-				};
-				// create new customer in database
-				api.customers.create(customerDraft).then(({ status, json }) => {
-					data.isCustomerSaved = true;
-					res.status(status).send(data);
-				});
-				return true;
+			const customerDraft = {
+				full_name: `${firstName} ${lastName}`,
+				first_name: firstName,
+				last_name: lastName,
+				email: eMail.toLowerCase(),
+				password: hashPassword
+			};
+
+			// create new customer in database
+			await api.customers.create(customerDraft).then(({ status, json }) => {
+				data.isCustomerSaved = true;
+				res.status(status).send(data);
 			});
+			return true;
 		})();
 	}
 
@@ -483,6 +483,12 @@ ajaxRouter.put('/customer-account', async (req, res, next) => {
 	const token = AuthHeader.decodeUserLoginAuth(req.body.token);
 	const userId = JSON.stringify(token.userId).replace(/["']/g, '');
 
+	// generate password-hash
+	const inputPassword = AuthHeader.decodeUserPassword(customerData.password)
+		.password;
+	const salt = bcrypt.genSaltSync(saltRounds);
+	const hashPassword = bcrypt.hashSync(inputPassword, salt);
+
 	// setup objects and filter
 	const customerDataObj = {
 		token: '',
@@ -494,8 +500,8 @@ ajaxRouter.put('/customer-account', async (req, res, next) => {
 		full_name: `${customerData.first_name} ${customerData.last_name}`,
 		first_name: customerData.first_name,
 		last_name: customerData.last_name,
-		email: customerData.email,
-		password: AuthHeader.decodeUserPassword(customerData.password).password,
+		email: customerData.email.toLowerCase(),
+		password: hashPassword,
 		addresses: [customerData.billing_address, customerData.shipping_address]
 	};
 	const filter = {
