@@ -12,7 +12,9 @@ import EmailTemplatesService from './services/settings/emailTemplates';
 import SettingsService from './services/settings/settings';
 import bcrypt from 'bcrypt';
 
-const saltRounds = 10;
+// cost factor for hashes
+const saltRounds = serverSettings.saltRounds;
+
 const ajaxRouter = express.Router();
 const TOKEN_PAYLOAD = { email: 'store', scopes: ['admin'] };
 const STORE_ACCESS_TOKEN = jwt.sign(TOKEN_PAYLOAD, serverSettings.jwtSecretKey);
@@ -140,7 +142,7 @@ ajaxRouter.get('/cart', (req, res, next) => {
 });
 
 ajaxRouter.post('/reset-password', async (req, res, next) => {
-	await bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+	await bcrypt.hash(req.body.password, saltRounds, async function(err, hash) {
 		const data = {
 			status: false,
 			id: null,
@@ -161,12 +163,14 @@ ajaxRouter.post('/reset-password', async (req, res, next) => {
 
 		// update customer password after checking customer id
 		if ('id' in req.body) {
-			api.customers.update(userId, customerDraft).then(({ status, json }) => {
-				data.status = true;
-				data.id = userId;
-				data.verified = true;
-				res.status(status).send(data);
-			});
+			await api.customers
+				.update(userId, customerDraft)
+				.then(({ status, json }) => {
+					data.status = true;
+					data.id = userId;
+					data.verified = true;
+					res.status(status).send(data);
+				});
 			return false;
 		}
 
@@ -176,7 +180,7 @@ ajaxRouter.post('/reset-password', async (req, res, next) => {
 		}
 
 		// if customer email exists send status back
-		api.customers.list(filter).then(({ status, json }) => {
+		await api.customers.list(filter).then(({ status, json }) => {
 			if (json.total_count > 0) {
 				data.status = true;
 				data.id = AuthHeader.encodeUserLoginAuth(userId);
@@ -312,11 +316,12 @@ ajaxRouter.post('/login', async (req, res, next) => {
 			var inputPassword = AuthHeader.decodeUserPassword(req.body.password)
 				.password;
 
-			bcrypt.compare(inputPassword, customerPassword, function(err, out) {
+			bcrypt.compare(inputPassword, customerPassword, async function(err, out) {
 				if (out == true) {
 					customerData.token = AuthHeader.encodeUserLoginAuth(result._id);
 					customerData.authenticated = true;
-					api.customers.retrieve(result._id).then(({ status, json }) => {
+
+					await api.customers.retrieve(result._id).then(({ status, json }) => {
 						customerData.customer_settings = json;
 						customerData.customer_settings.password = '*******';
 

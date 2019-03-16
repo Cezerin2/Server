@@ -32,7 +32,15 @@ module.exports = {
 
 	// used by API
 	mongodbServerUrl: dbUrl,
-	smtpServer: {},
+	smtpServer: {
+		host: '',
+		port: 0,
+		secure: true,
+		user: '',
+		pass: '',
+		fromName: '',
+		fromAddress: ''
+	},
 
 	// key to sign tokens
 	jwtSecretKey: 'SP69kXFR3znRi7kL8Max2GTB24wOtEQj',

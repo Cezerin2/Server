@@ -7,7 +7,6 @@ import winston from 'winston';
 import logger from './lib/logger';
 import settings from './lib/settings';
 import security from './lib/security';
-import { db } from './lib/mongo';
 import dashboardWebSocket from './lib/dashboardWebSocket';
 import ajaxRouter from './ajaxRouter';
 import apiRouter from './apiRouter';
@@ -33,24 +32,14 @@ app.use(express.static('public/content', STATIC_OPTIONS));
 
 app.all('*', (req, res, next) => {
 	// CORS headers
-	//var allowedOrigins = security.getAccessControlAllowOrigin();
-	//var origin = req.headers.origin;
-	//if (allowedOrigins === '*') {
-	//res.setHeader('Access-Control-Allow-Origin', allowedOrigins);
-	//} else {
-	//if (allowedOrigins.indexOf(origin) > -1) {
-	//res.setHeader('Access-Control-Allow-Origin', origin);
-	//}
-	//}
-	var allowedOrigins = [
-		'http://localhost:3000',
-		'http://localhost:3001',
-		'http://localhost:3003'
-	];
+	var allowedOrigins = security.getAccessControlAllowOrigin();
 	var origin = req.headers.origin;
-
-	if (allowedOrigins.indexOf(origin) > -1) {
-		res.setHeader('Access-Control-Allow-Origin', origin);
+	if (allowedOrigins === '*') {
+		res.setHeader('Access-Control-Allow-Origin', allowedOrigins);
+	} else {
+		if (allowedOrigins.indexOf(origin) > -1) {
+			res.setHeader('Access-Control-Allow-Origin', origin);
+		}
 	}
 
 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
