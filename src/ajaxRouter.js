@@ -10,9 +10,12 @@ import AuthHeader from './lib/auth-header';
 import mailer from './lib/mailer';
 import EmailTemplatesService from './services/settings/emailTemplates';
 import SettingsService from './services/settings/settings';
+import bcrypt from 'bcrypt';
+
+// cost factor for hashes
+const saltRounds = serverSettings.saltRounds;
 
 const ajaxRouter = express.Router();
-
 const TOKEN_PAYLOAD = { email: 'store', scopes: ['admin'] };
 const STORE_ACCESS_TOKEN = jwt.sign(TOKEN_PAYLOAD, serverSettings.jwtSecretKey);
 
@@ -139,57 +142,58 @@ ajaxRouter.get('/cart', (req, res, next) => {
 });
 
 ajaxRouter.post('/reset-password', async (req, res, next) => {
-	const data = {
-		status: false,
-		id: null,
-		verified: false
-	};
+	await bcrypt.hash(req.body.password, saltRounds, async function(err, hash) {
+		const data = {
+			status: false,
+			id: null,
+			verified: false
+		};
 
-	const userId =
-		'token' in req.body
-			? AuthHeader.decodeUserLoginAuth(req.body.token)
-			: AuthHeader.decodeUserLoginAuth(req.body.id).userId.userId;
+		const userId =
+			'token' in req.body
+				? AuthHeader.decodeUserLoginAuth(req.body.token)
+				: AuthHeader.decodeUserLoginAuth(req.body.id).userId.userId;
 
-	const filter = {
-		id: userId
-	};
+		const filter = {
+			id: userId
+		};
+		const customerDraft = {
+			password: hash
+		};
 
-	const customerDraft = {
-		password: req.body.password
-	};
-
-	// update customer password after checking customer id
-	if ('id' in req.body) {
-		await api.customers
-			.update(userId, customerDraft)
-			.then(({ status, json }) => {
-				data.status = true;
-				data.id = userId;
-				data.verified = true;
-				res.status(status).send(data);
-			});
-		return false;
-	}
-
-	if ('name' in userId && userId.name.indexOf('JsonWebTokenErro') !== -1) {
-		res.send(data);
-		return false;
-	}
-
-	// if customer email exists send status back
-	await api.customers.list(filter).then(({ status, json }) => {
-		if (json.total_count > 0) {
-			data.status = true;
-			data.id = AuthHeader.encodeUserLoginAuth(userId);
-			res.status(status).send(data);
+		// update customer password after checking customer id
+		if ('id' in req.body) {
+			await api.customers
+				.update(userId, customerDraft)
+				.then(({ status, json }) => {
+					data.status = true;
+					data.id = userId;
+					data.verified = true;
+					res.status(status).send(data);
+				});
+			return false;
 		}
-		res.status(status).send(data);
+
+		if ('name' in userId && userId.name.indexOf('JsonWebTokenErro') !== -1) {
+			res.send(data);
+			return false;
+		}
+
+		// if customer email exists send status back
+		await api.customers.list(filter).then(({ status, json }) => {
+			if (json.total_count > 0) {
+				data.status = true;
+				data.id = AuthHeader.encodeUserLoginAuth(userId);
+				res.status(status).send(data);
+			}
+			res.status(status).send(data);
+		});
 	});
 });
 
 ajaxRouter.post('/forgot-password', async (req, res, next) => {
 	const filter = {
-		email: req.body.email
+		email: req.body.email.toLowerCase()
 	};
 	const data = {
 		status: true
@@ -251,26 +255,31 @@ ajaxRouter.post('/customer-account', async (req, res, next) => {
 	};
 
 	customerData.token = AuthHeader.decodeUserLoginAuth(req.body.token);
-	const userId = JSON.stringify(customerData.token.userId).replace(/["']/g, '');
-	const filter = {
-		customer_id: userId
-	};
+	if (customerData.token.post !== undefined) {
+		const userId = JSON.stringify(customerData.token.userId).replace(
+			/["']/g,
+			''
+		);
+		const filter = {
+			customer_id: userId
+		};
 
-	// retrieve customer data
-	await api.customers.retrieve(userId).then(({ status, json }) => {
-		customerData.customer_settings = json;
-		customerData.customer_settings.password = '*******';
-		customerData.token = AuthHeader.encodeUserLoginAuth(userId);
-		customerData.authenticated = false;
-	});
+		// retrieve customer data
+		await api.customers.retrieve(userId).then(({ status, json }) => {
+			customerData.customer_settings = json;
+			customerData.customer_settings.password = '*******';
+			customerData.token = AuthHeader.encodeUserLoginAuth(userId);
+			customerData.authenticated = false;
+		});
 
-	// retrieve orders data
-	await api.orders.list(filter).then(({ status, json }) => {
-		customerData.order_statuses = json;
-		let objJsonB64 = JSON.stringify(customerData);
-		objJsonB64 = Buffer.from(objJsonB64).toString('base64');
-		res.status(status).send(JSON.stringify(objJsonB64));
-	});
+		// retrieve orders data
+		await api.orders.list(filter).then(({ status, json }) => {
+			customerData.order_statuses = json;
+			let objJsonB64 = JSON.stringify(customerData);
+			objJsonB64 = Buffer.from(objJsonB64).toString('base64');
+			res.status(status).send(JSON.stringify(objJsonB64));
+		});
+	}
 });
 
 ajaxRouter.post('/login', async (req, res, next) => {
@@ -282,13 +291,11 @@ ajaxRouter.post('/login', async (req, res, next) => {
 		order_statuses: null,
 		cartLayer: req.body.cartLayer !== undefined ? req.body.cartLayer : false
 	};
-
 	// check if customer exists in database and grant or denie access
 	await db
 		.collection('customers')
 		.find({
-			email: (req.body.email).toLowerCase(),
-			password: AuthHeader.decodeUserPassword(req.body.password).password
+			email: req.body.email.toLowerCase()
 		})
 		.limit(1)
 		.next(function getCustomerData(error, result) {
@@ -305,25 +312,36 @@ ajaxRouter.post('/login', async (req, res, next) => {
 				});
 				return;
 			}
+			var customerPassword = result.password;
+			var inputPassword = AuthHeader.decodeUserPassword(req.body.password)
+				.password;
 
-			customerData.token = AuthHeader.encodeUserLoginAuth(result._id);
-			customerData.authenticated = true;
+			bcrypt.compare(inputPassword, customerPassword, async function(err, out) {
+				if (out == true) {
+					customerData.token = AuthHeader.encodeUserLoginAuth(result._id);
+					customerData.authenticated = true;
 
-			// retrieve all customer and orders data for the myaccount settings
-			api.customers.retrieve(result._id).then(({ status, json }) => {
-				customerData.customer_settings = json;
-				customerData.customer_settings.password = '*******';
+					await api.customers.retrieve(result._id).then(({ status, json }) => {
+						customerData.customer_settings = json;
+						customerData.customer_settings.password = '*******';
 
-				const filter = {
-					customer_id: json.id
-				};
-				api.orders.list(filter).then(({ status, json }) => {
-					customerData.order_statuses = json;
-
-					let objJsonB64 = JSON.stringify(customerData);
-					objJsonB64 = Buffer.from(objJsonB64).toString('base64');
-					res.status(status).send(JSON.stringify(objJsonB64));
-				});
+						const filter = {
+							customer_id: json.id
+						};
+						api.orders.list(filter).then(({ status, json }) => {
+							customerData.order_statuses = json;
+							let objJsonB64 = JSON.stringify(customerData);
+							objJsonB64 = Buffer.from(objJsonB64).toString('base64');
+							res.status(status).send(JSON.stringify(objJsonB64));
+						});
+					});
+					return true;
+				}
+				customerData.loggedin_failed = true;
+				let objJsonB64 = JSON.stringify(customerData);
+				objJsonB64 = Buffer.from(objJsonB64).toString('base64');
+				res.status(200).send(JSON.stringify(objJsonB64));
+				return;
 			});
 		});
 });
@@ -386,21 +404,23 @@ ajaxRouter.post('/register', async (req, res, next) => {
 					return false;
 				}
 			});
+			// generate password-hash
+			const salt = bcrypt.genSaltSync(saltRounds);
+			const hashPassword = bcrypt.hashSync(passWord, salt);
 
-			// create new customer in database
 			const customerDraft = {
 				full_name: `${firstName} ${lastName}`,
 				first_name: firstName,
 				last_name: lastName,
-				email: (eMail).toLowerCase(),
-				password: passWord
+				email: eMail.toLowerCase(),
+				password: hashPassword
 			};
 
+			// create new customer in database
 			await api.customers.create(customerDraft).then(({ status, json }) => {
 				data.isCustomerSaved = true;
 				res.status(status).send(data);
 			});
-
 			return true;
 		})();
 	}
@@ -468,6 +488,12 @@ ajaxRouter.put('/customer-account', async (req, res, next) => {
 	const token = AuthHeader.decodeUserLoginAuth(req.body.token);
 	const userId = JSON.stringify(token.userId).replace(/["']/g, '');
 
+	// generate password-hash
+	const inputPassword = AuthHeader.decodeUserPassword(customerData.password)
+		.password;
+	const salt = bcrypt.genSaltSync(saltRounds);
+	const hashPassword = bcrypt.hashSync(inputPassword, salt);
+
 	// setup objects and filter
 	const customerDataObj = {
 		token: '',
@@ -479,8 +505,8 @@ ajaxRouter.put('/customer-account', async (req, res, next) => {
 		full_name: `${customerData.first_name} ${customerData.last_name}`,
 		first_name: customerData.first_name,
 		last_name: customerData.last_name,
-		email: customerData.email,
-		password: AuthHeader.decodeUserPassword(customerData.password).password,
+		email: customerData.email.toLowerCase(),
+		password: hashPassword,
 		addresses: [customerData.billing_address, customerData.shipping_address]
 	};
 	const filter = {

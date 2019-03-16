@@ -17,6 +17,9 @@ import EmailTemplatesService from '../settings/emailTemplates';
 import ProductStockService from '../products/stock';
 import SettingsService from '../settings/settings';
 import PaymentGateways from '../../paymentGateways';
+import bcrypt from 'bcrypt';
+
+const saltRounds = settings.saltRounds;
 
 class OrdersService {
 	constructor() {}
@@ -221,11 +224,15 @@ class OrdersService {
 									? order.shipping_address.full_name
 									: '';
 
+							// generate password-hash
+							const salt = bcrypt.genSaltSync(saltRounds);
+							const hashPassword = bcrypt.hashSync(order.password, salt);
+
 							return CustomersService.addCustomer({
 								first_name: order.first_name,
 								last_name: order.last_name,
-								password: order.password,
-								email: order.email,
+								password: hashPassword,
+								email: order.email.toLowerCase(),
 								full_name: order.first_name + ' ' + order.last_name,
 								mobile: order.mobile,
 								browser: order.browser,
