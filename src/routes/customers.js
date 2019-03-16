@@ -63,7 +63,7 @@ class CustomersRoute {
 	getCustomers(req, res, next) {
 		CustomersService.getCustomers(req.query)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -72,9 +72,9 @@ class CustomersRoute {
 		CustomersService.getSingleCustomer(req.params.id)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -83,7 +83,7 @@ class CustomersRoute {
 	addCustomer(req, res, next) {
 		CustomersService.addCustomer(req.body)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -92,9 +92,9 @@ class CustomersRoute {
 		CustomersService.updateCustomer(req.params.id, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -103,7 +103,7 @@ class CustomersRoute {
 	deleteCustomer(req, res, next) {
 		CustomersService.deleteCustomer(req.params.id)
 			.then(data => {
-				res.status(data ? 200 : 404).end();
+				return res.status(data ? 200 : 404).end();
 			})
 			.catch(next);
 	}
@@ -112,7 +112,7 @@ class CustomersRoute {
 		const customer_id = req.params.id;
 		CustomersService.addAddress(customer_id, req.body)
 			.then(data => {
-				res.end();
+				return res.end();
 			})
 			.catch(next);
 	}
@@ -122,7 +122,7 @@ class CustomersRoute {
 		const address_id = req.params.address_id;
 		CustomersService.updateAddress(customer_id, address_id, req.body)
 			.then(data => {
-				res.end();
+				return res.end();
 			})
 			.catch(next);
 	}
@@ -132,7 +132,7 @@ class CustomersRoute {
 		const address_id = req.params.address_id;
 		CustomersService.deleteAddress(customer_id, address_id)
 			.then(data => {
-				res.end();
+				return res.end();
 			})
 			.catch(next);
 	}
@@ -142,7 +142,7 @@ class CustomersRoute {
 		const address_id = req.params.address_id;
 		CustomersService.setDefaultBilling(customer_id, address_id)
 			.then(data => {
-				res.end();
+				return res.end();
 			})
 			.catch(next);
 	}
@@ -152,7 +152,7 @@ class CustomersRoute {
 		const address_id = req.params.address_id;
 		CustomersService.setDefaultShipping(customer_id, address_id)
 			.then(data => {
-				res.end();
+				return res.end();
 			})
 			.catch(next);
 	}
