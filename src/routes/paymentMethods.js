@@ -38,7 +38,7 @@ class PaymentMethodsRoute {
 	getMethods(req, res, next) {
 		PaymentMethodsService.getMethods(req.query)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -47,9 +47,9 @@ class PaymentMethodsRoute {
 		PaymentMethodsService.getSingleMethod(req.params.id)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -58,7 +58,7 @@ class PaymentMethodsRoute {
 	addMethod(req, res, next) {
 		PaymentMethodsService.addMethod(req.body)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -67,9 +67,9 @@ class PaymentMethodsRoute {
 		PaymentMethodsService.updateMethod(req.params.id, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -78,7 +78,7 @@ class PaymentMethodsRoute {
 	deleteMethod(req, res, next) {
 		PaymentMethodsService.deleteMethod(req.params.id)
 			.then(data => {
-				res.status(data ? 200 : 404).end();
+				return res.status(data ? 200 : 404).end();
 			})
 			.catch(next);
 	}
