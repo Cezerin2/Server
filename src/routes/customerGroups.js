@@ -35,52 +35,57 @@ class CustomerGroupsRoute {
 		);
 	}
 
-	getGroups(req, res, next) {
-		CustomerGroupsService.getGroups(req.query)
-			.then(data => {
+	async getGroups(req, res, next) {
+		try {
+			let data = await CustomerGroupsService.getGroups(req.query)
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
+	}
+
+	async getSingleGroup(req, res, next) {
+		try {
+			let data = await CustomerGroupsService.getSingleGroup(req.params.id)
+			if (data) {
 				return res.send(data);
-			})
-			.catch(next);
+			} else {
+				return res.status(404).end();
+			}
+		} catch (err) {
+			return next(err);
+		}
 	}
 
-	getSingleGroup(req, res, next) {
-		CustomerGroupsService.getSingleGroup(req.params.id)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+	async addGroup(req, res, next) {
+		try {
+			let data = CustomerGroupsService.addGroup(req.body)
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
-	addGroup(req, res, next) {
-		CustomerGroupsService.addGroup(req.body)
-			.then(data => {
+	async updateGroup(req, res, next) {
+		try {
+			let data = await CustomerGroupsService.updateGroup(req.params.id, req.body)
+			if (data) {
 				return res.send(data);
-			})
-			.catch(next);
+			} else {
+				return res.status(404).end();
+			}
+		} catch(err) {
+			return next(err);
+		}
 	}
 
-	updateGroup(req, res, next) {
-		CustomerGroupsService.updateGroup(req.params.id, req.body)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
-	}
-
-	deleteGroup(req, res, next) {
-		CustomerGroupsService.deleteGroup(req.params.id)
-			.then(data => {
-				return res.status(data ? 200 : 404).end();
-			})
-			.catch(next);
+	async deleteGroup(req, res, next) {
+		try {
+			let data = await CustomerGroupsService.deleteGroup(req.params.id)
+			return res.status(data ? 200 : 404).end();
+		} catch(err) {
+			return next(err)
+		}
 	}
 }
 
