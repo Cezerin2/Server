@@ -37,10 +37,8 @@ class OrderStatusesRoute {
 
 	async getStatuses(req, res, next) {
 		try {
-			await OrderStatusesService.getStatuses(req.query)
-				.then(data => {
-					return res.send(data);
-				});
+			let data = await OrderStatusesService.getStatuses(req.query)
+			return res.send(data);
 		} catch {
 			return next(err);
 		}
@@ -48,14 +46,12 @@ class OrderStatusesRoute {
 
 	async getSingleStatus(req, res, next) {
 		try {
-			await OrderStatusesService.getSingleStatus(req.params.id)
-				.then(data => {
-					if (data) {
-						return res.send(data);
-					} else {
-						return res.status(404).end();
-					}
-				});
+			let data = await OrderStatusesService.getSingleStatus(req.params.id)
+			if (data) {
+					return res.send(data);
+			} else {
+					return res.status(404).end();
+			}
 		} catch (err) {
 			return next(err);
 		}
@@ -63,10 +59,8 @@ class OrderStatusesRoute {
 
 	async addStatus(req, res, next) {
 		try {
-			OrderStatusesService.addStatus(req.body)
-				.then(data => {
-					return res.send(data);
-				});
+			let data = OrderStatusesService.addStatus(req.body)
+			return res.send(data);
 		} catch (err) {
 			return next(err);
 		}
@@ -74,14 +68,12 @@ class OrderStatusesRoute {
 
 	async updateStatus(req, res, next) {
 		try {
-			await OrderStatusesService.updateStatus(req.params.id, req.body)
-				.then(data => {
-					if (data) {
-						return res.send(data);
-					} else {
-						return res.status(404).end();
-					}
-				});
+			let data = await OrderStatusesService.updateStatus(req.params.id, req.body)
+			if (data) {
+				return res.send(data);
+			} else {
+				return res.status(404).end();
+			}
 		} catch (err) {
 			return next(err);
 		}
@@ -89,10 +81,8 @@ class OrderStatusesRoute {
 
 	async deleteStatus(req, res, next) {
 		try {
-			await OrderStatusesService.deleteStatus(req.params.id)
-				.then(data => {
-					return res.status(data ? 200 : 404).end();
-				});
+			let data = await OrderStatusesService.deleteStatus(req.params.id)
+			return res.status(data ? 200 : 404).end();
 		} catch (err) {
 			return next(err);
 		}
