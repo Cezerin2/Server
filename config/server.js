@@ -15,7 +15,7 @@ module.exports = {
 	apiBaseUrl: process.env.API_BASE_URL || `http://localhost:3001/api/v1`,
 
 	// Access-Control-Allow-Origin
-	storeBaseUrl: process.env.STORE_URL || `http://localhost:3000`,
+	storeBaseUrl: process.env.STORE_BASE_URL || `http://localhost:3000`,
 
 	// used by API
 	adminBaseURL: process.env.ADMIN_BASE_URL || 'http://localhost:3002',
@@ -29,14 +29,15 @@ module.exports = {
 	// used by API
 	mongodbServerUrl: dbUrl,
 
+	// smpt server parameters
 	smtpServer: {
-		host: '',
-		port: 0,
-		secure: true,
-		user: '',
-		pass: '',
-		fromName: '',
-		fromAddress: ''
+		host: process.env.SMTP_HOST || '',
+		port: process.env.SMTP_PORT || 587,
+		secure: process.env.SMTP_SECURE || false,
+		user: process.env.SMTP_USER || '',
+		pass: process.env.SMTP_PASS || '',
+		fromName: process.env.SMTP_FROM_NAME || '',
+		fromAddress: process.env.SMTP_FROM_ADDRESS || ''
 	},
 
 	// key to sign tokens
@@ -65,7 +66,7 @@ module.exports = {
 
 	// cost factor, controls how much time is needed to calculate a single BCrypt hash
 	// for production: recommended salRounds > 12
-	saltRounds: 10,
+	saltRounds: process.env.SALT_ROUNDS || 10,
 
 	developerMode: true
 };
