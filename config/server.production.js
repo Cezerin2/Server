@@ -63,6 +63,10 @@ module.exports = {
 	// store UI language
 	language: 'en',
 
+	// cost factor, controls how much time is needed to calculate a single BCrypt hash
+	// for production: recommended salRounds > 12
+	saltRounds: 12,
+
 	// used by API
 	orderStartNumber: 1000
 };

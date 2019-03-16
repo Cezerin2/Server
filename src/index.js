@@ -50,6 +50,7 @@ app.all('*', (req, res, next) => {
 	);
 	next();
 });
+
 app.use(responseTime());
 app.use(cookieParser(settings.cookieSecretKey));
 app.use(bodyParser.urlencoded({ extended: true }));

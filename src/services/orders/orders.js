@@ -20,6 +20,7 @@ import PaymentGateways from '../../paymentGateways';
 import bcrypt from 'bcrypt';
 
 const saltRounds = settings.saltRounds;
+
 class OrdersService {
 	constructor() {}
 
