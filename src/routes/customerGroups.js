@@ -38,7 +38,7 @@ class CustomerGroupsRoute {
 	getGroups(req, res, next) {
 		CustomerGroupsService.getGroups(req.query)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -47,9 +47,9 @@ class CustomerGroupsRoute {
 		CustomerGroupsService.getSingleGroup(req.params.id)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -58,7 +58,7 @@ class CustomerGroupsRoute {
 	addGroup(req, res, next) {
 		CustomerGroupsService.addGroup(req.body)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -67,9 +67,9 @@ class CustomerGroupsRoute {
 		CustomerGroupsService.updateGroup(req.params.id, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -78,7 +78,7 @@ class CustomerGroupsRoute {
 	deleteGroup(req, res, next) {
 		CustomerGroupsService.deleteGroup(req.params.id)
 			.then(data => {
-				res.status(data ? 200 : 404).end();
+				return res.status(data ? 200 : 404).end();
 			})
 			.catch(next);
 	}
