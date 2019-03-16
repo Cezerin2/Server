@@ -44,7 +44,7 @@ class SecurityTokensRoute {
 	getTokens(req, res, next) {
 		SecurityTokensService.getTokens(req.query)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -52,7 +52,7 @@ class SecurityTokensRoute {
 	getTokensBlacklist(req, res, next) {
 		SecurityTokensService.getTokensBlacklist()
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -61,9 +61,9 @@ class SecurityTokensRoute {
 		SecurityTokensService.getSingleToken(req.params.id)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -72,7 +72,7 @@ class SecurityTokensRoute {
 	addToken(req, res, next) {
 		SecurityTokensService.addToken(req.body)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -81,9 +81,9 @@ class SecurityTokensRoute {
 		SecurityTokensService.updateToken(req.params.id, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -92,7 +92,7 @@ class SecurityTokensRoute {
 	deleteToken(req, res, next) {
 		SecurityTokensService.deleteToken(req.params.id)
 			.then(data => {
-				res.end();
+				return res.end();
 			})
 			.catch(next);
 	}
@@ -100,7 +100,7 @@ class SecurityTokensRoute {
 	sendDashboardSigninUrl(req, res, next) {
 		SecurityTokensService.sendDashboardSigninUrl(req)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
