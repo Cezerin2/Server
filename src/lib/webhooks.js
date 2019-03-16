@@ -2,12 +2,14 @@ import crypto from 'crypto';
 import fetch from 'node-fetch';
 import WebhooksService from '../services/webhooks';
 
-const trigger = async ({ event, payload }) => {
-	const webhooks = await WebhooksService.getWebhooks();
-	for (const webhook of webhooks) {
-		if (webhook.events.includes(event)) {
-			send({ event, payload, webhook });
-		}
+const sign = ({ data, secret }) => {
+	if (secret && secret.length > 0) {
+		const hmac = crypto.createHmac('sha256', secret);
+		hmac.update(data);
+		const signature = hmac.digest('hex');
+		return signature;
+	} else {
+		return '';
 	}
 };
 
@@ -35,14 +37,12 @@ const send = ({ event, payload, webhook }) => {
 	}
 };
 
-const sign = ({ data, secret }) => {
-	if (secret && secret.length > 0) {
-		const hmac = crypto.createHmac('sha256', secret);
-		hmac.update(data);
-		const signature = hmac.digest('hex');
-		return signature;
-	} else {
-		return '';
+const trigger = async ({ event, payload }) => {
+	const webhooks = await WebhooksService.getWebhooks();
+	for (const webhook of webhooks) {
+		if (webhook.events.includes(event)) {
+			send({ event, payload, webhook });
+		}
 	}
 };
 
