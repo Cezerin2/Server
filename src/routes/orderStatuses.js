@@ -35,52 +35,67 @@ class OrderStatusesRoute {
 		);
 	}
 
-	getStatuses(req, res, next) {
-		OrderStatusesService.getStatuses(req.query)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
-	}
-
-	getSingleStatus(req, res, next) {
-		OrderStatusesService.getSingleStatus(req.params.id)
-			.then(data => {
-				if (data) {
+	async getStatuses(req, res, next) {
+		try {
+			await OrderStatusesService.getStatuses(req.query)
+				.then(data => {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+				});
+		} catch {
+			return next(err);
+		}
 	}
 
-	addStatus(req, res, next) {
-		OrderStatusesService.addStatus(req.body)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+	async getSingleStatus(req, res, next) {
+		try {
+			await OrderStatusesService.getSingleStatus(req.params.id)
+				.then(data => {
+					if (data) {
+						return res.send(data);
+					} else {
+						return res.status(404).end();
+					}
+				});
+		} catch (err) {
+			return next(err);
+		}
 	}
 
-	updateStatus(req, res, next) {
-		OrderStatusesService.updateStatus(req.params.id, req.body)
-			.then(data => {
-				if (data) {
+	async addStatus(req, res, next) {
+		try {
+			OrderStatusesService.addStatus(req.body)
+				.then(data => {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+				});
+		} catch (err) {
+			return next(err);
+		}
 	}
 
-	deleteStatus(req, res, next) {
-		OrderStatusesService.deleteStatus(req.params.id)
-			.then(data => {
-				return res.status(data ? 200 : 404).end();
-			})
-			.catch(next);
+	async updateStatus(req, res, next) {
+		try {
+			await OrderStatusesService.updateStatus(req.params.id, req.body)
+				.then(data => {
+					if (data) {
+						return res.send(data);
+					} else {
+						return res.status(404).end();
+					}
+				});
+		} catch (err) {
+			return next(err);
+		}
+	}
+
+	async deleteStatus(req, res, next) {
+		try {
+			await OrderStatusesService.deleteStatus(req.params.id)
+				.then(data => {
+					return res.status(data ? 200 : 404).end();
+				});
+		} catch (err) {
+			return next(err);
+		}
 	}
 }
 
