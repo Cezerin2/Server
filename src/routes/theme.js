@@ -87,7 +87,7 @@ class ThemeRoute {
 	getSettings(req, res, next) {
 		ThemeSettingsService.getSettings()
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -95,7 +95,7 @@ class ThemeRoute {
 	updateSettings(req, res, next) {
 		ThemeSettingsService.updateSettings(req.body)
 			.then(() => {
-				res.end();
+				return res.end();
 			})
 			.catch(next);
 	}
@@ -103,7 +103,7 @@ class ThemeRoute {
 	getSettingsSchema(req, res, next) {
 		ThemeSettingsService.getSettingsSchema()
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -115,7 +115,7 @@ class ThemeRoute {
 	deleteFile(req, res, next) {
 		ThemeAssetsService.deleteFile(req.params.file)
 			.then(() => {
-				res.end();
+				return res.end();
 			})
 			.catch(next);
 	}
@@ -123,7 +123,7 @@ class ThemeRoute {
 	getPlaceholders(req, res, next) {
 		ThemePlaceholdersService.getPlaceholders()
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -132,9 +132,9 @@ class ThemeRoute {
 		ThemePlaceholdersService.getSinglePlaceholder(req.params.key)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -143,7 +143,7 @@ class ThemeRoute {
 	addPlaceholder(req, res, next) {
 		ThemePlaceholdersService.addPlaceholder(req.body)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -152,9 +152,9 @@ class ThemeRoute {
 		ThemePlaceholdersService.updatePlaceholder(req.params.key, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -163,7 +163,7 @@ class ThemeRoute {
 	deletePlaceholder(req, res, next) {
 		ThemePlaceholdersService.deletePlaceholder(req.params.key)
 			.then(data => {
-				res.status(data ? 200 : 404).end();
+				return res.status(data ? 200 : 404).end();
 			})
 			.catch(next);
 	}
