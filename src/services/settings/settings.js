@@ -224,7 +224,7 @@ class SettingsService {
 		});
 	}
 
-	uploadLogo(req, res, next) {
+	uploadLogo(req, res) {
 		let uploadDir = path.resolve(settings.filesUploadPath);
 		fse.ensureDirSync(uploadDir);
 
