@@ -1,9 +1,9 @@
 // config used by server side only
-const dbHost = process.env.DB_HOST || 'ds147734.mlab.com';
-const dbPort = process.env.DB_PORT || 47734;
-const dbName = process.env.DB_NAME || 'cezerin2';
-const dbUser = process.env.DB_USER || 'admin';
-const dbPass = process.env.DB_PASS || 'password01';
+const dbHost = process.env.DB_HOST || '127.0.0.1';
+const dbPort = process.env.DB_PORT || 27017;
+const dbName = process.env.DB_NAME || 'shop';
+const dbUser = process.env.DB_USER || '';
+const dbPass = process.env.DB_PASS || '';
 const dbCred =
 	dbUser.length > 0 || dbPass.length > 0 ? `${dbUser}:${dbPass}@` : '';
 
@@ -30,13 +30,13 @@ module.exports = {
 	mongodbServerUrl: dbUrl,
 
 	smtpServer: {
-		host: 'in-v3.mailjet.com',
-		port: 587,
-		secure: false,
-		user: '23fc6d9ca38af11fa5f6d133bf0359cd',
-		pass: 'adc8d7ac9438464b5418b91ea68723de',
-		fromName: 'El Patron',
-		fromAddress: 'ninja.elpatron@gmail.com'
+		host: '',
+		port: 0,
+		secure: true,
+		user: '',
+		pass: '',
+		fromName: '',
+		fromAddress: ''
 	},
 
 	// key to sign tokens
