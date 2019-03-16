@@ -38,7 +38,7 @@ class OrderStatusesRoute {
 	getStatuses(req, res, next) {
 		OrderStatusesService.getStatuses(req.query)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -47,9 +47,9 @@ class OrderStatusesRoute {
 		OrderStatusesService.getSingleStatus(req.params.id)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -58,7 +58,7 @@ class OrderStatusesRoute {
 	addStatus(req, res, next) {
 		OrderStatusesService.addStatus(req.body)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -67,9 +67,9 @@ class OrderStatusesRoute {
 		OrderStatusesService.updateStatus(req.params.id, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -78,7 +78,7 @@ class OrderStatusesRoute {
 	deleteStatus(req, res, next) {
 		OrderStatusesService.deleteStatus(req.params.id)
 			.then(data => {
-				res.status(data ? 200 : 404).end();
+				return res.status(data ? 200 : 404).end();
 			})
 			.catch(next);
 	}
