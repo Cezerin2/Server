@@ -19,7 +19,7 @@ import SettingsService from '../settings/settings';
 import PaymentGateways from '../../paymentGateways';
 import bcrypt from 'bcrypt';
 
-const saltRounds = 10;
+const saltRounds = settings.saltRounds;
 class OrdersService {
 	constructor() {}
 
