@@ -106,7 +106,7 @@ const fillCartItems = cartResponse => {
 	}
 };
 
-ajaxRouter.get('/products', (req, res, next) => {
+ajaxRouter.get('/products', (req, res) => {
 	let filter = req.query;
 	filter.enabled = true;
 	api.products.list(filter).then(({ status, json }) => {
@@ -117,7 +117,7 @@ ajaxRouter.get('/products', (req, res, next) => {
 	});
 });
 
-ajaxRouter.get('/products/:id', (req, res, next) => {
+ajaxRouter.get('/products/:id', (req, res) => {
 	api.products.retrieve(req.params.id).then(({ status, json }) => {
 		res
 			.status(status)
@@ -126,7 +126,7 @@ ajaxRouter.get('/products/:id', (req, res, next) => {
 	});
 });
 
-ajaxRouter.get('/cart', (req, res, next) => {
+ajaxRouter.get('/cart', (req, res) => {
 	const order_id = req.signedCookies.order_id;
 	if (order_id) {
 		api.orders
@@ -683,7 +683,7 @@ ajaxRouter.put('/cart/checkout', (req, res, next) => {
 	}
 });
 
-ajaxRouter.put('/cart', async (req, res, next) => {
+ajaxRouter.put('/cart', async (req, res) => {
 	const cartData = req.body;
 	const {
 		shipping_address: shippingAddress,
@@ -709,7 +709,7 @@ ajaxRouter.put('/cart', async (req, res, next) => {
 	}
 });
 
-ajaxRouter.put('/cart/shipping_address', (req, res, next) => {
+ajaxRouter.put('/cart/shipping_address', (req, res) => {
 	const order_id = req.signedCookies.order_id;
 	if (order_id) {
 		api.orders
@@ -723,7 +723,7 @@ ajaxRouter.put('/cart/shipping_address', (req, res, next) => {
 	}
 });
 
-ajaxRouter.put('/cart/billing_address', (req, res, next) => {
+ajaxRouter.put('/cart/billing_address', (req, res) => {
 	const order_id = req.signedCookies.order_id;
 	if (order_id) {
 		api.orders
@@ -737,7 +737,7 @@ ajaxRouter.put('/cart/billing_address', (req, res, next) => {
 	}
 });
 
-ajaxRouter.post('/cart/charge', async (req, res, next) => {
+ajaxRouter.post('/cart/charge', async (req, res) => {
 	const order_id = req.signedCookies.order_id;
 	if (order_id) {
 		const client = api.orders.client;
@@ -748,7 +748,7 @@ ajaxRouter.post('/cart/charge', async (req, res, next) => {
 	}
 });
 
-ajaxRouter.get('/pages', (req, res, next) => {
+ajaxRouter.get('/pages', (req, res) => {
 	api.pages.list(req.query).then(({ status, json }) => {
 		res
 			.status(status)
@@ -757,7 +757,7 @@ ajaxRouter.get('/pages', (req, res, next) => {
 	});
 });
 
-ajaxRouter.get('/pages/:id', (req, res, next) => {
+ajaxRouter.get('/pages/:id', (req, res) => {
 	api.pages.retrieve(req.params.id).then(({ status, json }) => {
 		res
 			.status(status)
@@ -766,7 +766,7 @@ ajaxRouter.get('/pages/:id', (req, res, next) => {
 	});
 });
 
-ajaxRouter.get('/sitemap', async (req, res, next) => {
+ajaxRouter.get('/sitemap', async (req, res) => {
 	let result = null;
 	let filter = req.query;
 	filter.enabled = true;
@@ -790,7 +790,7 @@ ajaxRouter.get('/sitemap', async (req, res, next) => {
 		.send(result);
 });
 
-ajaxRouter.get('/payment_methods', (req, res, next) => {
+ajaxRouter.get('/payment_methods', (req, res) => {
 	const filter = {
 		enabled: true,
 		order_id: req.signedCookies.order_id
@@ -805,7 +805,7 @@ ajaxRouter.get('/payment_methods', (req, res, next) => {
 	});
 });
 
-ajaxRouter.get('/shipping_methods', (req, res, next) => {
+ajaxRouter.get('/shipping_methods', (req, res) => {
 	const filter = {
 		enabled: true,
 		order_id: req.signedCookies.order_id
@@ -815,7 +815,7 @@ ajaxRouter.get('/shipping_methods', (req, res, next) => {
 	});
 });
 
-ajaxRouter.get('/payment_form_settings', (req, res, next) => {
+ajaxRouter.get('/payment_form_settings', (req, res) => {
 	const order_id = req.signedCookies.order_id;
 	if (order_id) {
 		api.orders.getPaymentFormSettings(order_id).then(({ status, json }) => {
