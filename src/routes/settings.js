@@ -161,9 +161,11 @@ class SettingsRoute {
 	}
 
 	deleteLogo(req, res, next) {
-		SettingsService.deleteLogo().then(() => {
-			return res.end();
-		});
+		SettingsService.deleteLogo()
+			.then(() => {
+				return res.end();
+			})
+			.catch(next);
 	}
 }
 
