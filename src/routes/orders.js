@@ -276,13 +276,16 @@ class OrdersRoute {
 		}
 	}
 
-	addTransaction(req, res, next) {
-		const order_id = req.params.id;
-		OrdertTansactionsService.addTransaction(order_id, req.body)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+	async addTransaction(req, res, next) {
+		try {
+			const order_id = req.params.id;
+			await OrdertTansactionsService.addTransaction(order_id, req.body)
+				.then(data => {
+					return res.send(data);
+				})
+		} catch(err) {
+			next(err);
+		}
 	}
 
 	updateTransaction(req, res, next) {
