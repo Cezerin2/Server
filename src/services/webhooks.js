@@ -12,8 +12,6 @@ const cache = lruCache({
 const WEBHOOKS_CACHE_KEY = 'webhooks';
 
 class WebhooksService {
-	constructor() {}
-
 	async getWebhooks() {
 		const webhooksFromCache = cache.get(WEBHOOKS_CACHE_KEY);
 
