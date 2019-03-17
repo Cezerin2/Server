@@ -3,7 +3,6 @@ import winston from 'winston';
 import handlebars from 'handlebars';
 import settings from '../../lib/settings';
 import { db } from '../../lib/mongo';
-import utils from '../../lib/utils';
 import parse from '../../lib/parse';
 import webhooks from '../../lib/webhooks';
 import dashboardWebSocket from '../../lib/dashboardWebSocket';
