@@ -7,7 +7,6 @@ import parse from '../../lib/parse';
 import webhooks from '../../lib/webhooks';
 import dashboardWebSocket from '../../lib/dashboardWebSocket';
 import mailer from '../../lib/mailer';
-import ProductsService from '../products/products';
 import CustomersService from '../customers/customers';
 import OrderStatusesService from './orderStatuses';
 import PaymentMethodsLightService from './paymentMethodsLight';
