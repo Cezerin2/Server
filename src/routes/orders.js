@@ -310,13 +310,17 @@ class OrdersRoute {
 			.catch(next);
 	}
 
-	addDiscount(req, res, next) {
-		const order_id = req.params.id;
-		OrdertDiscountsService.addDiscount(order_id, req.body)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+	async addDiscount(req, res, next) {
+		try {
+			const order_id = req.params.id;
+		
+			await OrdertDiscountsService.addDiscount(order_id, req.body)
+				.then(data => {
+					return res.send(data);
+				})
+		} catch(er) {
+			next(err);
+		}
 	}
 
 	updateDiscount(req, res, next) {
