@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { ObjectID } from 'mongodb';
 import CezerinClient from 'cezerin2-client';
 import handlebars from 'handlebars';
+import bcrypt from 'bcrypt';
 import serverSettings from './lib/settings';
 import serverConfigs from '../config/server';
 import { db } from './lib/mongo';
@@ -10,7 +11,8 @@ import AuthHeader from './lib/auth-header';
 import mailer from './lib/mailer';
 import EmailTemplatesService from './services/settings/emailTemplates';
 import SettingsService from './services/settings/settings';
-import bcrypt from 'bcrypt';
+import OrderItemsService from './services/orders/orderItems';
+
 
 // cost factor for hashes
 const saltRounds = serverSettings.saltRounds;
@@ -54,16 +56,6 @@ const getUserAgent = req => {
 	return req.get('user-agent');
 };
 
-const getVariantFromProduct = (product, variantId) => {
-	if (product.variants && product.variants.length > 0) {
-		return product.variants.find(
-			variant => variant.id.toString() === variantId.toString()
-		);
-	} else {
-		return null;
-	}
-};
-
 const fillCartItemWithProductData = (products, cartItem) => {
 	const product = products.find(p => p.id === cartItem.product_id);
 	if (product) {
@@ -75,7 +67,7 @@ const fillCartItemWithProductData = (products, cartItem) => {
 		cartItem.stock_backorder = product.stock_backorder;
 		cartItem.stock_preorder = product.stock_preorder;
 		if (cartItem.variant_id && cartItem.variant_id.length > 0) {
-			const variant = getVariantFromProduct(product, cartItem.variant_id);
+			const variant = OrderItemsService.getVariantFromProduct(product, cartItem.variant_id);
 			cartItem.stock_quantity = variant ? variant.stock_quantity : 0;
 		} else {
 			cartItem.stock_quantity = product.stock_quantity;
