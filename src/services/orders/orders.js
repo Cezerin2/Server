@@ -1,5 +1,4 @@
 import { ObjectID } from 'mongodb';
-import winston from 'winston';
 import handlebars from 'handlebars';
 import settings from '../../lib/settings';
 import { db } from '../../lib/mongo';
