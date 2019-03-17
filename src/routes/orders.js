@@ -4,7 +4,6 @@ import OrderAddressService from '../services/orders/orderAddress';
 import OrderItemsService from '../services/orders/orderItems';
 import OrdertTansactionsService from '../services/orders/orderTransactions';
 import OrdertDiscountsService from '../services/orders/orderDiscounts';
-import SettingsService from '../services/settings/settings';
 import PaymentGateways from '../paymentGateways';
 
 class OrdersRoute {
