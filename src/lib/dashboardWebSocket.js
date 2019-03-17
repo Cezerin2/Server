@@ -4,19 +4,6 @@ import security from './security';
 
 let wss = null;
 
-const listen = server => {
-	wss = new WebSocket.Server({
-		path: '/ws/dashboard', //Accept only connections matching this path
-		maxPayload: 1024, //The maximum allowed message size
-		backlog: 100, //The maximum length of the queue of pending connections.
-		verifyClient: verifyClient, //An hook to reject connections
-		server //A pre-created HTTP/S server to use
-	});
-
-	wss.on('connection', onConnection);
-	wss.broadcast = broadcastToAll;
-};
-
 const getTokenFromRequestPath = requestPath => {
 	try {
 		const urlObj = url.parse(requestPath, true);
@@ -55,6 +42,19 @@ const broadcastToAll = data => {
 			client.send(data, error => {});
 		}
 	});
+};
+
+const listen = server => {
+	wss = new WebSocket.Server({
+		path: '/ws/dashboard', //Accept only connections matching this path
+		maxPayload: 1024, //The maximum allowed message size
+		backlog: 100, //The maximum length of the queue of pending connections.
+		verifyClient: verifyClient, //An hook to reject connections
+		server //A pre-created HTTP/S server to use
+	});
+
+	wss.on('connection', onConnection);
+	wss.broadcast = broadcastToAll;
 };
 
 const send = ({ event, payload }) => {
