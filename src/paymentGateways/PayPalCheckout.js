@@ -6,61 +6,6 @@ import OrdertTansactionsService from '../services/orders/orderTransactions';
 const SANDBOX_URL = 'www.sandbox.paypal.com';
 const REGULAR_URL = 'www.paypal.com';
 
-const getPaymentFormSettings = options => {
-	const { gateway, gatewaySettings, order, amount, currency } = options;
-
-	const formSettings = {
-		order_id: order.id,
-		amount: amount,
-		currency: currency,
-		env: gatewaySettings.env,
-		client: gatewaySettings.client,
-		size: gatewaySettings.size,
-		shape: gatewaySettings.shape,
-		color: gatewaySettings.color,
-		notify_url: gatewaySettings.notify_url
-	};
-
-	return Promise.resolve(formSettings);
-};
-
-const paymentNotification = options => {
-	const { gateway, gatewaySettings, req, res } = options;
-	const settings = { allow_sandbox: true };
-	const params = req.body;
-	const orderId = params.custom;
-	const paymentCompleted = params.payment_status === 'Completed';
-
-	res.status(200).end();
-
-	verify(params, settings)
-		.then(() => {
-			// TODO: Validate that the receiver's email address is registered to you.
-			// TODO: Verify that the price, item description, and so on, match the transaction on your website.
-
-			if (paymentCompleted) {
-				OrdersService.updateOrder(orderId, {
-					paid: true,
-					date_paid: new Date()
-				}).then(() => {
-					OrdertTansactionsService.addTransaction(orderId, {
-						transaction_id: params.txn_id,
-						amount: params.mc_gross,
-						currency: params.mc_currency,
-						status: params.payment_status,
-						details: `${params.first_name} ${params.last_name}, ${
-							params.payer_email
-						}`,
-						success: true
-					});
-				});
-			}
-		})
-		.catch(e => {
-			console.error(e);
-		});
-};
-
 const verify = (params, settings) => {
 	return new Promise((resolve, reject) => {
 		if (!settings) {
@@ -115,6 +60,61 @@ const verify = (params, settings) => {
 		req.on('error', reject);
 		req.end();
 	});
+};
+
+const getPaymentFormSettings = options => {
+	const { gateway, gatewaySettings, order, amount, currency } = options;
+
+	const formSettings = {
+		order_id: order.id,
+		amount: amount,
+		currency: currency,
+		env: gatewaySettings.env,
+		client: gatewaySettings.client,
+		size: gatewaySettings.size,
+		shape: gatewaySettings.shape,
+		color: gatewaySettings.color,
+		notify_url: gatewaySettings.notify_url
+	};
+
+	return Promise.resolve(formSettings);
+};
+
+const paymentNotification = options => {
+	const { gateway, gatewaySettings, req, res } = options;
+	const settings = { allow_sandbox: true };
+	const params = req.body;
+	const orderId = params.custom;
+	const paymentCompleted = params.payment_status === 'Completed';
+
+	res.status(200).end();
+
+	verify(params, settings)
+		.then(() => {
+			// TODO: Validate that the receiver's email address is registered to you.
+			// TODO: Verify that the price, item description, and so on, match the transaction on your website.
+
+			if (paymentCompleted) {
+				OrdersService.updateOrder(orderId, {
+					paid: true,
+					date_paid: new Date()
+				}).then(() => {
+					OrdertTansactionsService.addTransaction(orderId, {
+						transaction_id: params.txn_id,
+						amount: params.mc_gross,
+						currency: params.mc_currency,
+						status: params.payment_status,
+						details: `${params.first_name} ${params.last_name}, ${
+							params.payer_email
+						}`,
+						success: true
+					});
+				});
+			}
+		})
+		.catch(e => {
+			console.error(e);
+		});
 };
 
 export default {
