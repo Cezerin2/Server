@@ -110,7 +110,7 @@ ajaxRouter.get('/products', (req, res) => {
 	let filter = req.query;
 	filter.enabled = true;
 	api.products.list(filter).then(({ status, json }) => {
-		res
+		return res
 			.status(status)
 			.header('Cache-Control', PRODUCTS_CACHE_CONTROL)
 			.send(json);
@@ -119,7 +119,7 @@ ajaxRouter.get('/products', (req, res) => {
 
 ajaxRouter.get('/products/:id', (req, res) => {
 	api.products.retrieve(req.params.id).then(({ status, json }) => {
-		res
+		return res
 			.status(status)
 			.header('Cache-Control', PRODUCT_DETAILS_CACHE_CONTROL)
 			.send(json);
@@ -134,10 +134,10 @@ ajaxRouter.get('/cart', (req, res) => {
 			.then(cartResponse => fillCartItems(cartResponse))
 			.then(({ status, json }) => {
 				json.browser = undefined;
-				res.status(status).send(json);
+				return res.status(status).send(json);
 			});
 	} else {
-		res.end();
+		return res.end();
 	}
 });
 
@@ -169,7 +169,7 @@ ajaxRouter.post('/reset-password', async (req, res, next) => {
 					data.status = true;
 					data.id = userId;
 					data.verified = true;
-					res.status(status).send(data);
+					return res.status(status).send(data);
 				});
 			return false;
 		}
@@ -184,9 +184,9 @@ ajaxRouter.post('/reset-password', async (req, res, next) => {
 			if (json.total_count > 0) {
 				data.status = true;
 				data.id = AuthHeader.encodeUserLoginAuth(userId);
-				res.status(status).send(data);
+				return res.status(status).send(data);
 			}
-			res.status(status).send(data);
+			return res.status(status).send(data);
 		});
 	});
 });
@@ -231,7 +231,7 @@ ajaxRouter.post('/forgot-password', async (req, res, next) => {
 					shop_name: settings.store_name
 				})
 			}),
-			res.send(data)
+			return res.send(data)
 		]);
 	}
 
@@ -277,7 +277,7 @@ ajaxRouter.post('/customer-account', async (req, res, next) => {
 			customerData.order_statuses = json;
 			let objJsonB64 = JSON.stringify(customerData);
 			objJsonB64 = Buffer.from(objJsonB64).toString('base64');
-			res.status(status).send(JSON.stringify(objJsonB64));
+			return res.status(status).send(JSON.stringify(objJsonB64));
 		});
 	}
 });
@@ -308,7 +308,7 @@ ajaxRouter.post('/login', async (req, res, next) => {
 					customerData.loggedin_failed = true;
 					let objJsonB64 = JSON.stringify(customerData);
 					objJsonB64 = Buffer.from(objJsonB64).toString('base64');
-					res.status(status).send(JSON.stringify(objJsonB64));
+					return res.status(status).send(JSON.stringify(objJsonB64));
 				});
 				return;
 			}
@@ -332,7 +332,7 @@ ajaxRouter.post('/login', async (req, res, next) => {
 							customerData.order_statuses = json;
 							let objJsonB64 = JSON.stringify(customerData);
 							objJsonB64 = Buffer.from(objJsonB64).toString('base64');
-							res.status(status).send(JSON.stringify(objJsonB64));
+							return res.status(status).send(JSON.stringify(objJsonB64));
 						});
 					});
 					return true;
@@ -419,7 +419,7 @@ ajaxRouter.post('/register', async (req, res, next) => {
 			// create new customer in database
 			await api.customers.create(customerDraft).then(({ status, json }) => {
 				data.isCustomerSaved = true;
-				res.status(status).send(data);
+				return res.status(status).send(data);
 			});
 			return true;
 		})();
@@ -465,7 +465,7 @@ ajaxRouter.post('/register', async (req, res, next) => {
 						shop_name: settings.store_name
 					})
 				}),
-				res.status('200').send(data)
+				return res.status('200').send(data)
 			]);
 		}
 		return false;
