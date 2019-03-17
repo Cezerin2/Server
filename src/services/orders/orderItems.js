@@ -8,8 +8,6 @@ import ProductsService from '../products/products';
 import ProductStockService from '../products/stock';
 
 class OrderItemsService {
-	constructor() {}
-
 	async addItem(order_id, data) {
 		if (!ObjectID.isValid(order_id)) {
 			return Promise.reject('Invalid identifier');
