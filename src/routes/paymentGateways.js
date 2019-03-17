@@ -23,7 +23,7 @@ class PaymentGatewaysRoute {
 	getGateway(req, res, next) {
 		PaymentGatewaysService.getGateway(req.params.name)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -31,7 +31,7 @@ class PaymentGatewaysRoute {
 	updateGateway(req, res, next) {
 		PaymentGatewaysService.updateGateway(req.params.name, req.body)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
