@@ -71,7 +71,7 @@ class SettingsRoute {
 	getSettings(req, res, next) {
 		SettingsService.getSettings()
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -80,9 +80,9 @@ class SettingsRoute {
 		SettingsService.updateSettings(req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -91,7 +91,7 @@ class SettingsRoute {
 	getEmailSettings(req, res, next) {
 		EmailSettingsService.getEmailSettings()
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -100,9 +100,9 @@ class SettingsRoute {
 		EmailSettingsService.updateEmailSettings(req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -111,7 +111,7 @@ class SettingsRoute {
 	getEmailTemplate(req, res, next) {
 		EmailTemplatesService.getEmailTemplate(req.params.name)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -120,9 +120,9 @@ class SettingsRoute {
 		EmailTemplatesService.updateEmailTemplate(req.params.name, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -131,7 +131,7 @@ class SettingsRoute {
 	getCheckoutFields(req, res, next) {
 		CheckoutFieldsService.getCheckoutFields()
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -139,7 +139,7 @@ class SettingsRoute {
 	getCheckoutField(req, res, next) {
 		CheckoutFieldsService.getCheckoutField(req.params.name)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -148,9 +148,9 @@ class SettingsRoute {
 		CheckoutFieldsService.updateCheckoutField(req.params.name, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -162,7 +162,7 @@ class SettingsRoute {
 
 	deleteLogo(req, res, next) {
 		SettingsService.deleteLogo().then(() => {
-			res.end();
+			return res.end();
 		});
 	}
 }
