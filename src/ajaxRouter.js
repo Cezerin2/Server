@@ -172,14 +172,12 @@ ajaxRouter.post('/reset-password', async (req, res, next) => {
 		}
 
 		// if customer email exists send status back
-		await api.customers.list(filter).then(({ status, json }) => {
-			if (json.total_count > 0) {
-				data.status = true;
-				data.id = AuthHeader.encodeUserLoginAuth(userId);
-				return res.status(status).send(data);
-			}
-			return res.status(status).send(data);
-		});
+		let { status, json } = await api.customers.list(filter);
+		if (json.total_count > 0) {
+			data.status = true;
+			data.id = AuthHeader.encodeUserLoginAuth(userId);
+		}
+		return res.status(status).send(data);
 	});
 });
 
