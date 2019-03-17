@@ -154,9 +154,9 @@ class OrderItemsService {
 			return product.variants.find(
 				variant => variant.id.toString() === variantId.toString()
 			);
-		} else {
-			return null;
 		}
+	
+		return null;
 	}
 
 	getOptionFromProduct(product, optionId) {
@@ -164,9 +164,9 @@ class OrderItemsService {
 			return product.options.find(
 				item => item.id.toString() === optionId.toString()
 			);
-		} else {
-			return null;
 		}
+		
+		return null;
 	}
 
 	getOptionValueFromProduct(product, optionId, valueId) {
@@ -175,9 +175,9 @@ class OrderItemsService {
 			return option.values.find(
 				item => item.id.toString() === valueId.toString()
 			);
-		} else {
-			return null;
 		}
+		
+		return null;
 	}
 
 	getOptionNameFromProduct(product, optionId) {
@@ -279,10 +279,10 @@ class OrderItemsService {
 					'items.$.discount_total': 0,
 					'items.$.price_total': variantPrice * item.quantity
 				};
-			} else {
-				// variant not exists
-				return null;
 			}
+			
+			// variant not exists
+			return null;
 		} else {
 			// normal product
 			return {
@@ -308,10 +308,10 @@ class OrderItemsService {
 				await this.calculateAndUpdateItem(order_id, item.id);
 			}
 			return OrdersService.getSingleOrder(order_id);
-		} else {
-			// order.items is empty
-			return null;
 		}
+		
+		// order.items is empty
+		return null;
 	}
 
 	async deleteItem(order_id, item_id) {
