@@ -19,8 +19,6 @@ const cache = lruCache({
 const BLACKLIST_CACHE_KEY = 'blacklist';
 
 class SecurityTokensService {
-	constructor() {}
-
 	getTokens(params = {}) {
 		let filter = {
 			is_revoked: false
