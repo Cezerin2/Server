@@ -326,18 +326,21 @@ class OrdersRoute {
 		}
 	}
 
-	updateDiscount(req, res, next) {
-		const order_id = req.params.id;
-		const discount_id = req.params.item_id;
-		OrdertDiscountsService.updateDiscount(order_id, discount_id, req.body)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+	async updateDiscount(req, res, next) {
+		try {
+			const order_id = req.params.id;
+			const discount_id = req.params.item_id;
+			await OrdertDiscountsService.updateDiscount(order_id, discount_id, req.body)
+				.then(data => {
+					if (data) {
+						return res.send(data);
+					} else {
+						return res.status(404).end();
+					}
+				})
+		} catch(err) {
+			next(err);
+		}
 	}
 
 	deleteDiscount(req, res, next) {
