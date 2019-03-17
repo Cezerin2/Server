@@ -1,9 +1,6 @@
 import { db } from '../../lib/mongo';
-import parse from '../../lib/parse';
 
 class AppSettingsService {
-	constructor() {}
-
 	getSettings(appKey) {
 		return db
 			.collection('appSettings')
