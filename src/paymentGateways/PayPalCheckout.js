@@ -63,7 +63,7 @@ const verify = (params, settings) => {
 };
 
 const getPaymentFormSettings = options => {
-	const { gateway, gatewaySettings, order, amount, currency } = options;
+	const { gatewaySettings, order, amount, currency } = options;
 
 	const formSettings = {
 		order_id: order.id,
@@ -81,7 +81,7 @@ const getPaymentFormSettings = options => {
 };
 
 const paymentNotification = options => {
-	const { gateway, gatewaySettings, req, res } = options;
+	const { gatewaySettings, req, res } = options;
 	const settings = { allow_sandbox: true };
 	const params = req.body;
 	const orderId = params.custom;
