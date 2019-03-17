@@ -39,7 +39,7 @@ class OrderStatusesRoute {
 		try {
 			let data = await OrderStatusesService.getStatuses(req.query)
 			return res.send(data);
-		} catch {
+		} catch(err) {
 			return next(err);
 		}
 	}
