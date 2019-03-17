@@ -38,7 +38,7 @@ class ShippingMethodsRoute {
 	getMethods(req, res, next) {
 		ShippingMethodsService.getMethods(req.query)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -47,9 +47,9 @@ class ShippingMethodsRoute {
 		ShippingMethodsService.getSingleMethod(req.params.id)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -58,7 +58,7 @@ class ShippingMethodsRoute {
 	addMethod(req, res, next) {
 		ShippingMethodsService.addMethod(req.body)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -67,9 +67,9 @@ class ShippingMethodsRoute {
 		ShippingMethodsService.updateMethod(req.params.id, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -77,7 +77,7 @@ class ShippingMethodsRoute {
 
 	async deleteMethod(req, res, next) {
 		const result = await ShippingMethodsService.deleteMethod(req.params.id);
-		res.status(result ? 200 : 404).end();
+		return res.status(result ? 200 : 404).end();
 	}
 }
 

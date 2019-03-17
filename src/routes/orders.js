@@ -136,7 +136,7 @@ class OrdersRoute {
 	getOrders(req, res, next) {
 		OrdersService.getOrders(req.query)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -145,9 +145,9 @@ class OrdersRoute {
 		OrdersService.getSingleOrder(req.params.id)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -156,7 +156,7 @@ class OrdersRoute {
 	addOrder(req, res, next) {
 		OrdersService.addOrder(req.body)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -165,9 +165,9 @@ class OrdersRoute {
 		OrdersService.updateOrder(req.params.id, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -176,7 +176,7 @@ class OrdersRoute {
 	deleteOrder(req, res, next) {
 		OrdersService.deleteOrder(req.params.id)
 			.then(data => {
-				res.status(data ? 200 : 404).end();
+				return res.status(data ? 200 : 404).end();
 			})
 			.catch(next);
 	}
@@ -185,9 +185,9 @@ class OrdersRoute {
 		OrderItemsService.calculateAndUpdateAllItems(req.params.id)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -196,7 +196,7 @@ class OrdersRoute {
 	checkoutOrder(req, res, next) {
 		OrdersService.checkoutOrder(req.params.id)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -204,7 +204,7 @@ class OrdersRoute {
 	cancelOrder(req, res, next) {
 		OrdersService.cancelOrder(req.params.id)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -212,7 +212,7 @@ class OrdersRoute {
 	closeOrder(req, res, next) {
 		OrdersService.closeOrder(req.params.id)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -221,9 +221,9 @@ class OrdersRoute {
 		OrderAddressService.updateBillingAddress(req.params.id, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -233,9 +233,9 @@ class OrdersRoute {
 		OrderAddressService.updateShippingAddress(req.params.id, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -245,7 +245,7 @@ class OrdersRoute {
 		const order_id = req.params.id;
 		OrderItemsService.addItem(order_id, req.body)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -256,9 +256,9 @@ class OrdersRoute {
 		OrderItemsService.updateItem(order_id, item_id, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -269,7 +269,7 @@ class OrdersRoute {
 		const item_id = req.params.item_id;
 		OrderItemsService.deleteItem(order_id, item_id)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -278,7 +278,7 @@ class OrdersRoute {
 		const order_id = req.params.id;
 		OrdertTansactionsService.addTransaction(order_id, req.body)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -293,9 +293,9 @@ class OrdersRoute {
 		)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -306,7 +306,7 @@ class OrdersRoute {
 		const transaction_id = req.params.item_id;
 		OrdertTansactionsService.deleteTransaction(order_id, transaction_id)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -315,7 +315,7 @@ class OrdersRoute {
 		const order_id = req.params.id;
 		OrdertDiscountsService.addDiscount(order_id, req.body)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -326,9 +326,9 @@ class OrdersRoute {
 		OrdertDiscountsService.updateDiscount(order_id, discount_id, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -339,7 +339,7 @@ class OrdersRoute {
 		const discount_id = req.params.item_id;
 		OrdertDiscountsService.deleteDiscount(order_id, discount_id)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -348,7 +348,7 @@ class OrdersRoute {
 		const orderId = req.params.id;
 		PaymentGateways.getPaymentFormSettings(orderId)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -357,7 +357,7 @@ class OrdersRoute {
 		const orderId = req.params.id;
 		try {
 			const isSuccess = await OrdersService.chargeOrder(orderId);
-			res.status(isSuccess ? 200 : 500).end();
+			return res.status(isSuccess ? 200 : 500).end();
 		} catch (err) {
 			next(err);
 		}

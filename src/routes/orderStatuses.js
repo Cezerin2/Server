@@ -35,52 +35,57 @@ class OrderStatusesRoute {
 		);
 	}
 
-	getStatuses(req, res, next) {
-		OrderStatusesService.getStatuses(req.query)
-			.then(data => {
-				res.send(data);
-			})
-			.catch(next);
+	async getStatuses(req, res, next) {
+		try {
+			let data = await OrderStatusesService.getStatuses(req.query)
+			return res.send(data);
+		} catch {
+			return next(err);
+		}
 	}
 
-	getSingleStatus(req, res, next) {
-		OrderStatusesService.getSingleStatus(req.params.id)
-			.then(data => {
-				if (data) {
-					res.send(data);
-				} else {
-					res.status(404).end();
-				}
-			})
-			.catch(next);
+	async getSingleStatus(req, res, next) {
+		try {
+			let data = await OrderStatusesService.getSingleStatus(req.params.id)
+			if (data) {
+					return res.send(data);
+			} else {
+					return res.status(404).end();
+			}
+		} catch (err) {
+			return next(err);
+		}
 	}
 
-	addStatus(req, res, next) {
-		OrderStatusesService.addStatus(req.body)
-			.then(data => {
-				res.send(data);
-			})
-			.catch(next);
+	async addStatus(req, res, next) {
+		try {
+			let data = OrderStatusesService.addStatus(req.body)
+			return res.send(data);
+		} catch (err) {
+			return next(err);
+		}
 	}
 
-	updateStatus(req, res, next) {
-		OrderStatusesService.updateStatus(req.params.id, req.body)
-			.then(data => {
-				if (data) {
-					res.send(data);
-				} else {
-					res.status(404).end();
-				}
-			})
-			.catch(next);
+	async updateStatus(req, res, next) {
+		try {
+			let data = await OrderStatusesService.updateStatus(req.params.id, req.body)
+			if (data) {
+				return res.send(data);
+			} else {
+				return res.status(404).end();
+			}
+		} catch (err) {
+			return next(err);
+		}
 	}
 
-	deleteStatus(req, res, next) {
-		OrderStatusesService.deleteStatus(req.params.id)
-			.then(data => {
-				res.status(data ? 200 : 404).end();
-			})
-			.catch(next);
+	async deleteStatus(req, res, next) {
+		try {
+			let data = await OrderStatusesService.deleteStatus(req.params.id)
+			return res.status(data ? 200 : 404).end();
+		} catch (err) {
+			return next(err);
+		}
 	}
 }
 

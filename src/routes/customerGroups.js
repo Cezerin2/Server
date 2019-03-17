@@ -35,52 +35,57 @@ class CustomerGroupsRoute {
 		);
 	}
 
-	getGroups(req, res, next) {
-		CustomerGroupsService.getGroups(req.query)
-			.then(data => {
-				res.send(data);
-			})
-			.catch(next);
+	async getGroups(req, res, next) {
+		try {
+			let data = await CustomerGroupsService.getGroups(req.query)
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
-	getSingleGroup(req, res, next) {
-		CustomerGroupsService.getSingleGroup(req.params.id)
-			.then(data => {
-				if (data) {
-					res.send(data);
-				} else {
-					res.status(404).end();
-				}
-			})
-			.catch(next);
+	async getSingleGroup(req, res, next) {
+		try {
+			let data = await CustomerGroupsService.getSingleGroup(req.params.id)
+			if (data) {
+				return res.send(data);
+			} else {
+				return res.status(404).end();
+			}
+		} catch (err) {
+			return next(err);
+		}
 	}
 
-	addGroup(req, res, next) {
-		CustomerGroupsService.addGroup(req.body)
-			.then(data => {
-				res.send(data);
-			})
-			.catch(next);
+	async addGroup(req, res, next) {
+		try {
+			let data = CustomerGroupsService.addGroup(req.body)
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
-	updateGroup(req, res, next) {
-		CustomerGroupsService.updateGroup(req.params.id, req.body)
-			.then(data => {
-				if (data) {
-					res.send(data);
-				} else {
-					res.status(404).end();
-				}
-			})
-			.catch(next);
+	async updateGroup(req, res, next) {
+		try {
+			let data = await CustomerGroupsService.updateGroup(req.params.id, req.body)
+			if (data) {
+				return res.send(data);
+			} else {
+				return res.status(404).end();
+			}
+		} catch(err) {
+			return next(err);
+		}
 	}
 
-	deleteGroup(req, res, next) {
-		CustomerGroupsService.deleteGroup(req.params.id)
-			.then(data => {
-				res.status(data ? 200 : 404).end();
-			})
-			.catch(next);
+	async deleteGroup(req, res, next) {
+		try {
+			let data = await CustomerGroupsService.deleteGroup(req.params.id)
+			return res.status(data ? 200 : 404).end();
+		} catch(err) {
+			return next(err)
+		}
 	}
 }
 

@@ -38,7 +38,7 @@ class RedirectsRoute {
 	getRedirects(req, res, next) {
 		RedirectsService.getRedirects(req.query)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -47,9 +47,9 @@ class RedirectsRoute {
 		RedirectsService.getSingleRedirect(req.params.id)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -58,7 +58,7 @@ class RedirectsRoute {
 	addRedirect(req, res, next) {
 		RedirectsService.addRedirect(req.body)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -67,9 +67,9 @@ class RedirectsRoute {
 		RedirectsService.updateRedirect(req.params.id, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
@@ -78,7 +78,7 @@ class RedirectsRoute {
 	deleteRedirect(req, res, next) {
 		RedirectsService.deleteRedirect(req.params.id)
 			.then(data => {
-				res.status(data ? 200 : 404).end();
+				return res.status(data ? 200 : 404).end();
 			})
 			.catch(next);
 	}

@@ -11,6 +11,10 @@ const getArrayIfValid = value => {
 	return Array.isArray(value) ? value : null;
 };
 
+const getObjectIDIfValid = value => {
+	return ObjectID.isValid(value) ? new ObjectID(value) : null;
+};
+
 const getArrayOfObjectID = value => {
 	if (Array.isArray(value) && value.length > 0) {
 		return value.map(id => getObjectIDIfValid(id)).filter(id => !!id);
@@ -34,10 +38,6 @@ const getBooleanIfValid = (value, defaultValue = null) => {
 	} else {
 		return typeof value === 'boolean' ? value : defaultValue;
 	}
-};
-
-const getObjectIDIfValid = value => {
-	return ObjectID.isValid(value) ? new ObjectID(value) : null;
 };
 
 const getBrowser = browser => {

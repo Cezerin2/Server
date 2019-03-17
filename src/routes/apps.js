@@ -23,7 +23,7 @@ class AppsRoute {
 	getSettings(req, res, next) {
 		AppSettingsService.getSettings(req.params.key)
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -32,9 +32,9 @@ class AppsRoute {
 		AppSettingsService.updateSettings(req.params.key, req.body)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
-					res.status(404).end();
+					return res.status(404).end();
 				}
 			})
 			.catch(next);
