@@ -9,31 +9,33 @@ import { db } from '../../lib/mongo';
 import parse from '../../lib/parse';
 
 class SettingsService {
-	defaultSettings {
-		store_name: 'Cezerin',
-		domain: '',
-		logo_file: 'assets/images/logo.png',
-		language: 'en',
-		currency_code: 'USD',
-		currency_symbol: '$',
-		currency_format: '${amount}',
-		thousand_separator: ',',
-		decimal_separator: '.',
-		decimal_number: 2,
-		timezone: 'Asia/Singapore',
-		date_format: 'MMMM D, YYYY',
-		time_format: 'h:mm a',
-		default_shipping_country: '',
-		default_shipping_state: '',
-		default_shipping_city: '',
-		default_product_sorting: 'stock_status,price,position',
-		product_fields:
-			'path,id,name,category_id,category_name,sku,images,enabled,discontinued,stock_status,stock_quantity,price,on_sale,regular_price,attributes,tags,position',
-		products_limit: 30,
-		weight_unit: 'kg',
-		length_unit: 'cm',
-		hide_billing_address: false,
-		order_confirmation_copy_to: ''
+	constructor() {
+		this.defaultSettings {
+			store_name: 'Cezerin',
+			domain: '',
+			logo_file: 'assets/images/logo.png',
+			language: 'en',
+			currency_code: 'USD',
+			currency_symbol: '$',
+			currency_format: '${amount}',
+			thousand_separator: ',',
+			decimal_separator: '.',
+			decimal_number: 2,
+			timezone: 'Asia/Singapore',
+			date_format: 'MMMM D, YYYY',
+			time_format: 'h:mm a',
+			default_shipping_country: '',
+			default_shipping_state: '',
+			default_shipping_city: '',
+			default_product_sorting: 'stock_status,price,position',
+			product_fields:
+				'path,id,name,category_id,category_name,sku,images,enabled,discontinued,stock_status,stock_quantity,price,on_sale,regular_price,attributes,tags,position',
+			products_limit: 30,
+			weight_unit: 'kg',
+			length_unit: 'cm',
+			hide_billing_address: false,
+			order_confirmation_copy_to: ''
+		}
 	}
 
 	getSettings() {
