@@ -6,8 +6,6 @@ import webhooks from '../../lib/webhooks';
 import OrdersService from './orders';
 
 class OrdertTansactionsService {
-	constructor() {}
-
 	async addTransaction(order_id, data) {
 		if (!ObjectID.isValid(order_id)) {
 			return Promise.reject('Invalid identifier');
