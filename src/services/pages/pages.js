@@ -8,8 +8,6 @@ import SettingsService from '../settings/settings';
 const DEFAULT_SORT = { is_system: -1, date_created: 1 };
 
 class PagesService {
-	constructor() {}
-
 	getFilter(params = {}) {
 		let filter = {};
 		const id = parse.getObjectIDIfValid(params.id);
