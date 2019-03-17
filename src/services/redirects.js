@@ -12,8 +12,6 @@ const cache = lruCache({
 const REDIRECTS_CACHE_KEY = 'redirects';
 
 class RedirectsService {
-	constructor() {}
-
 	getRedirects() {
 		const redirectsFromCache = cache.get(REDIRECTS_CACHE_KEY);
 
