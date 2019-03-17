@@ -22,8 +22,6 @@ import bcrypt from 'bcrypt';
 const saltRounds = settings.saltRounds;
 
 class OrdersService {
-	constructor() {}
-
 	getFilter(params = {}) {
 		// TODO: sort, coupon, tag, channel
 		let filter = {};
