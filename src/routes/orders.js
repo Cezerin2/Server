@@ -359,7 +359,7 @@ class OrdersRoute {
 			const isSuccess = await OrdersService.chargeOrder(orderId);
 			return res.status(isSuccess ? 200 : 500).end();
 		} catch (err) {
-			next(err);
+			return next(err);
 		}
 	}
 }
