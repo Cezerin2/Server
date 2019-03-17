@@ -8,8 +8,6 @@ import AuthHeader from '../../lib/auth-header';
 import security from '../../lib/security';
 
 class CustomersService {
-	constructor() {}
-
 	getFilter(params = {}) {
 		// tag
 		// gender
