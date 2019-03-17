@@ -120,7 +120,7 @@ class ProductCategoriesRoute {
 
 	deleteCategoryImage(req, res, next) {
 		CategoriesService.deleteCategoryImage(req.params.id);
-		res.end();
+		return res.end();
 	}
 }
 
