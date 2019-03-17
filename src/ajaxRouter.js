@@ -455,7 +455,7 @@ ajaxRouter.post('/register', async (req, res, next) => {
 						shop_name: settings.store_name
 					})
 				}),
-				return res.status('200').send(data)
+				res.status('200').send(data)
 			]);
 		}
 		return false;
