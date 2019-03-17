@@ -9,6 +9,7 @@ import { db } from '../../lib/mongo';
 import parse from '../../lib/parse';
 
 class SettingsService {
+
 	constructor() {
 		this.defaultSettings = {
 			store_name: '',
