@@ -10,8 +10,6 @@ import utils from '../../lib/utils';
 import parse from '../../lib/parse';
 
 class ProductCategoriesService {
-	constructor() {}
-
 	getFilter(params = {}) {
 		let filter = {};
 		const enabled = parse.getBooleanIfValid(params.enabled);
