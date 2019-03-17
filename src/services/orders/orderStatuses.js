@@ -4,8 +4,6 @@ import utils from '../../lib/utils';
 import parse from '../../lib/parse';
 
 class OrderStatusesService {
-	constructor() {}
-
 	getStatuses(params = {}) {
 		let filter = {};
 		const id = parse.getObjectIDIfValid(params.id);
