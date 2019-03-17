@@ -259,7 +259,7 @@ class ProductsRoute {
 		)
 			.then(data => {
 				if (data) {
-					res.send(data);
+					return res.send(data);
 				} else {
 					return res.status(404).end();
 				}
