@@ -3,7 +3,7 @@ import OrdersService from '../services/orders/orders';
 import OrdertTansactionsService from '../services/orders/orderTransactions';
 
 const getPaymentFormSettings = options => {
-	const { gateway, gatewaySettings, order, amount, currency } = options;
+	const { gatewaySettings, order, amount, currency } = options;
 	const formSettings = {
 		order_id: order.id,
 		amount,
