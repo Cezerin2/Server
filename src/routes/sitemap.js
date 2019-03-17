@@ -20,16 +20,16 @@ class SitemapRoute {
 			SitemapService.getSinglePath(req.query.path, req.query.enabled)
 				.then(data => {
 					if (data) {
-						res.send(data);
+						return res.send(data);
 					} else {
-						res.status(404).end();
+						return res.status(404).end();
 					}
 				})
 				.catch(next);
 		} else {
 			SitemapService.getPaths(req.query.enabled)
 				.then(data => {
-					res.send(data);
+					return res.send(data);
 				})
 				.catch(next);
 		}
