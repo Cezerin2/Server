@@ -9,7 +9,7 @@ import { db } from '../../lib/mongo';
 import parse from '../../lib/parse';
 
 class SettingsService {
-	const defaultSettings = {
+	defaultSettings = {
 		store_name: 'Cezerin',
 		domain: '',
 		logo_file: 'assets/images/logo.png',
