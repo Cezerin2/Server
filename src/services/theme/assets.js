@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-import url from 'url';
 import formidable from 'formidable';
 import settings from '../../lib/settings';
 
