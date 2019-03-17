@@ -28,7 +28,7 @@ class FilesRoute {
 	getFiles(req, res, next) {
 		FilesService.getFiles()
 			.then(data => {
-				res.send(data);
+				return res.send(data);
 			})
 			.catch(next);
 	}
@@ -40,7 +40,7 @@ class FilesRoute {
 	deleteFile(req, res, next) {
 		FilesService.deleteFile(req.params.file)
 			.then(() => {
-				res.end();
+				return res.end();
 			})
 			.catch(next);
 	}
