@@ -263,14 +263,17 @@ class OrdersRoute {
 			.catch(next);
 	}
 
-	deleteItem(req, res, next) {
-		const order_id = req.params.id;
-		const item_id = req.params.item_id;
-		OrderItemsService.deleteItem(order_id, item_id)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+	async deleteItem(req, res, next) {
+		try {
+			const order_id = req.params.id;
+			const item_id = req.params.item_id;
+			OrderItemsService.deleteItem(order_id, item_id)
+				.then(data => {
+					return res.send(data);
+				})
+		} catch(err) {
+			next(err);
+		}
 	}
 
 	addTransaction(req, res, next) {
