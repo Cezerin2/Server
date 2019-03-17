@@ -221,7 +221,7 @@ ajaxRouter.post('/forgot-password', async (req, res, next) => {
 					shop_name: settings.store_name
 				})
 			}),
-			return res.send(data)
+			res.send(data)
 		]);
 	}
 
