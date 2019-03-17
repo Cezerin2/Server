@@ -303,14 +303,17 @@ class OrdersRoute {
 			.catch(next);
 	}
 
-	deleteTransaction(req, res, next) {
-		const order_id = req.params.id;
-		const transaction_id = req.params.item_id;
-		OrdertTansactionsService.deleteTransaction(order_id, transaction_id)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+	async deleteTransaction(req, res, next) {
+		try {
+			const order_id = req.params.id;
+			const transaction_id = req.params.item_id;
+			await OrdertTansactionsService.deleteTransaction(order_id, transaction_id)
+				.then(data => {
+					return res.send(data);
+				})
+		} catch(err) {
+			next(err);
+		}
 	}
 
 	async addDiscount(req, res, next) {
