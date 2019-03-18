@@ -133,11 +133,12 @@ class OrdersRoute {
 	}
 
 	async getOrders(req, res, next) {
-		await OrdersService.getOrders(req.query)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			let data = await OrdersService.getOrders(req.query);
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async getSingleOrder(req, res, next) {
