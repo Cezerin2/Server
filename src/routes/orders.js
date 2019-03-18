@@ -146,9 +146,8 @@ class OrdersRoute {
 			let data = await OrdersService.getSingleOrder(req.params.id);
 			if (data) {
 				return res.send(data);
-			} else {
-				return res.status(404).end();
 			}
+			return res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -168,9 +167,8 @@ class OrdersRoute {
 			let data = await OrdersService.updateOrder(req.params.id, req.body);
 			if (data) {
 				return res.send(data);
-			} else {
-				return res.status(404).end();
 			}
+			return res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -190,9 +188,8 @@ class OrdersRoute {
 			let data = await OrderItemsService.calculateAndUpdateAllItems(req.params.id);
 			if (data) {
 				return res.send(data);
-			} else {
-				return res.status(404).end();
 			}
+			return res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -230,9 +227,8 @@ class OrdersRoute {
 			let data = await OrderAddressService.updateBillingAddress(req.params.id, req.body);
 			if (data) {
 				return res.send(data);
-			} else {
-				return res.status(404).end();
 			}
+			return res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -243,9 +239,8 @@ class OrdersRoute {
 			let data = await OrderAddressService.updateShippingAddress(req.params.id, req.body);
 			if (data) {
 				return res.send(data);
-			} else {
-				return res.status(404).end();
 			}
+			return res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -267,9 +262,8 @@ class OrdersRoute {
 			let data = await OrderItemsService.updateItem(order_id, item_id, req.body);
 			if (data) {
 				return res.send(data);
-			} else {
-				return res.status(404).end();
 			}
+			return res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -306,9 +300,8 @@ class OrdersRoute {
 			);
 			if (data) {
 				return res.send(data);
-			} else {
-				return res.status(404).end();
 			}
+			return res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -341,9 +334,8 @@ class OrdersRoute {
 			let data = await OrdertDiscountsService.updateDiscount(order_id, discount_id, req.body);
 			if (data) {
 				return res.send(data);
-			} else {
-				return res.status(404).end();
 			}
+			return res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
