@@ -144,10 +144,7 @@ class OrdersRoute {
 	async getSingleOrder(req, res, next) {
 		try {
 			let data = await OrdersService.getSingleOrder(req.params.id);
-			if (data) {
-				return res.send(data);
-			}
-			return res.status(404).end();
+			return (data) ? res.send(data) : res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -165,10 +162,7 @@ class OrdersRoute {
 	async updateOrder(req, res, next) {
 		try {
 			let data = await OrdersService.updateOrder(req.params.id, req.body);
-			if (data) {
-				return res.send(data);
-			}
-			return res.status(404).end();
+			return (data) ? res.send(data) : res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -186,10 +180,7 @@ class OrdersRoute {
 	async recalculateOrder(req, res, next) {
 		try {
 			let data = await OrderItemsService.calculateAndUpdateAllItems(req.params.id);
-			if (data) {
-				return res.send(data);
-			}
-			return res.status(404).end();
+			return (data) ? res.send(data) : res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -225,10 +216,7 @@ class OrdersRoute {
 	async updateBillingAddress(req, res, next) {
 		try {
 			let data = await OrderAddressService.updateBillingAddress(req.params.id, req.body);
-			if (data) {
-				return res.send(data);
-			}
-			return res.status(404).end();
+			return (data) ? res.send(data) : res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -237,10 +225,7 @@ class OrdersRoute {
 	async updateShippingAddress(req, res, next) {
 		try {
 			let data = await OrderAddressService.updateShippingAddress(req.params.id, req.body);
-			if (data) {
-				return res.send(data);
-			}
-			return res.status(404).end();
+			return (data) ? res.send(data) : res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -260,10 +245,7 @@ class OrdersRoute {
 			const order_id = req.params.id;
 			const item_id = req.params.item_id;
 			let data = await OrderItemsService.updateItem(order_id, item_id, req.body);
-			if (data) {
-				return res.send(data);
-			}
-			return res.status(404).end();
+			return (data) ? res.send(data) : res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -298,10 +280,7 @@ class OrdersRoute {
 				transaction_id,
 				req.body
 			);
-			if (data) {
-				return res.send(data);
-			}
-			return res.status(404).end();
+			return (data) ? res.send(data) : res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -332,10 +311,7 @@ class OrdersRoute {
 			const order_id = req.params.id;
 			const discount_id = req.params.item_id;
 			let data = await OrdertDiscountsService.updateDiscount(order_id, discount_id, req.body);
-			if (data) {
-				return res.send(data);
-			}
-			return res.status(404).end();
+			return (data) ? res.send(data) : res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
