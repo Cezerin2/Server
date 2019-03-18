@@ -142,179 +142,188 @@ class OrdersRoute {
 	}
 
 	async getSingleOrder(req, res, next) {
-		await OrdersService.getSingleOrder(req.params.id)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+		try {
+			let data = await OrdersService.getSingleOrder(req.params.id);
+			if (data) {
+				return res.send(data);
+			} else {
+				return res.status(404).end();
+			}
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async addOrder(req, res, next) {
-		await OrdersService.addOrder(req.body)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			let data = await OrdersService.addOrder(req.body);
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async updateOrder(req, res, next) {
-		await OrdersService.updateOrder(req.params.id, req.body)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+		try {
+			let data = await OrdersService.updateOrder(req.params.id, req.body);
+			if (data) {
+				return res.send(data);
+			} else {
+				return res.status(404).end();
+			}
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async deleteOrder(req, res, next) {
-		await OrdersService.deleteOrder(req.params.id)
-			.then(data => {
-				return res.status(data ? 200 : 404).end();
-			})
-			.catch(next);
+		try {
+			let data = await OrdersService.deleteOrder(req.params.id);
+			return res.status(data ? 200 : 404).end();
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async recalculateOrder(req, res, next) {
-		await OrderItemsService.calculateAndUpdateAllItems(req.params.id)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+		try {
+			let data = await OrderItemsService.calculateAndUpdateAllItems(req.params.id);
+			if (data) {
+				return res.send(data);
+			} else {
+				return res.status(404).end();
+			}
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async checkoutOrder(req, res, next) {
-		await OrdersService.checkoutOrder(req.params.id)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			let data = await OrdersService.checkoutOrder(req.params.id);
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async cancelOrder(req, res, next) {
-		await OrdersService.cancelOrder(req.params.id)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			let data = await OrdersService.cancelOrder(req.params.id);
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async closeOrder(req, res, next) {
-		await OrdersService.closeOrder(req.params.id)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			let data = await OrdersService.closeOrder(req.params.id);
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async updateBillingAddress(req, res, next) {
-		await OrderAddressService.updateBillingAddress(req.params.id, req.body)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+		try {
+			let data = await OrderAddressService.updateBillingAddress(req.params.id, req.body);
+			if (data) {
+				return res.send(data);
+			} else {
+				return res.status(404).end();
+			}
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async updateShippingAddress(req, res, next) {
-		await OrderAddressService.updateShippingAddress(req.params.id, req.body)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+		try {
+			let data = await OrderAddressService.updateShippingAddress(req.params.id, req.body);
+			if (data) {
+				return res.send(data);
+			} else {
+				return res.status(404).end();
+			}
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async addItem(req, res, next) {
-		const order_id = req.params.id;
-		await OrderItemsService.addItem(order_id, req.body)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			const order_id = req.params.id;
+			let data = await OrderItemsService.addItem(order_id, req.body);
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async updateItem(req, res, next) {
-		const order_id = req.params.id;
-		const item_id = req.params.item_id;
-		await OrderItemsService.updateItem(order_id, item_id, req.body)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+		try {
+			const order_id = req.params.id;
+			const item_id = req.params.item_id;
+			let data = await OrderItemsService.updateItem(order_id, item_id, req.body);
+			if (data) {
+				return res.send(data);
+			} else {
+				return res.status(404).end();
+			}
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async deleteItem(req, res, next) {
 		try {
 			const order_id = req.params.id;
 			const item_id = req.params.item_id;
-			await OrderItemsService.deleteItem(order_id, item_id)
-				.then(data => {
-					return res.send(data);
-				})
+			let data = await OrderItemsService.deleteItem(order_id, item_id);
+			return res.send(data);
 		} catch(err) {
-			next(err);
+			return next(err);
 		}
 	}
 
 	async addTransaction(req, res, next) {
 		try {
 			const order_id = req.params.id;
-			await OrdertTansactionsService.addTransaction(order_id, req.body)
-				.then(data => {
-					return res.send(data);
-				})
+			let data = await OrdertTansactionsService.addTransaction(order_id, req.body);
+			return res.send(data);
 		} catch(err) {
-			next(err);
+			return next(err);
 		}
 	}
 
 	async updateTransaction(req, res, next) {
-		const order_id = req.params.id;
-		const transaction_id = req.params.item_id;
-		await OrdertTansactionsService.updateTransaction(
-			order_id,
-			transaction_id,
-			req.body
-		)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+		try {
+			const order_id = req.params.id;
+			const transaction_id = req.params.item_id;
+			let data = await OrdertTansactionsService.updateTransaction(
+				order_id,
+				transaction_id,
+				req.body
+			);
+			if (data) {
+				return res.send(data);
+			} else {
+				return res.status(404).end();
+			}
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async deleteTransaction(req, res, next) {
 		try {
 			const order_id = req.params.id;
 			const transaction_id = req.params.item_id;
-			let data = await OrdertTansactionsService.deleteTransaction(order_id, transaction_id)
+			let data = await OrdertTansactionsService.deleteTransaction(order_id, transaction_id);
 			return res.send(data);
 		} catch(err) {
-			next(err);
+			return next(err);
 		}
 	}
 
@@ -324,7 +333,7 @@ class OrdersRoute {
 			let data = await OrdertDiscountsService.addDiscount(order_id, req.body);
 			return res.send(data);
 		} catch(err) {
-			next(err);
+			return next(err);
 		}
 	}
 
@@ -339,7 +348,7 @@ class OrdersRoute {
 				return res.status(404).end();
 			}
 		} catch(err) {
-			next(err);
+			return next(err);
 		}
 	}
 
@@ -350,7 +359,7 @@ class OrdersRoute {
 			let data = await OrdertDiscountsService.deleteDiscount(order_id, discount_id);
 			return res.send(data);
 		} catch(err) {
-			next(err);
+			return next(err);
 		}
 	}
 
@@ -360,7 +369,7 @@ class OrdersRoute {
 			let data = await PaymentGateways.getPaymentFormSettings(orderId);
 			return res.send(data);
 		} catch(err) {
-			next(err);
+			return next(err);
 		}
 	}
 
