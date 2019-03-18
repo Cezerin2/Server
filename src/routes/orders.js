@@ -310,10 +310,8 @@ class OrdersRoute {
 		try {
 			const order_id = req.params.id;
 			const transaction_id = req.params.item_id;
-			await OrdertTansactionsService.deleteTransaction(order_id, transaction_id)
-				.then(data => {
-					return res.send(data);
-				})
+			let data = await OrdertTansactionsService.deleteTransaction(order_id, transaction_id)
+			return res.send(data);
 		} catch(err) {
 			next(err);
 		}
@@ -322,12 +320,9 @@ class OrdersRoute {
 	async addDiscount(req, res, next) {
 		try {
 			const order_id = req.params.id;
-		
-			await OrdertDiscountsService.addDiscount(order_id, req.body)
-				.then(data => {
-					return res.send(data);
-				})
-		} catch(er) {
+			let data = await OrdertDiscountsService.addDiscount(order_id, req.body);
+			return res.send(data);
+		} catch(err) {
 			next(err);
 		}
 	}
@@ -336,44 +331,44 @@ class OrdersRoute {
 		try {
 			const order_id = req.params.id;
 			const discount_id = req.params.item_id;
-			await OrdertDiscountsService.updateDiscount(order_id, discount_id, req.body)
-				.then(data => {
-					if (data) {
-						return res.send(data);
-					} else {
-						return res.status(404).end();
-					}
-				})
+			let data = await OrdertDiscountsService.updateDiscount(order_id, discount_id, req.body);
+			if (data) {
+				return res.send(data);
+			} else {
+				return res.status(404).end();
+			}
 		} catch(err) {
 			next(err);
 		}
 	}
 
-	deleteDiscount(req, res, next) {
-		const order_id = req.params.id;
-		const discount_id = req.params.item_id;
-		OrdertDiscountsService.deleteDiscount(order_id, discount_id)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+	async deleteDiscount(req, res, next) {
+		try {
+			const order_id = req.params.id;
+			const discount_id = req.params.item_id;
+			let data = await OrdertDiscountsService.deleteDiscount(order_id, discount_id);
+			return res.send(data);
+		} catch(err) {
+			next(err);
+		}
 	}
 
-	getPaymentFormSettings(req, res, next) {
-		const orderId = req.params.id;
-		PaymentGateways.getPaymentFormSettings(orderId)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+	async getPaymentFormSettings(req, res, next) {
+		try {
+			const orderId = req.params.id;
+			let data = await PaymentGateways.getPaymentFormSettings(orderId);
+			return res.send(data);
+		} catch(err) {
+			next(err);
+		}
 	}
 
 	async chargeOrder(req, res, next) {
-		const orderId = req.params.id;
 		try {
+			const orderId = req.params.id;
 			const isSuccess = await OrdersService.chargeOrder(orderId);
 			return res.status(isSuccess ? 200 : 500).end();
-		} catch (err) {
+		} catch(err) {
 			return next(err);
 		}
 	}
