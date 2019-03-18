@@ -10,7 +10,7 @@ import parse from '../../lib/parse';
 
 class SettingsService {
 	constructor() {
-		this.defaultSettings {
+		this.defaultSettings = {
 			store_name: 'Cezerin',
 			domain: '',
 			logo_file: 'assets/images/logo.png',
