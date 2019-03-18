@@ -253,8 +253,7 @@ class OrdersRoute {
 
 	async addItem(req, res, next) {
 		try {
-			const order_id = req.params.id;
-			let data = await OrderItemsService.addItem(order_id, req.body);
+			let data = await OrderItemsService.addItem(req.params.id, req.body);
 			return res.send(data);
 		} catch(err) {
 			return next(err);
@@ -289,8 +288,7 @@ class OrdersRoute {
 
 	async addTransaction(req, res, next) {
 		try {
-			const order_id = req.params.id;
-			let data = await OrdertTansactionsService.addTransaction(order_id, req.body);
+			let data = await OrdertTansactionsService.addTransaction(req.params.id, req.body);
 			return res.send(data);
 		} catch(err) {
 			return next(err);
@@ -329,8 +327,7 @@ class OrdersRoute {
 
 	async addDiscount(req, res, next) {
 		try {
-			const order_id = req.params.id;
-			let data = await OrdertDiscountsService.addDiscount(order_id, req.body);
+			let data = await OrdertDiscountsService.addDiscount(req.params.id, req.body);
 			return res.send(data);
 		} catch(err) {
 			return next(err);
@@ -365,8 +362,7 @@ class OrdersRoute {
 
 	async getPaymentFormSettings(req, res, next) {
 		try {
-			const orderId = req.params.id;
-			let data = await PaymentGateways.getPaymentFormSettings(orderId);
+			let data = await PaymentGateways.getPaymentFormSettings(req.params.id);
 			return res.send(data);
 		} catch(err) {
 			return next(err);
@@ -375,8 +371,7 @@ class OrdersRoute {
 
 	async chargeOrder(req, res, next) {
 		try {
-			const orderId = req.params.id;
-			const isSuccess = await OrdersService.chargeOrder(orderId);
+			const isSuccess = await OrdersService.chargeOrder(req.params.id);
 			return res.status(isSuccess ? 200 : 500).end();
 		} catch(err) {
 			return next(err);
