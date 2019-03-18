@@ -133,7 +133,7 @@ class OrdersRoute {
 	}
 
 	async getOrders(req, res, next) {
-		OrdersService.getOrders(req.query)
+		await OrdersService.getOrders(req.query)
 			.then(data => {
 				return res.send(data);
 			})
@@ -141,7 +141,7 @@ class OrdersRoute {
 	}
 
 	async getSingleOrder(req, res, next) {
-		OrdersService.getSingleOrder(req.params.id)
+		await OrdersService.getSingleOrder(req.params.id)
 			.then(data => {
 				if (data) {
 					return res.send(data);
@@ -153,7 +153,7 @@ class OrdersRoute {
 	}
 
 	async addOrder(req, res, next) {
-		OrdersService.addOrder(req.body)
+		await OrdersService.addOrder(req.body)
 			.then(data => {
 				return res.send(data);
 			})
@@ -161,7 +161,7 @@ class OrdersRoute {
 	}
 
 	async updateOrder(req, res, next) {
-		OrdersService.updateOrder(req.params.id, req.body)
+		await OrdersService.updateOrder(req.params.id, req.body)
 			.then(data => {
 				if (data) {
 					return res.send(data);
@@ -173,7 +173,7 @@ class OrdersRoute {
 	}
 
 	async deleteOrder(req, res, next) {
-		OrdersService.deleteOrder(req.params.id)
+		await OrdersService.deleteOrder(req.params.id)
 			.then(data => {
 				return res.status(data ? 200 : 404).end();
 			})
@@ -181,7 +181,7 @@ class OrdersRoute {
 	}
 
 	async recalculateOrder(req, res, next) {
-		OrderItemsService.calculateAndUpdateAllItems(req.params.id)
+		await OrderItemsService.calculateAndUpdateAllItems(req.params.id)
 			.then(data => {
 				if (data) {
 					return res.send(data);
@@ -193,7 +193,7 @@ class OrdersRoute {
 	}
 
 	async checkoutOrder(req, res, next) {
-		OrdersService.checkoutOrder(req.params.id)
+		await OrdersService.checkoutOrder(req.params.id)
 			.then(data => {
 				return res.send(data);
 			})
@@ -201,7 +201,7 @@ class OrdersRoute {
 	}
 
 	async cancelOrder(req, res, next) {
-		OrdersService.cancelOrder(req.params.id)
+		await OrdersService.cancelOrder(req.params.id)
 			.then(data => {
 				return res.send(data);
 			})
@@ -209,7 +209,7 @@ class OrdersRoute {
 	}
 
 	async closeOrder(req, res, next) {
-		OrdersService.closeOrder(req.params.id)
+		await OrdersService.closeOrder(req.params.id)
 			.then(data => {
 				return res.send(data);
 			})
@@ -217,7 +217,7 @@ class OrdersRoute {
 	}
 
 	async updateBillingAddress(req, res, next) {
-		OrderAddressService.updateBillingAddress(req.params.id, req.body)
+		await OrderAddressService.updateBillingAddress(req.params.id, req.body)
 			.then(data => {
 				if (data) {
 					return res.send(data);
@@ -229,7 +229,7 @@ class OrdersRoute {
 	}
 
 	async updateShippingAddress(req, res, next) {
-		OrderAddressService.updateShippingAddress(req.params.id, req.body)
+		await OrderAddressService.updateShippingAddress(req.params.id, req.body)
 			.then(data => {
 				if (data) {
 					return res.send(data);
@@ -242,7 +242,7 @@ class OrdersRoute {
 
 	async addItem(req, res, next) {
 		const order_id = req.params.id;
-		OrderItemsService.addItem(order_id, req.body)
+		await OrderItemsService.addItem(order_id, req.body)
 			.then(data => {
 				return res.send(data);
 			})
@@ -252,7 +252,7 @@ class OrdersRoute {
 	async updateItem(req, res, next) {
 		const order_id = req.params.id;
 		const item_id = req.params.item_id;
-		OrderItemsService.updateItem(order_id, item_id, req.body)
+		await OrderItemsService.updateItem(order_id, item_id, req.body)
 			.then(data => {
 				if (data) {
 					return res.send(data);
@@ -267,7 +267,7 @@ class OrdersRoute {
 		try {
 			const order_id = req.params.id;
 			const item_id = req.params.item_id;
-			OrderItemsService.deleteItem(order_id, item_id)
+			await OrderItemsService.deleteItem(order_id, item_id)
 				.then(data => {
 					return res.send(data);
 				})
@@ -291,7 +291,7 @@ class OrdersRoute {
 	async updateTransaction(req, res, next) {
 		const order_id = req.params.id;
 		const transaction_id = req.params.item_id;
-		OrdertTansactionsService.updateTransaction(
+		await OrdertTansactionsService.updateTransaction(
 			order_id,
 			transaction_id,
 			req.body
