@@ -42,7 +42,7 @@ class SecurityTokensRoute {
 	}
 
 	async getTokens(req, res, next) {
-		SecurityTokensService.getTokens(req.query)
+		await SecurityTokensService.getTokens(req.query)
 			.then(data => {
 				return res.send(data);
 			})
@@ -50,7 +50,7 @@ class SecurityTokensRoute {
 	}
 
 	async getTokensBlacklist(req, res, next) {
-		SecurityTokensService.getTokensBlacklist()
+		await SecurityTokensService.getTokensBlacklist()
 			.then(data => {
 				return res.send(data);
 			})
@@ -58,7 +58,7 @@ class SecurityTokensRoute {
 	}
 
 	async getSingleToken(req, res, next) {
-		SecurityTokensService.getSingleToken(req.params.id)
+		await SecurityTokensService.getSingleToken(req.params.id)
 			.then(data => {
 				if (data) {
 					return res.send(data);
@@ -70,7 +70,7 @@ class SecurityTokensRoute {
 	}
 
 	async addToken(req, res, next) {
-		SecurityTokensService.addToken(req.body)
+		await SecurityTokensService.addToken(req.body)
 			.then(data => {
 				return res.send(data);
 			})
@@ -78,7 +78,7 @@ class SecurityTokensRoute {
 	}
 
 	async updateToken(req, res, next) {
-		SecurityTokensService.updateToken(req.params.id, req.body)
+		await SecurityTokensService.updateToken(req.params.id, req.body)
 			.then(data => {
 				if (data) {
 					return res.send(data);
@@ -90,7 +90,7 @@ class SecurityTokensRoute {
 	}
 
 	async deleteToken(req, res, next) {
-		SecurityTokensService.deleteToken(req.params.id)
+		await SecurityTokensService.deleteToken(req.params.id)
 			.then(data => {
 				return res.end();
 			})
@@ -98,7 +98,7 @@ class SecurityTokensRoute {
 	}
 
 	async sendDashboardSigninUrl(req, res, next) {
-		SecurityTokensService.sendDashboardSigninUrl(req)
+		await SecurityTokensService.sendDashboardSigninUrl(req)
 			.then(data => {
 				return res.send(data);
 			})
