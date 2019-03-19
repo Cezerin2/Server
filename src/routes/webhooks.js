@@ -36,23 +36,22 @@ class WebhooksRoute {
 	}
 
 	async getWebhooks(req, res, next) {
-		await WebhooksService.getWebhooks(req.query)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			let data = await WebhooksService.getWebhooks(req.query)
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async getSingleWebhook(req, res, next) {
 		try {
-			await WebhooksService.getSingleWebhook(req.params.id)
-				.then(data => {
-					if (data) {
-						return res.send(data);
-					} else {
-						return res.status(404).end();
-					}
-				});
+			let data = await WebhooksService.getSingleWebhook(req.params.id)
+			if (data) {
+				return res.send(data);
+			} else {
+				return res.status(404).end();
+			}
 		} catch(err) {
 			return next(err);
 		}
@@ -60,10 +59,8 @@ class WebhooksRoute {
 
 	async addWebhook(req, res, next) {
 		try {
-			await WebhooksService.addWebhook(req.body)
-				.then(data => {
-					return res.send(data);
-				});
+			let data = await WebhooksService.addWebhook(req.body)
+			return res.send(data);
 		} catch(err) {
 			return next(err);
 		}
@@ -71,14 +68,12 @@ class WebhooksRoute {
 
 	async updateWebhook(req, res, next) {
 		try {
-			await WebhooksService.updateWebhook(req.params.id, req.body)
-				.then(data => {
-					if (data) {
-						return res.send(data);
-					} else {
-						return res.status(404).end();
-					}
-				});	
+			let data = await WebhooksService.updateWebhook(req.params.id, req.body)
+			if (data) {
+				return res.send(data);
+			} else {
+				return res.status(404).end();
+			}
 		} catch(err) {
 			return next(err);
 		}
@@ -86,10 +81,8 @@ class WebhooksRoute {
 
 	async deleteWebhook(req, res, next) {
 		try {
-			await WebhooksService.deleteWebhook(req.params.id)
-				.then(data => {
-					return res.status(data ? 200 : 404).end();
-				});
+			let data = await WebhooksService.deleteWebhook(req.params.id)
+			return res.status(data ? 200 : 404).end();
 		} catch(err) {
 			return next(err);
 		}
