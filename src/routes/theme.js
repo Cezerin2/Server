@@ -111,7 +111,7 @@ class ThemeRoute {
 		}
 	}
 
-	async uploadFile(req, res, next) {
+	uploadFile(req, res, next) {
 		ThemeAssetsService.uploadFile(req, res, next);
 	}
 
@@ -143,11 +143,12 @@ class ThemeRoute {
 	}
 
 	async addPlaceholder(req, res, next) {
-		await ThemePlaceholdersService.addPlaceholder(req.body)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			let data = await ThemePlaceholdersService.addPlaceholder(req.body);
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async updatePlaceholder(req, res, next) {
