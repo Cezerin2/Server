@@ -42,67 +42,66 @@ class SecurityTokensRoute {
 	}
 
 	async getTokens(req, res, next) {
-		await SecurityTokensService.getTokens(req.query)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			let data = await SecurityTokensService.getTokens(req.query);
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async getTokensBlacklist(req, res, next) {
-		await SecurityTokensService.getTokensBlacklist()
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			let data = await SecurityTokensService.getTokensBlacklist();
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async getSingleToken(req, res, next) {
-		await SecurityTokensService.getSingleToken(req.params.id)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+		try {
+			let data = await SecurityTokensService.getSingleToken(req.params.id);
+			return (data) ? res.send(data) : res.status(404).end();
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async addToken(req, res, next) {
-		await SecurityTokensService.addToken(req.body)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			let data = await SecurityTokensService.addToken(req.body);
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async updateToken(req, res, next) {
-		await SecurityTokensService.updateToken(req.params.id, req.body)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+		try {
+			let data = await SecurityTokensService.updateToken(req.params.id, req.body);
+			return (data) ? res.send(data) : res.status(404).end();
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async deleteToken(req, res, next) {
-		await SecurityTokensService.deleteToken(req.params.id)
-			.then(data => {
-				return res.end();
-			})
-			.catch(next);
+		try {
+			let data = await SecurityTokensService.deleteToken(req.params.id);
+			return res.end();
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async sendDashboardSigninUrl(req, res, next) {
-		await SecurityTokensService.sendDashboardSigninUrl(req)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			let data = await SecurityTokensService.sendDashboardSigninUrl(req);
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 }
 
