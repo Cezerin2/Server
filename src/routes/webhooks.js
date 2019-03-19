@@ -55,7 +55,7 @@ class WebhooksRoute {
 
 	async addWebhook(req, res, next) {
 		try {
-			let data = await WebhooksService.addWebhook(req.body)
+			let data = await WebhooksService.addWebhook(req.body);
 			return res.send(data);
 		} catch(err) {
 			return next(err);
@@ -64,8 +64,8 @@ class WebhooksRoute {
 
 	async updateWebhook(req, res, next) {
 		try {
-			let data = await WebhooksService.updateWebhook(req.params.id, req.body)
-			return (data) ? res.send(data) ? res.status(404).end();
+			let data = await WebhooksService.updateWebhook(req.params.id, req.body);
+			return (data) ? res.send(data) : res.status(404).end();
 		} catch(err) {
 			return next(err);
 		}
@@ -73,7 +73,7 @@ class WebhooksRoute {
 
 	async deleteWebhook(req, res, next) {
 		try {
-			let data = await WebhooksService.deleteWebhook(req.params.id)
+			let data = await WebhooksService.deleteWebhook(req.params.id);
 			return res.status(data ? 200 : 404).end();
 		} catch(err) {
 			return next(err);
