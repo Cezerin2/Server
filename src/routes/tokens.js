@@ -41,7 +41,7 @@ class SecurityTokensRoute {
 		this.router.post('/v1/authorize', this.sendDashboardSigninUrl.bind(this));
 	}
 
-	getTokens(req, res, next) {
+	async getTokens(req, res, next) {
 		SecurityTokensService.getTokens(req.query)
 			.then(data => {
 				return res.send(data);
@@ -49,7 +49,7 @@ class SecurityTokensRoute {
 			.catch(next);
 	}
 
-	getTokensBlacklist(req, res, next) {
+	async getTokensBlacklist(req, res, next) {
 		SecurityTokensService.getTokensBlacklist()
 			.then(data => {
 				return res.send(data);
@@ -57,7 +57,7 @@ class SecurityTokensRoute {
 			.catch(next);
 	}
 
-	getSingleToken(req, res, next) {
+	async getSingleToken(req, res, next) {
 		SecurityTokensService.getSingleToken(req.params.id)
 			.then(data => {
 				if (data) {
@@ -69,7 +69,7 @@ class SecurityTokensRoute {
 			.catch(next);
 	}
 
-	addToken(req, res, next) {
+	async addToken(req, res, next) {
 		SecurityTokensService.addToken(req.body)
 			.then(data => {
 				return res.send(data);
@@ -77,7 +77,7 @@ class SecurityTokensRoute {
 			.catch(next);
 	}
 
-	updateToken(req, res, next) {
+	async updateToken(req, res, next) {
 		SecurityTokensService.updateToken(req.params.id, req.body)
 			.then(data => {
 				if (data) {
@@ -89,7 +89,7 @@ class SecurityTokensRoute {
 			.catch(next);
 	}
 
-	deleteToken(req, res, next) {
+	async deleteToken(req, res, next) {
 		SecurityTokensService.deleteToken(req.params.id)
 			.then(data => {
 				return res.end();
@@ -97,7 +97,7 @@ class SecurityTokensRoute {
 			.catch(next);
 	}
 
-	sendDashboardSigninUrl(req, res, next) {
+	async sendDashboardSigninUrl(req, res, next) {
 		SecurityTokensService.sendDashboardSigninUrl(req)
 			.then(data => {
 				return res.send(data);
