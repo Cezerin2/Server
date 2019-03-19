@@ -94,11 +94,12 @@ class ThemeRoute {
 	}
 
 	async updateSettings(req, res, next) {
-		await ThemeSettingsService.updateSettings(req.body)
-			.then(() => {
-				return res.end();
-			})
-			.catch(next);
+		try {
+			await ThemeSettingsService.updateSettings(req.body)
+			return res.end();
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async getSettingsSchema(req, res, next) {
