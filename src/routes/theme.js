@@ -125,23 +125,21 @@ class ThemeRoute {
 	}
 
 	async getPlaceholders(req, res, next) {
-		await ThemePlaceholdersService.getPlaceholders()
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			let data = await ThemePlaceholdersService.getPlaceholders();
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async getSinglePlaceholder(req, res, next) {
-		await ThemePlaceholdersService.getSinglePlaceholder(req.params.key)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+		try {
+			let data = await ThemePlaceholdersService.getSinglePlaceholder(req.params.key);
+			return (data) ? res.send(data) : res.status(404).end();
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async addPlaceholder(req, res, next) {
