@@ -76,15 +76,15 @@ class ThemeRoute {
 		);
 	}
 
-	exportTheme(req, res, next) {
+	async exportTheme(req, res, next) {
 		ThemeService.exportTheme(req, res);
 	}
 
-	installTheme(req, res, next) {
+	async installTheme(req, res, next) {
 		ThemeService.installTheme(req, res);
 	}
 
-	getSettings(req, res, next) {
+	async getSettings(req, res, next) {
 		ThemeSettingsService.getSettings()
 			.then(data => {
 				return res.send(data);
@@ -92,7 +92,7 @@ class ThemeRoute {
 			.catch(next);
 	}
 
-	updateSettings(req, res, next) {
+	async updateSettings(req, res, next) {
 		ThemeSettingsService.updateSettings(req.body)
 			.then(() => {
 				return res.end();
@@ -100,7 +100,7 @@ class ThemeRoute {
 			.catch(next);
 	}
 
-	getSettingsSchema(req, res, next) {
+	async getSettingsSchema(req, res, next) {
 		ThemeSettingsService.getSettingsSchema()
 			.then(data => {
 				return res.send(data);
@@ -108,11 +108,11 @@ class ThemeRoute {
 			.catch(next);
 	}
 
-	uploadFile(req, res, next) {
+	async uploadFile(req, res, next) {
 		ThemeAssetsService.uploadFile(req, res, next);
 	}
 
-	deleteFile(req, res, next) {
+	async deleteFile(req, res, next) {
 		ThemeAssetsService.deleteFile(req.params.file)
 			.then(() => {
 				return res.end();
@@ -120,7 +120,7 @@ class ThemeRoute {
 			.catch(next);
 	}
 
-	getPlaceholders(req, res, next) {
+	async getPlaceholders(req, res, next) {
 		ThemePlaceholdersService.getPlaceholders()
 			.then(data => {
 				return res.send(data);
@@ -128,7 +128,7 @@ class ThemeRoute {
 			.catch(next);
 	}
 
-	getSinglePlaceholder(req, res, next) {
+	async getSinglePlaceholder(req, res, next) {
 		ThemePlaceholdersService.getSinglePlaceholder(req.params.key)
 			.then(data => {
 				if (data) {
@@ -140,7 +140,7 @@ class ThemeRoute {
 			.catch(next);
 	}
 
-	addPlaceholder(req, res, next) {
+	async addPlaceholder(req, res, next) {
 		ThemePlaceholdersService.addPlaceholder(req.body)
 			.then(data => {
 				return res.send(data);
@@ -148,7 +148,7 @@ class ThemeRoute {
 			.catch(next);
 	}
 
-	updatePlaceholder(req, res, next) {
+	async updatePlaceholder(req, res, next) {
 		ThemePlaceholdersService.updatePlaceholder(req.params.key, req.body)
 			.then(data => {
 				if (data) {
@@ -160,7 +160,7 @@ class ThemeRoute {
 			.catch(next);
 	}
 
-	deletePlaceholder(req, res, next) {
+	async deletePlaceholder(req, res, next) {
 		ThemePlaceholdersService.deletePlaceholder(req.params.key)
 			.then(data => {
 				return res.status(data ? 200 : 404).end();
