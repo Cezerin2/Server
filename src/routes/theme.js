@@ -152,23 +152,21 @@ class ThemeRoute {
 	}
 
 	async updatePlaceholder(req, res, next) {
-		await ThemePlaceholdersService.updatePlaceholder(req.params.key, req.body)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+		try {
+			let data = await ThemePlaceholdersService.updatePlaceholder(req.params.key, req.body);
+			return (data) ? res.send(data) : res.status(404).end();
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async deletePlaceholder(req, res, next) {
-		await ThemePlaceholdersService.deletePlaceholder(req.params.key)
-			.then(data => {
-				return res.status(data ? 200 : 404).end();
-			})
-			.catch(next);
+		try {
+			let data = await ThemePlaceholdersService.deletePlaceholder(req.params.key);
+			return res.status(data ? 200 : 404).end();
+		} catch(err) {
+			return next(err);
+		}
 	}
 }
 
