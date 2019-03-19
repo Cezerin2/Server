@@ -76,20 +76,21 @@ class ThemeRoute {
 		);
 	}
 
-	async exportTheme(req, res, next) {
-		await ThemeService.exportTheme(req, res);
+	exportTheme(req, res, next) {
+		ThemeService.exportTheme(req, res);
 	}
 
-	async installTheme(req, res, next) {
-		await ThemeService.installTheme(req, res);
+	installTheme(req, res, next) {
+		ThemeService.installTheme(req, res);
 	}
 
 	async getSettings(req, res, next) {
-		await ThemeSettingsService.getSettings()
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			let data = await ThemeSettingsService.getSettings();
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async updateSettings(req, res, next) {
