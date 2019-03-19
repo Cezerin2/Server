@@ -103,23 +103,25 @@ class ThemeRoute {
 	}
 
 	async getSettingsSchema(req, res, next) {
-		await ThemeSettingsService.getSettingsSchema()
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			let data = await ThemeSettingsService.getSettingsSchema();
+			return res.send(data);
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async uploadFile(req, res, next) {
-		await ThemeAssetsService.uploadFile(req, res, next);
+		ThemeAssetsService.uploadFile(req, res, next);
 	}
 
 	async deleteFile(req, res, next) {
-		await ThemeAssetsService.deleteFile(req.params.file)
-			.then(() => {
-				return res.end();
-			})
-			.catch(next);
+		try {
+			await ThemeAssetsService.deleteFile(req.params.file);
+			return res.end();
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async getPlaceholders(req, res, next) {
