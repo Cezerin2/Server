@@ -44,43 +44,55 @@ class WebhooksRoute {
 	}
 
 	async getSingleWebhook(req, res, next) {
-		await WebhooksService.getSingleWebhook(req.params.id)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+		try {
+			await WebhooksService.getSingleWebhook(req.params.id)
+				.then(data => {
+					if (data) {
+						return res.send(data);
+					} else {
+						return res.status(404).end();
+					}
+				});
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async addWebhook(req, res, next) {
-		await WebhooksService.addWebhook(req.body)
-			.then(data => {
-				return res.send(data);
-			})
-			.catch(next);
+		try {
+			await WebhooksService.addWebhook(req.body)
+				.then(data => {
+					return res.send(data);
+				});
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async updateWebhook(req, res, next) {
-		await WebhooksService.updateWebhook(req.params.id, req.body)
-			.then(data => {
-				if (data) {
-					return res.send(data);
-				} else {
-					return res.status(404).end();
-				}
-			})
-			.catch(next);
+		try {
+			await WebhooksService.updateWebhook(req.params.id, req.body)
+				.then(data => {
+					if (data) {
+						return res.send(data);
+					} else {
+						return res.status(404).end();
+					}
+				});	
+		} catch(err) {
+			return next(err);
+		}
 	}
 
 	async deleteWebhook(req, res, next) {
-		await WebhooksService.deleteWebhook(req.params.id)
-			.then(data => {
-				return res.status(data ? 200 : 404).end();
-			})
-			.catch(next);
+		try {
+			await WebhooksService.deleteWebhook(req.params.id)
+				.then(data => {
+					return res.status(data ? 200 : 404).end();
+				});
+		} catch(err) {
+			return next(err);
+		}
 	}
 }
 
