@@ -13,7 +13,6 @@ import EmailTemplatesService from './services/settings/emailTemplates';
 import SettingsService from './services/settings/settings';
 import OrderItemsService from './services/orders/orderItems';
 
-
 // cost factor for hashes
 const saltRounds = serverSettings.saltRounds;
 
@@ -67,7 +66,10 @@ const fillCartItemWithProductData = (products, cartItem) => {
 		cartItem.stock_backorder = product.stock_backorder;
 		cartItem.stock_preorder = product.stock_preorder;
 		if (cartItem.variant_id && cartItem.variant_id.length > 0) {
-			const variant = OrderItemsService.getVariantFromProduct(product, cartItem.variant_id);
+			const variant = OrderItemsService.getVariantFromProduct(
+				product,
+				cartItem.variant_id
+			);
 			cartItem.stock_quantity = variant ? variant.stock_quantity : 0;
 		} else {
 			cartItem.stock_quantity = product.stock_quantity;
@@ -134,51 +136,58 @@ ajaxRouter.get('/cart', (req, res) => {
 });
 
 ajaxRouter.post('/reset-password', async (req, res, next) => {
-	await bcrypt.hash(req.body.password, saltRounds, async function(err, hash) {
-		const data = {
-			status: false,
-			id: null,
-			verified: false
-		};
+	await bcrypt
+		.hash(req.body.password, saltRounds, async function(err, hash) {
+			const data = {
+				status: false,
+				id: null,
+				verified: false
+			};
 
-		const userId =
-			'token' in req.body
-				? AuthHeader.decodeUserLoginAuth(req.body.token)
-				: AuthHeader.decodeUserLoginAuth(req.body.id).userId.userId;
+			const userId =
+				'token' in req.body
+					? AuthHeader.decodeUserLoginAuth(req.body.token)
+					: AuthHeader.decodeUserLoginAuth(req.body.id).userId.userId;
 
-		const filter = {
-			id: userId
-		};
-		const customerDraft = {
-			password: hash
-		};
+			const filter = {
+				id: userId
+			};
+			const customerDraft = {
+				password: hash
+			};
 
-		// update customer password after checking customer id
-		if ('id' in req.body) {
-			await api.customers
-				.update(userId, customerDraft)
-				.then(({ status, json }) => {
-					data.status = true;
-					data.id = userId;
-					data.verified = true;
-					return res.status(status).send(data);
-				});
-			return false;
-		}
+			// update customer password after checking customer id
+			if ('id' in req.body) {
+				await api.customers
+					.update(userId, customerDraft)
+					.then(({ status, json }) => {
+						data.status = true;
+						data.id = userId;
+						data.verified = true;
+						return res.status(status).send(data);
+					})
+					.catch(err => {
+						console.log('Error in await api.customers: ', err);
+					});
+				return false;
+			}
 
-		if ('name' in userId && userId.name.indexOf('JsonWebTokenErro') !== -1) {
-			res.send(data);
-			return false;
-		}
+			if ('name' in userId && userId.name.indexOf('JsonWebTokenErro') !== -1) {
+				res.send(data);
+				return false;
+			}
 
-		// if customer email exists send status back
-		let { status, json } = await api.customers.list(filter);
-		if (json.total_count > 0) {
-			data.status = true;
-			data.id = AuthHeader.encodeUserLoginAuth(userId);
-		}
-		return res.status(status).send(data);
-	});
+			// if customer email exists send status back
+			let { status, json } = await api.customers.list(filter);
+			if (json.total_count > 0) {
+				data.status = true;
+				data.id = AuthHeader.encodeUserLoginAuth(userId);
+			}
+			return res.status(status).send(data);
+		})
+		.catch(err => {
+			console.log('Error in bcrypt.hash: ', err);
+		});
 });
 
 ajaxRouter.post('/forgot-password', async (req, res, next) => {
@@ -196,19 +205,25 @@ ajaxRouter.post('/forgot-password', async (req, res, next) => {
 			EmailTemplatesService.getEmailTemplate(
 				`forgot_password_${serverConfigs.language}`
 			)
-		]);
-		await handlebars.registerHelper('forgot_password_link', function(obj) {
-			var url = `${serverConfigs.storeBaseUrl}${
-				countryCode !== undefined ? `/${countryCode}/` : '/'
-			}reset-password?token=${AuthHeader.encodeUserLoginAuth(userId)}`;
-			var text = emailTemp.link;
-			if (text == undefined) {
-				text = url;
-			}
-			return new handlebars.SafeString(
-				`<a style="position: relative;text-transform: uppercase;border: 1px solid #ccc;color: #000;padding: 5px;text-decoration: none;" value="${text}" href="${url}"> ${text} </a>`
-			);
+		]).catch(err => {
+			console.log('Error in await Promise.all: ', err);
 		});
+		await handlebars
+			.registerHelper('forgot_password_link', function(obj) {
+				var url = `${serverConfigs.storeBaseUrl}${
+					countryCode !== undefined ? `/${countryCode}/` : '/'
+				}reset-password?token=${AuthHeader.encodeUserLoginAuth(userId)}`;
+				var text = emailTemp.link;
+				if (text == undefined) {
+					text = url;
+				}
+				return new handlebars.SafeString(
+					`<a style="position: relative;text-transform: uppercase;border: 1px solid #ccc;color: #000;padding: 5px;text-decoration: none;" value="${text}" href="${url}"> ${text} </a>`
+				);
+			})
+			.catch(err => {
+				console.log('Error in await handlebars.registerHelper: ', err);
+			});
 		const [bodyTemplate, settings] = await Promise.all([
 			handlebars.compile(emailTemp.body),
 			SettingsService.getSettings()
@@ -222,18 +237,25 @@ ajaxRouter.post('/forgot-password', async (req, res, next) => {
 				})
 			}),
 			res.send(data)
-		]);
+		]).catch(err => {
+			console.log('Error in await Promise.all: ', err);
+		});
 	}
 
 	// check if customer exists
-	await api.customers.list(filter).then(({ status, json }) => {
-		if (json.total_count < 1) {
-			data.status = false;
-			res.status(status).send(data);
-			return false;
-		}
-		sendEmail(json.data[0].id);
-	});
+	await api.customers
+		.list(filter)
+		.then(({ status, json }) => {
+			if (json.total_count < 1) {
+				data.status = false;
+				res.status(status).send(data);
+				return false;
+			}
+			sendEmail(json.data[0].id);
+		})
+		.catch(err => {
+			console.log('Error in await api.customers.list: ', err);
+		});
 });
 
 ajaxRouter.post('/customer-account', async (req, res, next) => {
@@ -255,20 +277,30 @@ ajaxRouter.post('/customer-account', async (req, res, next) => {
 		};
 
 		// retrieve customer data
-		await api.customers.retrieve(userId).then(({ status, json }) => {
-			customerData.customer_settings = json;
-			customerData.customer_settings.password = '*******';
-			customerData.token = AuthHeader.encodeUserLoginAuth(userId);
-			customerData.authenticated = false;
-		});
+		await api.customers
+			.retrieve(userId)
+			.then(({ status, json }) => {
+				customerData.customer_settings = json;
+				customerData.customer_settings.password = '*******';
+				customerData.token = AuthHeader.encodeUserLoginAuth(userId);
+				customerData.authenticated = false;
+			})
+			.catch(err => {
+				console.log('Error in await api.customers.retrieve: ', err);
+			});
 
 		// retrieve orders data
-		await api.orders.list(filter).then(({ status, json }) => {
-			customerData.order_statuses = json;
-			let objJsonB64 = JSON.stringify(customerData);
-			objJsonB64 = Buffer.from(objJsonB64).toString('base64');
-			return res.status(status).send(JSON.stringify(objJsonB64));
-		});
+		await api.orders
+			.list(filter)
+			.then(({ status, json }) => {
+				customerData.order_statuses = json;
+				let objJsonB64 = JSON.stringify(customerData);
+				objJsonB64 = Buffer.from(objJsonB64).toString('base64');
+				return res.status(status).send(JSON.stringify(objJsonB64));
+			})
+			.catch(err => {
+				console.log('Error in await api.orders.list: ', err);
+			});
 	}
 });
 
@@ -294,12 +326,17 @@ ajaxRouter.post('/login', async (req, res, next) => {
 				throw error;
 			}
 			if (!result) {
-				api.customers.list().then(({ status, json }) => {
-					customerData.loggedin_failed = true;
-					let objJsonB64 = JSON.stringify(customerData);
-					objJsonB64 = Buffer.from(objJsonB64).toString('base64');
-					return res.status(status).send(JSON.stringify(objJsonB64));
-				});
+				api.customers
+					.list()
+					.then(({ status, json }) => {
+						customerData.loggedin_failed = true;
+						let objJsonB64 = JSON.stringify(customerData);
+						objJsonB64 = Buffer.from(objJsonB64).toString('base64');
+						return res.status(status).send(JSON.stringify(objJsonB64));
+					})
+					.catch(err => {
+						console.log('Error in api.customers.list: ', err);
+					});
 				return;
 			}
 			var customerPassword = result.password;
@@ -311,20 +348,25 @@ ajaxRouter.post('/login', async (req, res, next) => {
 					customerData.token = AuthHeader.encodeUserLoginAuth(result._id);
 					customerData.authenticated = true;
 
-					await api.customers.retrieve(result._id).then(({ status, json }) => {
-						customerData.customer_settings = json;
-						customerData.customer_settings.password = '*******';
+					await api.customers
+						.retrieve(result._id)
+						.then(({ status, json }) => {
+							customerData.customer_settings = json;
+							customerData.customer_settings.password = '*******';
 
-						const filter = {
-							customer_id: json.id
-						};
-						api.orders.list(filter).then(({ status, json }) => {
-							customerData.order_statuses = json;
-							let objJsonB64 = JSON.stringify(customerData);
-							objJsonB64 = Buffer.from(objJsonB64).toString('base64');
-							return res.status(status).send(JSON.stringify(objJsonB64));
+							const filter = {
+								customer_id: json.id
+							};
+							api.orders.list(filter).then(({ status, json }) => {
+								customerData.order_statuses = json;
+								let objJsonB64 = JSON.stringify(customerData);
+								objJsonB64 = Buffer.from(objJsonB64).toString('base64');
+								return res.status(status).send(JSON.stringify(objJsonB64));
+							});
+						})
+						.catch(err => {
+							console.log('Error in api.customers.retrieve: ', err);
 						});
-					});
 					return true;
 				}
 				customerData.loggedin_failed = true;
@@ -333,6 +375,9 @@ ajaxRouter.post('/login', async (req, res, next) => {
 				res.status(200).send(JSON.stringify(objJsonB64));
 				return;
 			});
+		})
+		.catch(err => {
+			console.log('Error in db.collection: ', err);
 		});
 });
 
@@ -387,13 +432,18 @@ ajaxRouter.post('/register', async (req, res, next) => {
 
 			// check once if customer email is existig in database
 			filter.email = eMail;
-			await api.customers.list(filter).then(({ status, json }) => {
-				if (json.total_count > 0) {
-					data.isCustomerSaved = true;
-					res.status(status).send(data);
-					return false;
-				}
-			});
+			await api.customers
+				.list(filter)
+				.then(({ status, json }) => {
+					if (json.total_count > 0) {
+						data.isCustomerSaved = true;
+						res.status(status).send(data);
+						return false;
+					}
+				})
+				.catch(err => {
+					console.log('Error in api.customers.list: ', err);
+				});
 			// generate password-hash
 			const salt = bcrypt.genSaltSync(saltRounds);
 			const hashPassword = bcrypt.hashSync(passWord, salt);
@@ -407,10 +457,15 @@ ajaxRouter.post('/register', async (req, res, next) => {
 			};
 
 			// create new customer in database
-			await api.customers.create(customerDraft).then(({ status, json }) => {
-				data.isCustomerSaved = true;
-				return res.status(status).send(data);
-			});
+			await api.customers
+				.create(customerDraft)
+				.then(({ status, json }) => {
+					data.isCustomerSaved = true;
+					return res.status(status).send(data);
+				})
+				.catch(err => {
+					console.log('Error in await api.customers.create: ', err);
+				});
 			return true;
 		})();
 	}
@@ -423,19 +478,25 @@ ajaxRouter.post('/register', async (req, res, next) => {
 				EmailTemplatesService.getEmailTemplate(
 					`register_doi_${serverConfigs.language}`
 				)
-			]);
-			await handlebars.registerHelper('register_doi_link', function(obj) {
-				var url = `${serverConfigs.storeBaseUrl}${
-					countryCode !== undefined ? `/${countryCode}/` : '/'
-				}register?token=${tokenConcatString}`;
-				var text = emailTemp.link;
-				if (text == undefined) {
-					text = url;
-				}
-				return new handlebars.SafeString(
-					`<a style="position: relative;text-transform: uppercase;border: 1px solid #ccc;color: #000;padding: 5px;text-decoration: none;" value="${text}" href="${url}"> ${text} </a>`
-				);
+			]).catch(err => {
+				console.log('Error in await Promise.all: ', err);
 			});
+			await handlebars
+				.registerHelper('register_doi_link', function(obj) {
+					var url = `${serverConfigs.storeBaseUrl}${
+						countryCode !== undefined ? `/${countryCode}/` : '/'
+					}register?token=${tokenConcatString}`;
+					var text = emailTemp.link;
+					if (text == undefined) {
+						text = url;
+					}
+					return new handlebars.SafeString(
+						`<a style="position: relative;text-transform: uppercase;border: 1px solid #ccc;color: #000;padding: 5px;text-decoration: none;" value="${text}" href="${url}"> ${text} </a>`
+					);
+				})
+				.catch(err => {
+					console.log('Error in await handlebars.registerHelper: ', err);
+				});
 			const [bodyTemplate, settings] = await Promise.all([
 				handlebars.compile(emailTemp.body),
 				SettingsService.getSettings()
@@ -456,20 +517,27 @@ ajaxRouter.post('/register', async (req, res, next) => {
 					})
 				}),
 				res.status('200').send(data)
-			]);
+			]).catch(err => {
+				console.log('Error in await Promise.all: ', err);
+			});
 		}
 		return false;
 	}
 	// check if customer exist in database
 	if (!requestToken) {
-		await api.customers.list(filter).then(({ status, json }) => {
-			if (json.total_count > 0) {
-				res.status(status).send(data);
-				return false;
-			}
-			data.status = true;
-			registerCustomer();
-		});
+		await api.customers
+			.list(filter)
+			.then(({ status, json }) => {
+				if (json.total_count > 0) {
+					res.status(status).send(data);
+					return false;
+				}
+				data.status = true;
+				registerCustomer();
+			})
+			.catch(err => {
+				console.log('Error in await api.customers.list: ', err);
+			});
 	}
 });
 
@@ -503,59 +571,74 @@ ajaxRouter.put('/customer-account', async (req, res, next) => {
 		email: customerData.email
 	};
 	// update customer profile and addresses
-	await api.customers.list(filter).then(({ status, json }) => {
-		// if customer email exists already do not update
-		if (json.total_count > 0) {
-			delete customerDraftObj.email;
-		}
-	});
+	await api.customers
+		.list(filter)
+		.then(({ status, json }) => {
+			// if customer email exists already do not update
+			if (json.total_count > 0) {
+				delete customerDraftObj.email;
+			}
+		})
+		.catch(err => {
+			console.log('Error in await api.customers.list: ', err);
+		});
 	try {
 		// update customer
-		await db.collection('customers').updateMany(
-			{ _id: ObjectID(userId) },
-			{
-				$set: customerDraftObj
-			},
-			{ ordered: false },
-			async function(error, result) {
-				if (error) {
-					//alert
-					res.status('200').send(error);
-				}
-				customerDataObj.customer_settings = result;
-				customerDataObj.customer_settings.password = '*******';
-				customerDataObj.token = AuthHeader.encodeUserLoginAuth(userId);
-				customerData.authenticated = false;
+		await db
+			.collection('customers')
+			.updateMany(
+				{ _id: ObjectID(userId) },
+				{
+					$set: customerDraftObj
+				},
+				{ ordered: false },
+				async function(error, result) {
+					if (error) {
+						//alert
+						res.status('200').send(error);
+					}
+					customerDataObj.customer_settings = result;
+					customerDataObj.customer_settings.password = '*******';
+					customerDataObj.token = AuthHeader.encodeUserLoginAuth(userId);
+					customerData.authenticated = false;
 
-				if (customerData.saved_addresses === 0) {
-					let objJsonB64 = JSON.stringify(customerDataObj);
-					objJsonB64 = Buffer.from(objJsonB64).toString('base64');
-					res.status('200').send(JSON.stringify(objJsonB64));
-					return false;
-				}
-
-				// update orders
-				await db.collection('orders').updateMany(
-					{ customer_id: ObjectID(userId) },
-					{
-						$set: {
-							shipping_address: customerData.shipping_address,
-							billing_address: customerData.billing_address
-						}
-					},
-					function(error, result) {
-						if (error) {
-							//alert
-							res.status('200').send(error);
-						}
-						customerDataObj.order_statuses = result;
+					if (customerData.saved_addresses === 0) {
 						let objJsonB64 = JSON.stringify(customerDataObj);
 						objJsonB64 = Buffer.from(objJsonB64).toString('base64');
 						res.status('200').send(JSON.stringify(objJsonB64));
+						return false;
 					}
-				);
-			}
-		);
+
+					// update orders
+					await db
+						.collection('orders')
+						.updateMany(
+							{ customer_id: ObjectID(userId) },
+							{
+								$set: {
+									shipping_address: customerData.shipping_address,
+									billing_address: customerData.billing_address
+								}
+							},
+							function(error, result) {
+								if (error) {
+									//alert
+									res.status('200').send(error);
+								}
+								customerDataObj.order_statuses = result;
+								let objJsonB64 = JSON.stringify(customerDataObj);
+								objJsonB64 = Buffer.from(objJsonB64).toString('base64');
+								res.status('200').send(JSON.stringify(objJsonB64));
+							}
+						)
+						.catch(err => {
+							console.log('Error in await db.collection(orders: ', err);
+						});
+				}
+			)
+			.catch(err => {
+				console.log('Error in await db.collection(customers: ', err);
+			});
 	} catch (error) {}
 });
 
@@ -610,6 +693,9 @@ ajaxRouter.post('/cart/items', (req, res, next) => {
 							res.status(status).send(json);
 						});
 				});
+			})
+			.catch(err => {
+				console.log('Error in api.settings: ', err);
 			});
 	}
 });
@@ -693,6 +779,9 @@ ajaxRouter.put('/cart', async (req, res) => {
 			.then(cartResponse => fillCartItems(cartResponse))
 			.then(({ status, json }) => {
 				res.status(status).send(json);
+			})
+			.catch(err => {
+				console.log('Error in await api.orders: ', err);
 			});
 	} else {
 		res.end();
@@ -731,7 +820,11 @@ ajaxRouter.post('/cart/charge', async (req, res) => {
 	const order_id = req.signedCookies.order_id;
 	if (order_id) {
 		const client = api.orders.client;
-		const chargeResponse = await client.post(`/orders/${order_id}/charge`);
+		const chargeResponse = await client
+			.post(`/orders/${order_id}/charge`)
+			.catch(err => {
+				console.log('Error in await client.post(/orders: ', err);
+			});
 		res.status(chargeResponse.status).send(chargeResponse.json);
 	} else {
 		res.end();
@@ -766,10 +859,18 @@ ajaxRouter.get('/sitemap', async (req, res) => {
 		result = sitemapResponse.json;
 
 		if (result.type === 'product') {
-			const productResponse = await api.products.retrieve(result.resource);
+			const productResponse = await api.products
+				.retrieve(result.resource)
+				.catch(err => {
+					console.log('Error in await api.products.retrieve: ', err);
+				});
 			result.data = productResponse.json;
 		} else if (result.type === 'page') {
-			const pageResponse = await api.pages.retrieve(result.resource);
+			const pageResponse = await api.pages
+				.retrieve(result.resource)
+				.catch(err => {
+					console.log('Error in await api.pages.retrieve: ', err);
+				});
 			result.data = pageResponse.json;
 		}
 	}
