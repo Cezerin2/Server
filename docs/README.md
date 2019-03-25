@@ -2,8 +2,8 @@
 
 ### General
 * Getting Started
-  - [with GitHub](./getting-started.md)
-  - [with Docker](./getting-started-docker.md)
+  - [with GitHub](./using-source-code.md)
+  - [with Docker](./using-docker.md)
 * [How to deploy a Cezerin2 on Ubuntu 16.04 (from Docker)](./how-to-deploy-a-cezerin2-on-ubuntu-16-04.md)
 * [How to deploy a Cezerin2 on Ubuntu 18.04.1 (from GitHub)](./how-to-deploy-a-cezerin2-on-ubuntu-18-04-1-github.md)
 * [Application Structure](./structure.md)
