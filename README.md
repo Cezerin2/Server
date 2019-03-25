@@ -19,7 +19,7 @@ Built with:
 - [Community Site](https://cezerin.org)
 - [Demo Store](https://store.cezerin.com)
 - [Slack #cezerin2](https://join.slack.com/t/cezerin2/shared_invite/enQtNTE5NzYxMzA5ODc5LTVkZjM4ODUwMmNlMmMyZTkxYjg5N2QxZmQ5NjA1NTg3OWM2ZjU1NzVmNWM0N2E3ZmJjM2Q3MjQ5OGFmNTBmYjg)
-- [Docs](https://github.com/cezerin2/cezerin2/blob/master/docs/getting-started.md)
+- [Docs](https://github.com/cezerin2/cezerin2/blob/master/docs)
 - [Facebook](https://facebook.com/cezerin)
 - [Twitter](https://twitter.com/cezerin2)
 
