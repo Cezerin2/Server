@@ -24,7 +24,7 @@ class ProductImagesService {
 			settings.assetsBaseURL || (await SettingsService.getSettings()).domain;
 		console.log(domain);
 
-		db.collection('products')
+		return db.collection('products')
 			.findOne({ _id: productObjectID }, { fields: { images: 1 } })
 			.then(product => {
 				if (product && product.images && product.images.length > 0) {
