@@ -22,7 +22,6 @@ class ProductImagesService {
 
 		let domain =
 			settings.assetsBaseURL || (await SettingsService.getSettings()).domain;
-		console.log(domain);
 
 		db.collection('products')
 			.findOne({ _id: productObjectID }, { fields: { images: 1 } })
