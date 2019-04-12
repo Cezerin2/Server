@@ -29,7 +29,7 @@ app.get('/images/:entity/:id/:size/:filename', (req, res, next) => {
 	next();
 });
 app.use(express.static('public/content', STATIC_OPTIONS));
-
+app.use('/assets', express.static('theme/assets', STATIC_OPTIONS));
 app.all('*', (req, res, next) => {
 	// CORS headers
 	var allowedOrigins = security.getAccessControlAllowOrigin();
