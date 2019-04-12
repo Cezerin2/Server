@@ -13,7 +13,7 @@ class SettingsService {
 		this.defaultSettings = {
 			store_name: 'Cezerin',
 			domain: '',
-			logo_file: 'assets/images/logo.png',
+			logo_file: 'logo.png',
 			language: 'en',
 			currency_code: 'USD',
 			currency_symbol: '$',
@@ -188,8 +188,8 @@ class SettingsService {
 
 		if (data.logo_file && data.logo_file.length > 0) {
 			data.logo = url.resolve(
-				data.domain,
-				settings.filesUploadUrl + '/' + data.logo_file
+				settings.assetsBaseURL,
+				settings.themeAssetsUploadUrl + '/' + data.logo_file
 			);
 		} else {
 			data.logo = null;
@@ -201,7 +201,7 @@ class SettingsService {
 		return this.getSettings().then(data => {
 			if (data.logo_file && data.logo_file.length > 0) {
 				let filePath = path.resolve(
-					settings.filesUploadPath + '/' + data.logo_file
+					settings.themeAssetsUploadPath + '/' + data.logo_file
 				);
 				fs.unlink(filePath, err => {
 					this.updateSettings({ logo_file: null });
@@ -211,7 +211,7 @@ class SettingsService {
 	}
 
 	uploadLogo(req, res, next) {
-		let uploadDir = path.resolve(settings.filesUploadPath);
+		let uploadDir = path.resolve(settings.themeAssetsUploadPath);
 		fse.ensureDirSync(uploadDir);
 
 		let form = new formidable.IncomingForm(),
