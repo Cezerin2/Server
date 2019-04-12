@@ -19,7 +19,7 @@ module.exports = {
 
 	// used by API
 	adminBaseURL: process.env.ADMIN_BASE_URL || 'http://localhost:3002',
-	adminLoginPath: process.env.ADMIN_LOGIN_PATH || '/admin/login',
+	adminLoginPath: process.env.ADMIN_LOGIN_PATH || '/login',
 
 	// used by API to service assets
 	assetsBaseURL: process.env.ASSETS_BASE_URL || 'http://localhost:3001',
@@ -66,7 +66,10 @@ module.exports = {
 
 	// cost factor, controls how much time is needed to calculate a single BCrypt hash
 	// for production: recommended salRounds > 12
-	saltRounds: process.env.SALT_ROUNDS || 10,
+	saltRounds: process.env.SALT_ROUNDS || 12,
+
+	// used by API
+	orderStartNumber: 1000,
 
 	developerMode: true
 };
