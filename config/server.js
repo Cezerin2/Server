@@ -10,6 +10,8 @@ const dbCred =
 const dbUrl =
 	process.env.DB_URL || `mongodb://${dbCred}${dbHost}:${dbPort}/${dbName}`;
 
+const SUPPORT_LANGUAGES = ['en', 'de', 'ru'];
+
 module.exports = {
 	// used by Store (server side)
 	apiBaseUrl: process.env.API_BASE_URL || `http://localhost:3001/api/v1`,
@@ -59,7 +61,7 @@ module.exports = {
 	themeAssetsUploadUrl: '/assets/images',
 
 	// store UI language
-	language: process.env.LANGUAGE || 'en',
+	language: process.env.LANGUAGE.split(':').filter(el=>SUPPORT_LANGUAGES.includes(el))[0] || 'en',
 
 	// used by API
 	orderStartNumber: 1000,
