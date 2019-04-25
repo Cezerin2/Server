@@ -244,6 +244,7 @@ ajaxRouter.post('/customer-account', async (req, res, next) => {
 		order_statuses: null
 	};
 
+	if (req.body.token) {
 	customerData.token = AuthHeader.decodeUserLoginAuth(req.body.token);
 	if (customerData.token.post !== undefined) {
 		const userId = JSON.stringify(customerData.token.userId).replace(
@@ -270,6 +271,7 @@ ajaxRouter.post('/customer-account', async (req, res, next) => {
 			return res.status(status).send(JSON.stringify(objJsonB64));
 		});
 	}
+  }
 });
 
 ajaxRouter.post('/login', async (req, res, next) => {
