@@ -246,7 +246,7 @@ ajaxRouter.post('/customer-account', async (req, res, next) => {
 
 	if (req.body.token) {
 	customerData.token = AuthHeader.decodeUserLoginAuth(req.body.token);
-	if (customerData.token.post !== undefined) {
+	if (customerData.token.userId !== undefined) {
 		const userId = JSON.stringify(customerData.token.userId).replace(
 			/["']/g,
 			''
