@@ -13,7 +13,6 @@ import EmailTemplatesService from './services/settings/emailTemplates';
 import SettingsService from './services/settings/settings';
 import OrderItemsService from './services/orders/orderItems';
 
-
 // cost factor for hashes
 const saltRounds = serverSettings.saltRounds;
 
@@ -67,7 +66,10 @@ const fillCartItemWithProductData = (products, cartItem) => {
 		cartItem.stock_backorder = product.stock_backorder;
 		cartItem.stock_preorder = product.stock_preorder;
 		if (cartItem.variant_id && cartItem.variant_id.length > 0) {
-			const variant = OrderItemsService.getVariantFromProduct(product, cartItem.variant_id);
+			const variant = OrderItemsService.getVariantFromProduct(
+				product,
+				cartItem.variant_id
+			);
 			cartItem.stock_quantity = variant ? variant.stock_quantity : 0;
 		} else {
 			cartItem.stock_quantity = product.stock_quantity;
@@ -245,33 +247,34 @@ ajaxRouter.post('/customer-account', async (req, res, next) => {
 	};
 
 	if (req.body.token) {
-	customerData.token = AuthHeader.decodeUserLoginAuth(req.body.token);
-	if (customerData.token.userId !== undefined) {
-		const userId = JSON.stringify(customerData.token.userId).replace(
-			/["']/g,
-			''
-		);
-		const filter = {
-			customer_id: userId
-		};
+		customerData.token = AuthHeader.decodeUserLoginAuth(req.body.token);
+		if (customerData.token.userId !== undefined) {
+			const userId = JSON.stringify(customerData.token.userId).replace(
+				/["']/g,
+				''
+			);
 
-		// retrieve customer data
-		await api.customers.retrieve(userId).then(({ status, json }) => {
-			customerData.customer_settings = json;
-			customerData.customer_settings.password = '*******';
-			customerData.token = AuthHeader.encodeUserLoginAuth(userId);
-			customerData.authenticated = false;
-		});
+			const filter = {
+				customer_id: userId
+			};
 
-		// retrieve orders data
-		await api.orders.list(filter).then(({ status, json }) => {
-			customerData.order_statuses = json;
-			let objJsonB64 = JSON.stringify(customerData);
-			objJsonB64 = Buffer.from(objJsonB64).toString('base64');
-			return res.status(status).send(JSON.stringify(objJsonB64));
-		});
+			// retrieve customer data
+			await api.customers.retrieve(userId).then(({ status, json }) => {
+				customerData.customer_settings = json;
+				customerData.customer_settings.password = '*******';
+				customerData.token = AuthHeader.encodeUserLoginAuth(userId);
+				customerData.authenticated = false;
+			});
+
+			// retrieve orders data
+			await api.orders.list(filter).then(({ status, json }) => {
+				customerData.order_statuses = json;
+				let objJsonB64 = JSON.stringify(customerData);
+				objJsonB64 = Buffer.from(objJsonB64).toString('base64');
+				return res.status(status).send(JSON.stringify(objJsonB64));
+			});
+		}
 	}
-  }
 });
 
 ajaxRouter.post('/login', async (req, res, next) => {
@@ -372,7 +375,9 @@ ajaxRouter.post('/register', async (req, res, next) => {
 			).userId;
 			const eMail = await AuthHeader.decodeUserLoginAuth(requestTokenArray[2])
 				.userId;
-			const passWord = await AuthHeader.decodeUserPassword(requestTokenArray[3])
+			const mobile = await AuthHeader.decodeUserLoginAuth(requestTokenArray[3])
+				.userId;
+			const passWord = await AuthHeader.decodeUserPassword(requestTokenArray[4])
 				.password;
 
 			if (
@@ -405,6 +410,7 @@ ajaxRouter.post('/register', async (req, res, next) => {
 				first_name: firstName,
 				last_name: lastName,
 				email: eMail.toLowerCase(),
+				mobile: mobile,
 				password: hashPassword
 			};
 
@@ -446,7 +452,9 @@ ajaxRouter.post('/register', async (req, res, next) => {
 				req.body.first_name
 			)}xXx${AuthHeader.encodeUserLoginAuth(
 				req.body.last_name
-			)}xXx${AuthHeader.encodeUserLoginAuth(req.body.email)}xXx${
+			)}xXx${AuthHeader.encodeUserLoginAuth(
+				req.body.email
+			)}xXx${AuthHeader.encodeUserLoginAuth(req.body.mobile)}xXx${
 				req.body.password
 			}`;
 			await Promise.all([
@@ -498,6 +506,7 @@ ajaxRouter.put('/customer-account', async (req, res, next) => {
 		first_name: customerData.first_name,
 		last_name: customerData.last_name,
 		email: customerData.email.toLowerCase(),
+		mobile: customerData.mobile,
 		password: hashPassword,
 		addresses: [customerData.billing_address, customerData.shipping_address]
 	};
