@@ -81,7 +81,7 @@ server {
 
 server {
         listen 80;
-        server_name admin.cezerin.ru;
+        server_name admin.cezerin.org;
 
         gzip              on;
         gzip_comp_level   2;
