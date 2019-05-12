@@ -305,8 +305,7 @@ ajaxRouter.post('/login', async (req, res, next) => {
 				return;
 			}
 			var customerPassword = result.password;
-			var inputPassword = AuthHeader.decodeUserPassword(req.body.password)
-				.password;
+			var inputPassword = req.body.password;
 
 			bcrypt.compare(inputPassword, customerPassword, async function(err, out) {
 				if (out == true) {
@@ -372,8 +371,7 @@ ajaxRouter.post('/register', async (req, res, next) => {
 			).userId;
 			const eMail = await AuthHeader.decodeUserLoginAuth(requestTokenArray[2])
 				.userId;
-			const passWord = await AuthHeader.decodeUserPassword(requestTokenArray[3])
-				.password;
+			const passWord = requestTokenArray[3]
 
 			if (
 				requestTokenArray.length < 1 ||
@@ -481,8 +479,7 @@ ajaxRouter.put('/customer-account', async (req, res, next) => {
 	const userId = JSON.stringify(token.userId).replace(/["']/g, '');
 
 	// generate password-hash
-	const inputPassword = AuthHeader.decodeUserPassword(customerData.password)
-		.password;
+	const inputPassword = customerData.password;
 	const salt = bcrypt.genSaltSync(saltRounds);
 	const hashPassword = bcrypt.hashSync(inputPassword, salt);
 
