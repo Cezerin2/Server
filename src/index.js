@@ -16,7 +16,6 @@ const STATIC_OPTIONS = {
 	maxAge: 31536000000 // One year
 };
 
-security.applyMiddleware(app);
 app.set('trust proxy', 1);
 app.use(helmet());
 
@@ -30,6 +29,9 @@ app.get('/images/:entity/:id/:size/:filename', (req, res, next) => {
 });
 app.use(express.static('public/content', STATIC_OPTIONS));
 app.use('/assets', express.static('theme/assets', STATIC_OPTIONS));
+
+security.applyMiddleware(app);
+
 app.all('*', (req, res, next) => {
 	// CORS headers
 	var allowedOrigins = security.getAccessControlAllowOrigin();
