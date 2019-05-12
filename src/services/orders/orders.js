@@ -384,7 +384,7 @@ class OrdersService {
 				order.billing_address = parse.getOrderAddress(data.billing_address);
 				order.shipping_address = parse.getOrderAddress(data.shipping_address);
 
-				order.item_tax = parse.getNumberIfPositive(data.item_tax) || 0;
+				order.tax_rate = parse.getNumberIfPositive(data.tax_rate) || 0;
 				order.shipping_tax = parse.getNumberIfPositive(data.shipping_tax) || 0;
 				order.shipping_discount =
 					parse.getNumberIfPositive(data.shipping_discount) || 0;
@@ -449,9 +449,6 @@ class OrdersService {
 				order.payment_token = parse.getString(data.payment_token);
 			}
 
-			if (data.item_tax !== undefined) {
-				order.item_tax = parse.getNumberIfPositive(data.item_tax) || 0;
-			}
 			if (data.shipping_tax !== undefined) {
 				order.shipping_tax = parse.getNumberIfPositive(data.shipping_tax) || 0;
 			}
@@ -462,6 +459,9 @@ class OrdersService {
 			if (data.shipping_price !== undefined) {
 				order.shipping_price =
 					parse.getNumberIfPositive(data.shipping_price) || 0;
+			}
+			if (data.tax_rate !== undefined) {
+				order.tax_rate = parse.getNumberIfPositive(data.tax_rate) || 0;
 			}
 			if (data.item_tax_included !== undefined) {
 				order.item_tax_included = parse.getBooleanIfValid(
@@ -614,9 +614,7 @@ class OrdersService {
 			let sum_items_price_total = 0;
 			let sum_items_discount_total = 0;
 			let sum_discounts_amount = 0;
-			let tax_included_total =
-				(order.item_tax_included ? 0 : order.item_tax) +
-				(order.shipping_tax_included ? 0 : order.shipping_tax);
+			let sum_items_tax_total = 0;
 
 			if (order.items && order.items.length > 0) {
 				order.items.forEach(item => {
@@ -633,11 +631,27 @@ class OrdersService {
 				});
 
 				order.items.forEach(item => {
+					if (item.price_total > 0 && order.tax_rate > 0) {
+						if (order.item_tax_included) {
+							sum_items_tax_total +=
+								item.price_total -
+								item.price_total / (1 + order.tax_rate / 100);
+						} else {
+							sum_items_tax_total += item.price_total * (order.tax_rate / 100);
+						}
+					}
+				});
+
+				order.items.forEach(item => {
 					if (item.discount_total > 0) {
 						sum_items_discount_total += item.discount_total;
 					}
 				});
 			}
+
+			let tax_included_total =
+				(order.item_tax_included ? 0 : sum_items_tax_total) +
+				(order.shipping_tax_included ? 0 : order.shipping_tax);
 
 			if (order.discounts && order.discounts.length > 0) {
 				order.items.forEach(item => {
@@ -647,7 +661,7 @@ class OrdersService {
 				});
 			}
 
-			let tax_total = order.item_tax + order.shipping_tax;
+			let tax_total = sum_items_tax_total + order.shipping_tax;
 			let shipping_total = order.shipping_price - order.shipping_discount;
 			let discount_total = sum_items_discount_total + sum_discounts_amount;
 			let grand_total =
