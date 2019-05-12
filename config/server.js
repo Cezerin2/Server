@@ -68,8 +68,5 @@ module.exports = {
 	// for production: recommended salRounds > 12
 	saltRounds: process.env.SALT_ROUNDS || 12,
 
-	// used by API
-	orderStartNumber: 1000,
-
-	developerMode: true
+	developerMode: process.env.DEVELOPER_MODE || false
 };
