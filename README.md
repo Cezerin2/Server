@@ -81,6 +81,32 @@ Single-Page Application with React server-side rendering. [Demo store](https://s
 ├── theme                    # Theme as a local package
 └── process.json             # pm2 process file
 ```
+## Financial contributions
+
+We also welcome financial contributions in full transparency on our [open collective](https://opencollective.com/cezerin2).
+Anyone can file an expense. If the expense makes sense for the development of the community, it will be "merged" in the ledger of our open collective by the core contributors and the person who filed the expense will be reimbursed.
+
+## Credits
+
+
+### Contributors
+
+Thank you to all the people who have already contributed to cezerin2!
+<a href="graphs/contributors"><img src="https://opencollective.com/cezerin2/contributors.svg?width=890" /></a>
+
+
+### Backers
+
+Thank you to all our backers! [[Become a backer](https://opencollective.com/cezerin2#backer)]
+
+<a href="https://opencollective.com/cezerin2#backers" target="_blank"><img src="https://opencollective.com/cezerin2/tiers/backer.svg?avatarHeight=36&width=600"></a>
+
+
+### Sponsors
+
+Thank you to all our sponsors! (please ask your company to also support this open source project by [becoming a sponsor](https://opencollective.com/cezerin2#sponsor))
+
+<a href="https://opencollective.com/cezerin2#sponsor" target="_blank"><img src="https://opencollective.com/cezerin2/tiers/sponsor.svg?avatarHeight=36&width=600"></a>
 
 
 ## Contributing
