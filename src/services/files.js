@@ -5,7 +5,7 @@ import formidable from 'formidable';
 import utils from '../lib/utils';
 import settings from '../lib/settings';
 
-const CONTENT_PATH = path.resolve(settings.filesUploadPath);
+const CONTENT_PATH = path.resolve(settings.assetServer.filesUploadPath);
 
 class FilesService {
 	getFileData(fileName) {

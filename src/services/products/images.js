@@ -21,7 +21,7 @@ class ProductImagesService {
 		let productObjectID = new ObjectID(productId);
 
 		let domain =
-			settings.assetsBaseURL || (await SettingsService.getSettings()).domain;
+			settings.assetServer.domain || (await SettingsService.getSettings()).domain;
 
 		return db
 			.collection('products')
@@ -31,11 +31,7 @@ class ProductImagesService {
 					let images = product.images.map(image => {
 						image.url = url.resolve(
 							domain,
-							settings.productsUploadUrl +
-								'/' +
-								product._id +
-								'/' +
-								image.filename
+							`${settings.assetServer.productsUploadPath}/${product._id}/${image.filename}`
 						);
 						return image;
 					});
@@ -64,7 +60,7 @@ class ProductImagesService {
 					if (imageData) {
 						let filename = imageData.filename;
 						let filepath = path.resolve(
-							settings.productsUploadPath + '/' + productId + '/' + filename
+							`${settings.assetServer.plocalBasePath}/${settings.assetServer.productsUploadPath}/${productId}/${filename}`
 						);
 						fse.removeSync(filepath);
 						return db
@@ -93,7 +89,7 @@ class ProductImagesService {
 		let uploadedFiles = [];
 		const productObjectID = new ObjectID(productId);
 		const uploadDir = path.resolve(
-			settings.productsUploadPath + '/' + productId
+			`${settings.assetServer.productsUploadPath}/${productId}`
 		);
 		fse.ensureDirSync(uploadDir);
 

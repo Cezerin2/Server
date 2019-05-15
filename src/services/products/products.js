@@ -93,12 +93,12 @@ class ProductsService {
 		]);
 
 		const domain = generalSettings.domain || '';
-		const assetsBaseURL = settings.assetsBaseURL || domain;
+		const assetsDomain = settings.assetServer.domain || domain;
 		const ids = this.getArrayFromCSV(parse.getString(params.ids));
 		const sku = this.getArrayFromCSV(parse.getString(params.sku));
 
 		let items = itemsResult.map(item =>
-			this.changeProperties(item, domain, assetsBaseURL)
+			this.changeProperties(item, domain, assetsDomain)
 		);
 		items = this.sortItemsByArrayOfIdsIfNeed(items, ids, sortQuery);
 		items = this.sortItemsByArrayOfSkuIfNeed(items, sku, sortQuery);
@@ -689,7 +689,7 @@ class ProductsService {
 				if (deleteResponse.deletedCount > 0) {
 					// 2. delete directory with images
 					let deleteDir = path.resolve(
-						settings.productsUploadPath + '/' + productId
+						`${settings.assetServer.productsUploadPath}/${productId}`
 					);
 					fse.remove(deleteDir, err => {});
 				}
@@ -950,12 +950,12 @@ class ProductsService {
 		}
 	}
 
-	getSortedImagesWithUrls(item, assetsBaseURL) {
+	getSortedImagesWithUrls(item, assetsDomain) {
 		if (item.images && item.images.length > 0) {
 			return item.images
 				.map(image => {
 					image.url = this.getImageUrl(
-						assetsBaseURL,
+						assetsDomain,
 						item.id,
 						image.filename || ''
 					);
@@ -967,20 +967,20 @@ class ProductsService {
 		}
 	}
 
-	getImageUrl(assetsBaseURL, productId, imageFileName) {
+	getImageUrl(assetsDomain, productId, imageFileName) {
 		return url.resolve(
-			assetsBaseURL,
-			`${settings.productsUploadUrl}/${productId}/${imageFileName}`
+			assetsDomain,
+			`${settings.assetServer.productsUploadPath}/${productId}/${imageFileName}`
 		);
 	}
 
-	changeProperties(item, domain, assetsBaseURL) {
+	changeProperties(item, domain, assetsDomain) {
 		if (item) {
 			if (item.id) {
 				item.id = item.id.toString();
 			}
 
-			item.images = this.getSortedImagesWithUrls(item, assetsBaseURL);
+			item.images = this.getSortedImagesWithUrls(item, assetsDomain);
 
 			if (item.category_id) {
 				item.category_id = item.category_id.toString();
