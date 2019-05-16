@@ -8,7 +8,7 @@ class ProductVariantsService {
 			return Promise.reject('Invalid identifier');
 		}
 
-		let productObjectID = new ObjectID(productId);
+		const productObjectID = new ObjectID(productId);
 		return db
 			.collection('products')
 			.findOne({ _id: productObjectID }, { fields: { variants: 1 } })
@@ -19,8 +19,8 @@ class ProductVariantsService {
 		if (!ObjectID.isValid(productId) || !ObjectID.isValid(variantId)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let productObjectID = new ObjectID(productId);
-		let variantObjectID = new ObjectID(variantId);
+		const productObjectID = new ObjectID(productId);
+		const variantObjectID = new ObjectID(variantId);
 
 		return db
 			.collection('products')
@@ -43,7 +43,7 @@ class ProductVariantsService {
 		if (!ObjectID.isValid(productId)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let productObjectID = new ObjectID(productId);
+		const productObjectID = new ObjectID(productId);
 
 		const variantData = this.getValidDocumentForInsert(data);
 
@@ -57,8 +57,8 @@ class ProductVariantsService {
 		if (!ObjectID.isValid(productId) || !ObjectID.isValid(variantId)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let productObjectID = new ObjectID(productId);
-		let variantObjectID = new ObjectID(variantId);
+		const productObjectID = new ObjectID(productId);
+		const variantObjectID = new ObjectID(variantId);
 
 		const variantData = this.getValidDocumentForUpdate(data);
 
@@ -75,7 +75,7 @@ class ProductVariantsService {
 	}
 
 	getValidDocumentForInsert(data) {
-		let variant = {
+		const variant = {
 			id: new ObjectID(),
 			sku: parse.getString(data.sku),
 			price: parse.getNumberIfPositive(data.price) || 0,
@@ -92,7 +92,7 @@ class ProductVariantsService {
 			return new Error('Required fields are missing');
 		}
 
-		let variant = {};
+		const variant = {};
 
 		if (data.sku !== undefined) {
 			variant['variants.$.sku'] = parse.getString(data.sku);
@@ -116,7 +116,7 @@ class ProductVariantsService {
 	}
 
 	getVariantOptions(productId, variantId) {
-		let productObjectID = new ObjectID(productId);
+		const productObjectID = new ObjectID(productId);
 
 		return db
 			.collection('products')
@@ -157,9 +157,8 @@ class ProductVariantsService {
 						if (option.option_id.toString() === optionId) {
 							option.value_id = new ObjectID(valueId);
 							return option;
-						} else {
-							return option;
 						}
+						return option;
 					});
 				}
 			} else {
@@ -183,8 +182,8 @@ class ProductVariantsService {
 		) {
 			return Promise.reject('Invalid identifier');
 		}
-		let productObjectID = new ObjectID(productId);
-		let variantObjectID = new ObjectID(variantId);
+		const productObjectID = new ObjectID(productId);
+		const variantObjectID = new ObjectID(variantId);
 
 		return this.getModifiedVariantOptions(
 			productId,

@@ -151,9 +151,7 @@ class ProductsRoute {
 
 	getProducts(req, res, next) {
 		ProductsService.getProducts(req.query)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -162,18 +160,15 @@ class ProductsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	addProduct(req, res, next) {
 		ProductsService.addProduct(req.body)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -182,26 +177,21 @@ class ProductsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	deleteProduct(req, res, next) {
 		ProductsService.deleteProduct(req.params.productId)
-			.then(data => {
-				return res.status(data ? 200 : 404).end();
-			})
+			.then(data => res.status(data ? 200 : 404).end())
 			.catch(next);
 	}
 
 	getImages(req, res, next) {
 		ProductImagesService.getImages(req.params.productId)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -214,41 +204,31 @@ class ProductsRoute {
 			req.params.productId,
 			req.params.imageId,
 			req.body
-		).then(data => {
-			return res.end();
-		});
+		).then(data => res.end());
 	}
 
 	deleteImage(req, res, next) {
 		ProductImagesService.deleteImage(
 			req.params.productId,
 			req.params.imageId
-		).then(data => {
-			return res.end();
-		});
+		).then(data => res.end());
 	}
 
 	isSkuExists(req, res, next) {
 		ProductsService.isSkuExists(req.query.sku, req.params.productId)
-			.then(exists => {
-				return res.status(exists ? 200 : 404).end();
-			})
+			.then(exists => res.status(exists ? 200 : 404).end())
 			.catch(next);
 	}
 
 	isSlugExists(req, res, next) {
 		ProductsService.isSlugExists(req.query.slug, req.params.productId)
-			.then(exists => {
-				return res.status(exists ? 200 : 404).end();
-			})
+			.then(exists => res.status(exists ? 200 : 404).end())
 			.catch(next);
 	}
 
 	getOptions(req, res, next) {
 		ProductOptionsService.getOptions(req.params.productId)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -260,18 +240,15 @@ class ProductsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	addOption(req, res, next) {
 		ProductOptionsService.addOption(req.params.productId, req.body)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -281,9 +258,7 @@ class ProductsRoute {
 			req.params.optionId,
 			req.body
 		)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -292,9 +267,7 @@ class ProductsRoute {
 			req.params.productId,
 			req.params.optionId
 		)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -303,9 +276,7 @@ class ProductsRoute {
 			req.params.productId,
 			req.params.optionId
 		)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -318,9 +289,8 @@ class ProductsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
@@ -331,9 +301,7 @@ class ProductsRoute {
 			req.params.optionId,
 			req.body
 		)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -344,9 +312,7 @@ class ProductsRoute {
 			req.params.valueId,
 			req.body
 		)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -356,25 +322,19 @@ class ProductsRoute {
 			req.params.optionId,
 			req.params.valueId
 		)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
 	getVariants(req, res, next) {
 		ProductVariantsService.getVariants(req.params.productId)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
 	addVariant(req, res, next) {
 		ProductVariantsService.addVariant(req.params.productId, req.body)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -384,9 +344,7 @@ class ProductsRoute {
 			req.params.variantId,
 			req.body
 		)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -395,9 +353,7 @@ class ProductsRoute {
 			req.params.productId,
 			req.params.variantId
 		)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -407,9 +363,7 @@ class ProductsRoute {
 			req.params.variantId,
 			req.body
 		)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 }

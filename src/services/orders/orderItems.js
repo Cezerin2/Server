@@ -13,7 +13,7 @@ class OrderItemsService {
 			return Promise.reject('Invalid identifier');
 		}
 
-		let newItem = this.getValidDocumentForInsert(data);
+		const newItem = this.getValidDocumentForInsert(data);
 		const orderItem = await this.getOrderItemIfExists(
 			order_id,
 			newItem.product_id,
@@ -77,28 +77,29 @@ class OrderItemsService {
 
 		if (!product) {
 			return 0;
-		} else if (product.discontinued) {
+		}
+		if (product.discontinued) {
 			return 0;
-		} else if (product.stock_backorder) {
+		}
+		if (product.stock_backorder) {
 			return quantityNeeded;
-		} else if (product.variable && variant_id) {
+		}
+		if (product.variable && variant_id) {
 			const variant = this.getVariantFromProduct(product, variant_id);
 			if (variant) {
 				return variant.stock_quantity >= quantityNeeded
 					? quantityNeeded
 					: variant.stock_quantity;
-			} else {
-				return 0;
 			}
-		} else {
-			return product.stock_quantity >= quantityNeeded
-				? quantityNeeded
-				: product.stock_quantity;
+			return 0;
 		}
+		return product.stock_quantity >= quantityNeeded
+			? quantityNeeded
+			: product.stock_quantity;
 	}
 
 	async getOrderItemIfExists(order_id, product_id, variant_id) {
-		let orderObjectID = new ObjectID(order_id);
+		const orderObjectID = new ObjectID(order_id);
 		const order = await db.collection('orders').findOne(
 			{
 				_id: orderObjectID
@@ -114,39 +115,37 @@ class OrderItemsService {
 					item.product_id.toString() === product_id.toString() &&
 					(item.variant_id || '').toString() === (variant_id || '').toString()
 			);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	async updateItem(order_id, item_id, data) {
 		if (!ObjectID.isValid(order_id) || !ObjectID.isValid(item_id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let orderObjectID = new ObjectID(order_id);
-		let itemObjectID = new ObjectID(item_id);
+		const orderObjectID = new ObjectID(order_id);
+		const itemObjectID = new ObjectID(item_id);
 		const item = this.getValidDocumentForUpdate(data);
 
 		if (parse.getNumberIfPositive(data.quantity) === 0) {
 			// delete item
 			return this.deleteItem(order_id, item_id);
-		} else {
-			// update
-			await ProductStockService.handleDeleteOrderItem(order_id, item_id);
-			await db.collection('orders').updateOne(
-				{
-					_id: orderObjectID,
-					'items.id': itemObjectID
-				},
-				{
-					$set: item
-				}
-			);
-
-			await this.calculateAndUpdateItem(order_id, item_id);
-			await ProductStockService.handleAddOrderItem(order_id, item_id);
-			return OrdersService.getSingleOrder(order_id);
 		}
+		// update
+		await ProductStockService.handleDeleteOrderItem(order_id, item_id);
+		await db.collection('orders').updateOne(
+			{
+				_id: orderObjectID,
+				'items.id': itemObjectID
+			},
+			{
+				$set: item
+			}
+		);
+
+		await this.calculateAndUpdateItem(order_id, item_id);
+		await ProductStockService.handleAddOrderItem(order_id, item_id);
+		return OrdersService.getSingleOrder(order_id);
 	}
 
 	getVariantFromProduct(product, variantId) {
@@ -193,7 +192,7 @@ class OrderItemsService {
 	getVariantNameFromProduct(product, variantId) {
 		const variant = this.getVariantFromProduct(product, variantId);
 		if (variant) {
-			let optionNames = [];
+			const optionNames = [];
 			for (const option of variant.options) {
 				const optionName = this.getOptionNameFromProduct(
 					product,
@@ -256,7 +255,8 @@ class OrderItemsService {
 				'items.$.discount_total': 0,
 				'items.$.price_total': item.custom_price * item.quantity
 			};
-		} else if (item.variant_id) {
+		}
+		if (item.variant_id) {
 			// product with variant
 			const variant = this.getVariantFromProduct(product, item.variant_id);
 			const variantName = this.getVariantNameFromProduct(
@@ -283,21 +283,20 @@ class OrderItemsService {
 
 			// variant not exists
 			return null;
-		} else {
-			// normal product
-			return {
-				'items.$.product_image': product.images,
-				'items.$.sku': product.sku,
-				'items.$.name': product.name,
-				'items.$.variant_name': '',
-				'items.$.price': product.price,
-				'items.$.tax_class': product.tax_class,
-				'items.$.tax_total': 0,
-				'items.$.weight': product.weight || 0,
-				'items.$.discount_total': 0,
-				'items.$.price_total': product.price * item.quantity
-			};
 		}
+		// normal product
+		return {
+			'items.$.product_image': product.images,
+			'items.$.sku': product.sku,
+			'items.$.name': product.name,
+			'items.$.variant_name': '',
+			'items.$.price': product.price,
+			'items.$.tax_class': product.tax_class,
+			'items.$.tax_total': 0,
+			'items.$.weight': product.weight || 0,
+			'items.$.discount_total': 0,
+			'items.$.price_total': product.price * item.quantity
+		};
 	}
 
 	async calculateAndUpdateAllItems(order_id) {
@@ -318,8 +317,8 @@ class OrderItemsService {
 		if (!ObjectID.isValid(order_id) || !ObjectID.isValid(item_id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let orderObjectID = new ObjectID(order_id);
-		let itemObjectID = new ObjectID(item_id);
+		const orderObjectID = new ObjectID(order_id);
+		const itemObjectID = new ObjectID(item_id);
 
 		await ProductStockService.handleDeleteOrderItem(order_id, item_id);
 		await db.collection('orders').updateOne(
@@ -364,7 +363,7 @@ class OrderItemsService {
 			return new Error('Required fields are missing');
 		}
 
-		let item = {};
+		const item = {};
 
 		if (data.variant_id !== undefined) {
 			item['items.$.variant_id'] = parse.getObjectIDIfValid(data.variant_id);

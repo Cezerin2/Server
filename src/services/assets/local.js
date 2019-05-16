@@ -1,7 +1,7 @@
 import fse from 'fs-extra';
 import formidable from 'formidable';
-import utils from '../../lib/utils';
 import path from 'path';
+import utils from '../../lib/utils';
 
 class LocalService {
 	getFileData(dir, fileName) {
@@ -13,9 +13,8 @@ class LocalService {
 				size: stats.size,
 				modified: stats.mtime
 			};
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	getFilesData(dir, files) {
@@ -68,9 +67,9 @@ class LocalService {
 
 		fse.ensureDirSync(uploadDir);
 
-		let form = new formidable.IncomingForm(),
-			file_name = null,
-			file_size = 0;
+		const form = new formidable.IncomingForm();
+		let file_name = null;
+		let file_size = 0;
 
 		form.uploadDir = uploadDir;
 
@@ -80,7 +79,7 @@ class LocalService {
 				file.name = utils.getCorrectFileName(file.name);
 				file.path = `${uploadDir}/${file.name}`;
 			})
-			.on('file', function(name, file) {
+			.on('file', (name, file) => {
 				// every time a file has been uploaded successfully,
 				file_name = file.name;
 				file_size = file.size;
@@ -89,7 +88,7 @@ class LocalService {
 				res.status(500).send(this.getErrorMessage(err));
 			})
 			.on('end', async () => {
-				//Emitted when the entire request has been received, and all contained files have finished flushing to disk.
+				// Emitted when the entire request has been received, and all contained files have finished flushing to disk.
 				if (file_name) {
 					await onUploadEnd(file_name);
 					res.send({ file: file_name, size: file_size });
@@ -104,18 +103,18 @@ class LocalService {
 	}
 
 	uploadFiles(req, res, dir, onFileUpload, onFilesEnd) {
-		let uploadedFiles = [];
+		const uploadedFiles = [];
 
 		fse.ensureDirSync(path);
 
-		let form = new formidable.IncomingForm();
+		const form = new formidable.IncomingForm();
 		form.uploadDir = path.resolve(dir);
 
 		form
 			.on('fileBegin', (name, file) => {
 				// Emitted whenever a field / value pair has been received.
 				file.name = utils.getCorrectFileName(file.name);
-				file.path = path + '/' + file.name;
+				file.path = `${path}/${file.name}`;
 			})
 			.on('file', async (field, file) => {
 				// every time a file has been uploaded successfully,

@@ -86,7 +86,7 @@ class ThemeRoute {
 
 	async getSettings(req, res, next) {
 		try {
-			let data = await ThemeSettingsService.getSettings();
+			const data = await ThemeSettingsService.getSettings();
 			return res.send(data);
 		} catch (err) {
 			return next(err);
@@ -104,7 +104,7 @@ class ThemeRoute {
 
 	async getSettingsSchema(req, res, next) {
 		try {
-			let data = await ThemeSettingsService.getSettingsSchema();
+			const data = await ThemeSettingsService.getSettingsSchema();
 			return res.send(data);
 		} catch (err) {
 			return next(err);
@@ -126,7 +126,7 @@ class ThemeRoute {
 
 	async getPlaceholders(req, res, next) {
 		try {
-			let data = await ThemePlaceholdersService.getPlaceholders();
+			const data = await ThemePlaceholdersService.getPlaceholders();
 			return res.send(data);
 		} catch (err) {
 			return next(err);
@@ -135,7 +135,7 @@ class ThemeRoute {
 
 	async getSinglePlaceholder(req, res, next) {
 		try {
-			let data = await ThemePlaceholdersService.getSinglePlaceholder(
+			const data = await ThemePlaceholdersService.getSinglePlaceholder(
 				req.params.key
 			);
 			return data ? res.send(data) : res.status(404).end();
@@ -146,7 +146,7 @@ class ThemeRoute {
 
 	async addPlaceholder(req, res, next) {
 		try {
-			let data = await ThemePlaceholdersService.addPlaceholder(req.body);
+			const data = await ThemePlaceholdersService.addPlaceholder(req.body);
 			return res.send(data);
 		} catch (err) {
 			return next(err);
@@ -155,7 +155,7 @@ class ThemeRoute {
 
 	async updatePlaceholder(req, res, next) {
 		try {
-			let data = await ThemePlaceholdersService.updatePlaceholder(
+			const data = await ThemePlaceholdersService.updatePlaceholder(
 				req.params.key,
 				req.body
 			);
@@ -167,7 +167,7 @@ class ThemeRoute {
 
 	async deletePlaceholder(req, res, next) {
 		try {
-			let data = await ThemePlaceholdersService.deletePlaceholder(
+			const data = await ThemePlaceholdersService.deletePlaceholder(
 				req.params.key
 			);
 			return res.status(data ? 200 : 404).end();

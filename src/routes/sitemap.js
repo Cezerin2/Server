@@ -21,16 +21,13 @@ class SitemapRoute {
 				.then(data => {
 					if (data) {
 						return res.send(data);
-					} else {
-						return res.status(404).end();
 					}
+					return res.status(404).end();
 				})
 				.catch(next);
 		} else {
 			SitemapService.getPaths(req.query.enabled)
-				.then(data => {
-					return res.send(data);
-				})
+				.then(data => res.send(data))
 				.catch(next);
 		}
 	}

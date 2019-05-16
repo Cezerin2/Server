@@ -23,13 +23,12 @@ class ThemePlaceholdersService {
 			if (placeholder) {
 				// placeholder exists
 				return new Error('Placeholder exists');
-			} else {
-				// add
-				return db
-					.collection('themePlaceholders')
-					.insertOne(field)
-					.then(res => this.getSinglePlaceholder(placeholderKey));
 			}
+			// add
+			return db
+				.collection('themePlaceholders')
+				.insertOne(field)
+				.then(res => this.getSinglePlaceholder(placeholderKey));
 		});
 	}
 
@@ -58,7 +57,7 @@ class ThemePlaceholdersService {
 			return new Error('Required fields are missing');
 		}
 
-		let field = {};
+		const field = {};
 
 		if (data.place !== undefined) {
 			field.place = parse.getString(data.place);
@@ -76,7 +75,7 @@ class ThemePlaceholdersService {
 			return new Error('Required fields are missing');
 		}
 
-		let field = {};
+		const field = {};
 
 		if (data.key !== undefined) {
 			field.key = parse.getString(data.key);

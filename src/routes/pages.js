@@ -37,9 +37,7 @@ class PagesRoute {
 
 	getPages(req, res, next) {
 		PagesService.getPages(req.query)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -48,18 +46,15 @@ class PagesRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	addPage(req, res, next) {
 		PagesService.addPage(req.body)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -68,18 +63,15 @@ class PagesRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	deletePage(req, res, next) {
 		PagesService.deletePage(req.params.id)
-			.then(data => {
-				return res.status(data ? 200 : 404).end();
-			})
+			.then(data => res.status(data ? 200 : 404).end())
 			.catch(next);
 	}
 }

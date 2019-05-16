@@ -10,7 +10,7 @@ class OrdertTansactionsService {
 		if (!ObjectID.isValid(order_id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let orderObjectID = new ObjectID(order_id);
+		const orderObjectID = new ObjectID(order_id);
 		const transaction = this.getValidDocumentForInsert(data);
 
 		await db.collection('orders').updateOne(
@@ -36,8 +36,8 @@ class OrdertTansactionsService {
 		if (!ObjectID.isValid(order_id) || !ObjectID.isValid(transaction_id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let orderObjectID = new ObjectID(order_id);
-		let transactionObjectID = new ObjectID(transaction_id);
+		const orderObjectID = new ObjectID(order_id);
+		const transactionObjectID = new ObjectID(transaction_id);
 		const transaction = this.getValidDocumentForUpdate(data);
 
 		await db.collection('orders').updateOne(
@@ -62,8 +62,8 @@ class OrdertTansactionsService {
 		if (!ObjectID.isValid(order_id) || !ObjectID.isValid(transaction_id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let orderObjectID = new ObjectID(order_id);
-		let transactionObjectID = new ObjectID(transaction_id);
+		const orderObjectID = new ObjectID(order_id);
+		const transactionObjectID = new ObjectID(transaction_id);
 
 		await db.collection('orders').updateOne(
 			{
@@ -103,7 +103,7 @@ class OrdertTansactionsService {
 			return new Error('Required fields are missing');
 		}
 
-		let transaction = {};
+		const transaction = {};
 
 		if (data.transaction_id !== undefined) {
 			transaction['transactions.$.transaction_id'] = parse.getString(

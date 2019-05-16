@@ -1,15 +1,15 @@
 import AWS from 'aws-sdk';
 import fs from 'fs';
 import formidable from 'formidable';
+import path from 'path';
 import utils from '../../lib/utils';
 import settings from '../../lib/settings';
-import path from 'path';
 
 const BUCKET = settings.assetServer.bucket;
-var s3 = new AWS.S3();
+const s3 = new AWS.S3();
 
 const upload = (file_name, file) => {
-	var s3Config = {
+	const s3Config = {
 		Bucket: BUCKET,
 		Key: file_name,
 		Body: file
@@ -27,7 +27,7 @@ const upload = (file_name, file) => {
 
 class S3Service {
 	getFileData(path, fileName) {
-		const filePath = path + '/' + fileName;
+		const filePath = `${path}/${fileName}`;
 
 		return s3.headObject({ Key: filePath, Bucket: BUCKET }, (err, data) => {
 			if (err) {
@@ -55,13 +55,11 @@ class S3Service {
 				if (err) {
 					return reject(err);
 				}
-				const filesData = data.Contents.map(ObjectData => {
-					return {
-						file: ObjectData.Key,
-						size: data.Size,
-						modified: ObjectData.LastModified
-					};
-				});
+				const filesData = data.Contents.map(ObjectData => ({
+					file: ObjectData.Key,
+					size: data.Size,
+					modified: ObjectData.LastModified
+				}));
 				resolve(filesData);
 			});
 		});
@@ -69,7 +67,7 @@ class S3Service {
 
 	deleteFile(path, fileName) {
 		return new Promise((resolve, reject) => {
-			var params = {
+			const params = {
 				Bucket: BUCKET,
 				Delete: {
 					Objects: [
@@ -94,12 +92,12 @@ class S3Service {
 	}
 
 	emptyDir(path) {
-		var params = {
+		let params = {
 			Bucket: BUCKET,
 			Prefix: path
 		};
 
-		s3.listObjects(params, function(err, data) {
+		s3.listObjects(params, (err, data) => {
 			if (err) return;
 
 			if (data.Contents.length == 0) return;
@@ -107,7 +105,7 @@ class S3Service {
 			params = { Bucket: BUCKET };
 			params.Delete = { Objects: [] };
 
-			data.Contents.forEach(function(content) {
+			data.Contents.forEach(content => {
 				params.Delete.Objects.push({ Key: content.Key });
 			});
 
@@ -116,17 +114,17 @@ class S3Service {
 	}
 
 	uploadFile(req, res, path, onUploadEnd) {
-		let form = new formidable.IncomingForm(),
-			file_name = null,
-			file_size = 0,
-			buffer = null;
+		const form = new formidable.IncomingForm();
+		let file_name = null;
+		const file_size = 0;
+		let buffer = null;
 
 		form
 			.on('fileBegin', (name, file) => {
 				// Emitted whenever a field / value pair has been received.
 				file.name = utils.getCorrectFileName(file.name);
 			})
-			.on('file', function(name, file) {
+			.on('file', (name, file) => {
 				// every time a file has been uploaded successfully,
 				file_name = file.name;
 				buffer = fs.readFileSync(path.resolve(file.path));
@@ -153,9 +151,9 @@ class S3Service {
 	}
 
 	async uploadFiles(req, res, path, onFileUpload, onFilesEnd) {
-		let uploadedFiles = [];
+		const uploadedFiles = [];
 
-		let form = new formidable.IncomingForm();
+		const form = new formidable.IncomingForm();
 
 		form
 			.on('fileBegin', (name, file) => {
@@ -165,7 +163,7 @@ class S3Service {
 			.on('file', async (field, file) => {
 				// every time a file has been uploaded successfully,
 				if (file.name) {
-					var buffer = fs.readFileSync(file.path);
+					const buffer = fs.readFileSync(file.path);
 					await upload(`${path}/${file.name}`, buffer)
 						.then(async fileData => {
 							uploadedFiles.push(file.name);

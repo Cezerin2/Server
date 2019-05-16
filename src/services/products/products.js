@@ -131,8 +131,8 @@ class ProductsService {
 				min: min_price,
 				max: max_price
 			},
-			attributes: attributes,
-			total_count: total_count,
+			attributes,
+			total_count,
 			has_more: offset + items.length < total_count,
 			data: items
 		};
@@ -176,11 +176,10 @@ class ProductsService {
 				)
 				.map(b => ({
 					name: b._id.value,
-					checked:
+					checked: !!(
 						params[`attributes.${b._id.name}`] &&
 						params[`attributes.${b._id.name}`].includes(b._id.value)
-							? true
-							: false,
+					),
 					// total: b.count,
 					count: this.getAttributeCount(
 						filteredAttributesResult,
@@ -213,9 +212,8 @@ class ProductsService {
 				.collection('products')
 				.aggregate(aggregation)
 				.toArray();
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	getMinMaxPriceIfNeeded(params, categories, matchTextQuery, projectQuery) {
@@ -246,9 +244,8 @@ class ProductsService {
 				.collection('products')
 				.aggregate(aggregation)
 				.toArray();
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	getAllAttributesIfNeeded(params, categories, matchTextQuery, projectQuery) {
@@ -274,9 +271,8 @@ class ProductsService {
 				.collection('products')
 				.aggregate(aggregation)
 				.toArray();
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	getAttributesIfNeeded(params, categories, matchTextQuery, projectQuery) {
@@ -302,9 +298,8 @@ class ProductsService {
 				.collection('products')
 				.aggregate(aggregation)
 				.toArray();
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	getSortQuery({ sort, search }) {
@@ -315,7 +310,8 @@ class ProductsService {
 			search !== 'undefined';
 		if (sort === 'search' && isSearchUsed) {
 			return { score: { $meta: 'textScore' } };
-		} else if (sort && sort.length > 0) {
+		}
+		if (sort && sort.length > 0) {
 			const fields = sort.split(',');
 			return Object.assign(
 				...fields.map(field => ({
@@ -326,15 +322,14 @@ class ProductsService {
 						: 1
 				}))
 			);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	getProjectQuery(fieldsArray) {
-		let salePrice = '$sale_price';
-		let regularPrice = '$regular_price';
-		let costPrice = '$cost_price';
+		const salePrice = '$sale_price';
+		const regularPrice = '$regular_price';
+		const costPrice = '$cost_price';
 
 		let project = {
 			category_ids: 1,
@@ -478,13 +473,12 @@ class ProductsService {
 			return {
 				$or: [{ sku: new RegExp(search, 'i') }, { $text: { $search: search } }]
 			};
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	getMatchAttributesQuery(params) {
-		let attributesArray = Object.keys(params)
+		const attributesArray = Object.keys(params)
 			.filter(paramName => paramName.startsWith('attributes.'))
 			.map(paramName => {
 				const paramValue = params[paramName];
@@ -525,11 +519,11 @@ class ProductsService {
 		ids = parse.getString(ids);
 		tags = parse.getString(tags);
 
-		let queries = [];
+		const queries = [];
 		const currentDate = new Date();
 
 		if (category_id !== null) {
-			let categoryChildren = [];
+			const categoryChildren = [];
 			CategoriesService.findAllChildren(
 				categories,
 				category_id,
@@ -549,19 +543,19 @@ class ProductsService {
 
 		if (enabled !== null) {
 			queries.push({
-				enabled: enabled
+				enabled
 			});
 		}
 
 		if (discontinued !== null) {
 			queries.push({
-				discontinued: discontinued
+				discontinued
 			});
 		}
 
 		if (on_sale !== null) {
 			queries.push({
-				on_sale: on_sale
+				on_sale
 			});
 		}
 
@@ -581,13 +575,13 @@ class ProductsService {
 
 		if (stock_status && stock_status.length > 0) {
 			queries.push({
-				stock_status: stock_status
+				stock_status
 			});
 		}
 
 		if (ids && ids.length > 0) {
 			const idsArray = ids.split(',');
-			let objectIDs = [];
+			const objectIDs = [];
 			for (const id of idsArray) {
 				if (ObjectID.isValid(id)) {
 					objectIDs.push(new ObjectID(id));
@@ -608,14 +602,14 @@ class ProductsService {
 			} else {
 				// single value
 				queries.push({
-					sku: sku
+					sku
 				});
 			}
 		}
 
 		if (tags && tags.length > 0) {
 			queries.push({
-				tags: tags
+				tags
 			});
 		}
 
@@ -687,7 +681,7 @@ class ProductsService {
 			.then(deleteResponse => {
 				if (deleteResponse.deletedCount > 0) {
 					// 2. delete directory with images
-					let deleteDir = `${
+					const deleteDir = `${
 						settings.assetServer.productsUploadPath
 					}/${productId}`;
 					AssertService.deleteDir(deleteDir);
@@ -699,7 +693,7 @@ class ProductsService {
 	getValidDocumentForInsert(data) {
 		//  Allow empty product to create draft
 
-		let product = {
+		const product = {
 			date_created: new Date(),
 			date_updated: null,
 			images: [],
@@ -773,7 +767,7 @@ class ProductsService {
 			throw new Error('Required fields are missing');
 		}
 
-		let product = {
+		const product = {
 			date_updated: new Date()
 		};
 
@@ -928,9 +922,8 @@ class ProductsService {
 	getArrayOfObjectID(array) {
 		if (array && Array.isArray(array)) {
 			return array.map(item => parse.getObjectIDIfValid(item));
-		} else {
-			return [];
 		}
+		return [];
 	}
 
 	getValidAttributesArray(attributes) {
@@ -944,9 +937,8 @@ class ProductsService {
 					name: parse.getString(item.name),
 					value: parse.getString(item.value)
 				}));
-		} else {
-			return [];
 		}
+		return [];
 	}
 
 	getSortedImagesWithUrls(item, assetsDomain) {
@@ -961,9 +953,8 @@ class ProductsService {
 					return image;
 				})
 				.sort((a, b) => a.position - b.position);
-		} else {
-			return item.images;
 		}
+		return item.images;
 	}
 
 	getImageUrl(assetsDomain, productId, imageFileName) {
@@ -1015,8 +1006,8 @@ class ProductsService {
 	}
 
 	isSkuExists(sku, productId) {
-		let filter = {
-			sku: sku
+		const filter = {
+			sku
 		};
 
 		if (productId && ObjectID.isValid(productId)) {
@@ -1033,7 +1024,7 @@ class ProductsService {
 		// SKU can be empty
 		if (product.sku && product.sku.length > 0) {
 			let newSku = product.sku;
-			let filter = {};
+			const filter = {};
 			if (productId && ObjectID.isValid(productId)) {
 				filter._id = { $ne: new ObjectID(productId) };
 			}
@@ -1050,13 +1041,12 @@ class ProductsService {
 					product.sku = newSku;
 					return product;
 				});
-		} else {
-			return Promise.resolve(product);
 		}
+		return Promise.resolve(product);
 	}
 
 	isSlugExists(slug, productId) {
-		let filter = {
+		const filter = {
 			slug: utils.cleanSlug(slug)
 		};
 
@@ -1073,7 +1063,7 @@ class ProductsService {
 	setAvailableSlug(product, productId) {
 		if (product.slug && product.slug.length > 0) {
 			let newSlug = utils.cleanSlug(product.slug);
-			let filter = {};
+			const filter = {};
 			if (productId && ObjectID.isValid(productId)) {
 				filter._id = { $ne: new ObjectID(productId) };
 			}
@@ -1090,9 +1080,8 @@ class ProductsService {
 					product.slug = newSlug;
 					return product;
 				});
-		} else {
-			return Promise.resolve(product);
 		}
+		return Promise.resolve(product);
 	}
 }
 

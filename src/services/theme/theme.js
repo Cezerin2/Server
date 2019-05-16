@@ -56,9 +56,9 @@ class ThemesService {
 	saveThemeFile(req, res, callback) {
 		const uploadDir = path.resolve(settings.assetServer.filesUploadPath);
 
-		let form = new formidable.IncomingForm(),
-			file_name = null,
-			file_size = 0;
+		const form = new formidable.IncomingForm();
+		let file_name = null;
+		let file_size = 0;
 
 		form.multiples = false;
 
@@ -66,11 +66,11 @@ class ThemesService {
 			.on('fileBegin', (name, file) => {
 				// Emitted whenever a field / value pair has been received.
 				if (file.name.endsWith('.zip')) {
-					file.path = uploadDir + '/' + file.name;
+					file.path = `${uploadDir}/${file.name}`;
 				}
 				// else - will save to /tmp
 			})
-			.on('file', function(field, file) {
+			.on('file', (field, file) => {
 				// every time a file has been uploaded successfully,
 				if (file.name.endsWith('.zip')) {
 					file_name = file.name;
@@ -81,7 +81,7 @@ class ThemesService {
 				callback(err);
 			})
 			.on('end', () => {
-				//Emitted when the entire request has been received, and all contained files have finished flushing to disk.
+				// Emitted when the entire request has been received, and all contained files have finished flushing to disk.
 				if (file_name) {
 					callback(null, file_name);
 				} else {

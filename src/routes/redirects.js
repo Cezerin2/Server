@@ -37,9 +37,7 @@ class RedirectsRoute {
 
 	getRedirects(req, res, next) {
 		RedirectsService.getRedirects(req.query)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -48,18 +46,15 @@ class RedirectsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	addRedirect(req, res, next) {
 		RedirectsService.addRedirect(req.body)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -68,18 +63,15 @@ class RedirectsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	deleteRedirect(req, res, next) {
 		RedirectsService.deleteRedirect(req.params.id)
-			.then(data => {
-				return res.status(data ? 200 : 404).end();
-			})
+			.then(data => res.status(data ? 200 : 404).end())
 			.catch(next);
 	}
 }

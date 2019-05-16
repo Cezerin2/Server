@@ -37,9 +37,7 @@ class ShippingMethodsRoute {
 
 	getMethods(req, res, next) {
 		ShippingMethodsService.getMethods(req.query)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -48,18 +46,15 @@ class ShippingMethodsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	addMethod(req, res, next) {
 		ShippingMethodsService.addMethod(req.body)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -68,9 +63,8 @@ class ShippingMethodsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
