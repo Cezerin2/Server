@@ -122,15 +122,13 @@ class ProductVariantsService {
 			.collection('products')
 			.findOne({ _id: productObjectID }, { fields: { variants: 1 } })
 			.then(product => (product && product.variants ? product.variants : null))
-			.then(
-				variants =>
-					variants && variants.length > 0
-						? variants.find(variant => variant.id.toString() === variantId)
-						: null
+			.then(variants =>
+				variants && variants.length > 0
+					? variants.find(variant => variant.id.toString() === variantId)
+					: null
 			)
-			.then(
-				variant =>
-					variant && variant.options.length > 0 ? variant.options : []
+			.then(variant =>
+				variant && variant.options.length > 0 ? variant.options : []
 			);
 	}
 
