@@ -29,26 +29,30 @@ module.exports = {
 	// used by API
 	mongodbServerUrl: dbUrl,
 
-	// assest 
+	// assest
 	assetServer: {
 		type: 'local', // 'local' | 's3'
-		domain: 'http://localhost:3001',
+		domain: 'http://localhost:3001', // add localBasePath to S3 domain
 		localBasePath: 'public/content',
 		categoriesUploadPath: 'images/categories',
 		productsUploadPath: 'images/products',
 		themeImageUploadPath: 'theme/assets/images',
-		filesUploadPath: 'files'
+		filesUploadPath: 'files',
+
+		// S3 Config
+		bucket: 'cezerin2-asset-test'
 	},
 
 	// smpt server parameters
 	smtpServer: {
-		host: process.env.SMTP_HOST || '',
-		port: process.env.SMTP_PORT || 587,
+		host: process.env.SMTP_HOST || 'mail.privateemail.com',
+		port: process.env.SMTP_PORT || 465,
 		secure: process.env.SMTP_SECURE || false,
-		user: process.env.SMTP_USER || '',
-		pass: process.env.SMTP_PASS || '',
-		fromName: process.env.SMTP_FROM_NAME || '',
-		fromAddress: process.env.SMTP_FROM_ADDRESS || ''
+		user: process.env.SMTP_USER || 'store@getyourdogwalking.com.au',
+		pass: process.env.SMTP_PASS || '_QT=J*4"ZV4b',
+		fromName: process.env.SMTP_FROM_NAME || 'Get Your Dog Walking Store',
+		fromAddress:
+			process.env.SMTP_FROM_ADDRESS || 'store@getyourdogwalking.com.au'
 	},
 
 	// key to sign tokens

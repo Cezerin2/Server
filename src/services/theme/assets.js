@@ -11,9 +11,7 @@ class ThemeAssetsService {
 	}
 
 	uploadFile(req, res, next) {
-		const uploadDir = path.resolve(ThemeAssetPath);
-
-		AssetService.uploadFile(req, res, uploadDir, () => {});
+		AssetService.uploadFile(req, res, ThemeAssetPath, () => {});
 	}
 
 	getErrorMessage(err) {
