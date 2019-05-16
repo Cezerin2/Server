@@ -29,15 +29,18 @@ module.exports = {
 	// used by API
 	mongodbServerUrl: dbUrl,
 
-	// assest 
+	// assest
 	assetServer: {
 		type: 'local', // 'local' | 's3'
-		domain: 'http://localhost:3001',
+		domain: 'http://localhost:3001', // add localBasePath to S3 domain
 		localBasePath: 'public/content',
 		categoriesUploadPath: 'images/categories',
 		productsUploadPath: 'images/products',
 		themeImageUploadPath: 'theme/assets/images',
-		filesUploadPath: 'files'
+		filesUploadPath: 'files',
+
+		// S3 Config
+		bucket: 'cezerin2-asset-test'
 	},
 
 	// smpt server parameters

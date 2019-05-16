@@ -687,9 +687,9 @@ class ProductsService {
 			.then(deleteResponse => {
 				if (deleteResponse.deletedCount > 0) {
 					// 2. delete directory with images
-					let deleteDir = path.resolve(
-						`${settings.assetServer.productsUploadPath}/${productId}`
-					);
+					let deleteDir = `${
+						settings.assetServer.productsUploadPath
+					}/${productId}`;
 					AssertService.deleteDir(deleteDir);
 				}
 				return deleteResponse.deletedCount > 0;

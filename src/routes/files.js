@@ -29,7 +29,7 @@ class FilesRoute {
 	}
 
 	getFiles(req, res, next) {
-		AssetsService.getFiles(filesPath)
+		AssetsService.getFilesData(filesPath)
 			.then(data => {
 				return res.send(data);
 			})

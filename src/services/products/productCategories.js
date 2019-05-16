@@ -148,9 +148,9 @@ class ProductCategoriesService {
 				// 6. delete directories with images
 				if (idsToDelete) {
 					for (let categoryId of idsToDelete) {
-						let deleteDir = path.resolve(
-							`${settings.assetServer.categoriesUploadPath}/${categoryId}`
-						);
+						let deleteDir = `${
+							settings.assetServer.categoriesUploadPath
+						}/${categoryId}`;
 						AssetService.deleteFolder(deleteDir);
 					}
 					return Promise.resolve(true);
@@ -291,22 +291,19 @@ class ProductCategoriesService {
 	}
 
 	deleteCategoryImage(id) {
-		let dir = path.resolve(
-			`${settings.assetServer.localBasePath}/${
-				settings.assetServer.categoriesUploadPath
-			}/${id}`
-		);
+		let dir = `${settings.assetServer.localBasePath}/${
+			settings.assetServer.categoriesUploadPath
+		}/${id}`;
+
 		AssetService.emptyDir(dir);
 		this.updateCategory(id, { image: '' });
 	}
 
 	uploadCategoryImage(req, res) {
 		let categoryId = req.params.id;
-		let dir = path.resolve(
-			`${settings.assetServer.localBasePath}/${
-				settings.assetServer.categoriesUploadPath
-			}/${categoryId}`
-		);
+		let dir = `${settings.assetServer.localBasePath}/${
+			settings.assetServer.categoriesUploadPath
+		}/${categoryId}`;
 
 		AssetService.uploadFile(req, res, dir, file_name => {
 			this.updateCategory(categoryId, { image: file_name });
