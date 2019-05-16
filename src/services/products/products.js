@@ -1,7 +1,7 @@
 import { ObjectID } from 'mongodb';
 import path from 'path';
 import url from 'url';
-import fse from 'fs-extra';
+import AssertService from '../assets/assets';
 import settings from '../../lib/settings';
 import { db } from '../../lib/mongo';
 import utils from '../../lib/utils';
@@ -171,9 +171,8 @@ class ProductsService {
 			name: attributeName,
 			values: allAttributesResult
 				.filter(b => b._id.name === attributeName)
-				.sort(
-					(a, b) =>
-						a._id.value > b._id.value ? 1 : b._id.value > a._id.value ? -1 : 0
+				.sort((a, b) =>
+					a._id.value > b._id.value ? 1 : b._id.value > a._id.value ? -1 : 0
 				)
 				.map(b => ({
 					name: b._id.value,
@@ -648,8 +647,8 @@ class ProductsService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getProducts({ ids: id, limit: 1 }).then(
-			products => (products.data.length > 0 ? products.data[0] : {})
+		return this.getProducts({ ids: id, limit: 1 }).then(products =>
+			products.data.length > 0 ? products.data[0] : {}
 		);
 	}
 
@@ -691,7 +690,7 @@ class ProductsService {
 					let deleteDir = path.resolve(
 						`${settings.assetServer.productsUploadPath}/${productId}`
 					);
-					fse.remove(deleteDir, err => {});
+					AssertService.deleteDir(deleteDir);
 				}
 				return deleteResponse.deletedCount > 0;
 			});

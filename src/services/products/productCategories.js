@@ -2,8 +2,8 @@ import { ObjectID } from 'mongodb';
 import path from 'path';
 import url from 'url';
 import formidable from 'formidable';
-import fse from 'fs-extra';
 import settings from '../../lib/settings';
+import AssetService from '../assets/assets';
 import SettingsService from '../settings/settings';
 import { db } from '../../lib/mongo';
 import utils from '../../lib/utils';
@@ -116,9 +116,8 @@ class ProductCategoriesService {
 				return db
 					.collection('productCategories')
 					.deleteMany({ _id: { $in: objectsToDelete } })
-					.then(
-						deleteResponse =>
-							deleteResponse.deletedCount > 0 ? idsToDelete : null
+					.then(deleteResponse =>
+						deleteResponse.deletedCount > 0 ? idsToDelete : null
 					);
 			})
 			.then(idsToDelete => {
@@ -152,7 +151,7 @@ class ProductCategoriesService {
 						let deleteDir = path.resolve(
 							`${settings.assetServer.categoriesUploadPath}/${categoryId}`
 						);
-						fse.remove(deleteDir, err => {});
+						AssetService.deleteFolder(deleteDir);
 					}
 					return Promise.resolve(true);
 				} else {
@@ -281,7 +280,9 @@ class ProductCategoriesService {
 			if (item.image) {
 				item.image = url.resolve(
 					assetsDomain,
-					`${settings.assetServer.categoriesUploadPath}/${categoryId}/${item.id}/${item.image}`
+					`${settings.assetServer.categoriesUploadPath}/${item.id}/${
+						item.image
+					}`
 				);
 			}
 		}
@@ -291,49 +292,25 @@ class ProductCategoriesService {
 
 	deleteCategoryImage(id) {
 		let dir = path.resolve(
-			`${settings.assetServer.categoriesUploadPath}/${categoryId}/${id}`
+			`${settings.assetServer.localBasePath}/${
+				settings.assetServer.categoriesUploadPath
+			}/${id}`
 		);
-		fse.emptyDirSync(dir);
+		AssetService.emptyDir(dir);
 		this.updateCategory(id, { image: '' });
 	}
 
 	uploadCategoryImage(req, res) {
 		let categoryId = req.params.id;
-		let form = new formidable.IncomingForm(),
-			file_name = null,
-			file_size = 0;
+		let dir = path.resolve(
+			`${settings.assetServer.localBasePath}/${
+				settings.assetServer.categoriesUploadPath
+			}/${categoryId}`
+		);
 
-		form
-			.on('fileBegin', (name, file) => {
-				// Emitted whenever a field / value pair has been received.
-				let dir = path.resolve(
-					`${settings.assetServer.plocalBasePath}/${settings.assetServer.categoriesUploadPath}/${categoryId}`
-				);
-				fse.emptyDirSync(dir);
-				file.name = utils.getCorrectFileName(file.name);
-				file.path = dir + '/' + file.name;
-			})
-			.on('file', function(field, file) {
-				// every time a file has been uploaded successfully,
-				file_name = file.name;
-				file_size = file.size;
-			})
-			.on('error', err => {
-				res.status(500).send(this.getErrorMessage(err));
-			})
-			.on('end', () => {
-				//Emitted when the entire request has been received, and all contained files have finished flushing to disk.
-				if (file_name) {
-					this.updateCategory(categoryId, { image: file_name });
-					res.send({ file: file_name, size: file_size });
-				} else {
-					res
-						.status(400)
-						.send(this.getErrorMessage('Required fields are missing'));
-				}
-			});
-
-		form.parse(req);
+		AssetService.uploadFile(req, res, dir, file_name => {
+			this.updateCategory(categoryId, { image: file_name });
+		});
 	}
 }
 
