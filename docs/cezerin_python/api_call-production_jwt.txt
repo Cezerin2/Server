@@ -1,1 +1,12 @@
+import jwt
+import json
+import requests
 
+jwt_key = "juN@cO7i7lNYn7PmMKk5zBaFhSciHYPX"
+jwt_payload = { 'email': 'store', 'scopes': ['admin'] }
+cezerin_products_url = "http://192.168.0.0:3001/api/v1/products"
+auth_token = jwt.encode(jwt_payload, jwt_key, algorithm='HS256')
+headers = {'Authorization': 'Bearer ' + auth_token}
+post_response = requests.get(cezerin_products_url, headers=headers)
+data = post_response.json()print(data)
+print(post_response)
