@@ -54,7 +54,7 @@ class ThemesService {
 	}
 
 	saveThemeFile(req, res, callback) {
-		const uploadDir = path.resolve(settings.filesUploadPath);
+		const uploadDir = path.resolve(settings.assetServer.filesUploadPath);
 
 		let form = new formidable.IncomingForm(),
 			file_name = null,

@@ -1,5 +1,8 @@
 import security from '../lib/security';
-import FilesService from '../services/files';
+import settings from '../lib/settings';
+import AssetsService from '../services/assets/assets';
+
+const filesPath = settings.assetServer.filesUploadPath;
 
 class FilesRoute {
 	constructor(router) {
@@ -26,7 +29,7 @@ class FilesRoute {
 	}
 
 	getFiles(req, res, next) {
-		FilesService.getFiles()
+		AssetsService.getFilesData(filesPath)
 			.then(data => {
 				return res.send(data);
 			})
@@ -34,11 +37,16 @@ class FilesRoute {
 	}
 
 	uploadFile(req, res, next) {
-		FilesService.uploadFile(req, res, next);
+		AssetsService.uploadFile(
+			req,
+			res,
+			settings.assetServer.filesUploadPath,
+			filesPath
+		);
 	}
 
 	deleteFile(req, res, next) {
-		FilesService.deleteFile(req.params.file)
+		AssetsService.deleteFile(req.params.file)
 			.then(() => {
 				return res.end();
 			})

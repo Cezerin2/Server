@@ -29,6 +29,20 @@ module.exports = {
 	// used by API
 	mongodbServerUrl: dbUrl,
 
+	// assest
+	assetServer: {
+		type: 'local', // 'local' | 's3'
+		domain: 'http://localhost:3001', // add localBasePath to S3 domain
+		localBasePath: 'public/content',
+		categoriesUploadPath: 'images/categories',
+		productsUploadPath: 'images/products',
+		themeImageUploadPath: 'theme/assets/images',
+		filesUploadPath: 'files',
+
+		// S3 Config
+		bucket: 'cezerin2-asset-test'
+	},
+
 	// smpt server parameters
 	smtpServer: {
 		host: process.env.SMTP_HOST || '',
@@ -45,18 +59,6 @@ module.exports = {
 
 	// key to sign store cookies
 	cookieSecretKey: process.env.COOKIE_SECRET_KEY || '-',
-
-	// path to uploads
-	categoriesUploadPath: 'public/content/images/categories',
-	productsUploadPath: 'public/content/images/products',
-	filesUploadPath: 'public/content',
-	themeAssetsUploadPath: 'theme/assets/images',
-
-	// url to uploads
-	categoriesUploadUrl: '/images/categories',
-	productsUploadUrl: '/images/products',
-	filesUploadUrl: '',
-	themeAssetsUploadUrl: '/assets/images',
 
 	// store UI language
 	language: process.env.LANGUAGE || 'en',

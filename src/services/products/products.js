@@ -1,7 +1,7 @@
 import { ObjectID } from 'mongodb';
 import path from 'path';
 import url from 'url';
-import fse from 'fs-extra';
+import AssertService from '../assets/assets';
 import settings from '../../lib/settings';
 import { db } from '../../lib/mongo';
 import utils from '../../lib/utils';
@@ -93,12 +93,12 @@ class ProductsService {
 		]);
 
 		const domain = generalSettings.domain || '';
-		const assetsBaseURL = settings.assetsBaseURL || domain;
+		const assetsDomain = settings.assetServer.domain || domain;
 		const ids = this.getArrayFromCSV(parse.getString(params.ids));
 		const sku = this.getArrayFromCSV(parse.getString(params.sku));
 
 		let items = itemsResult.map(item =>
-			this.changeProperties(item, domain, assetsBaseURL)
+			this.changeProperties(item, domain, assetsDomain)
 		);
 		items = this.sortItemsByArrayOfIdsIfNeed(items, ids, sortQuery);
 		items = this.sortItemsByArrayOfSkuIfNeed(items, sku, sortQuery);
@@ -171,9 +171,8 @@ class ProductsService {
 			name: attributeName,
 			values: allAttributesResult
 				.filter(b => b._id.name === attributeName)
-				.sort(
-					(a, b) =>
-						a._id.value > b._id.value ? 1 : b._id.value > a._id.value ? -1 : 0
+				.sort((a, b) =>
+					a._id.value > b._id.value ? 1 : b._id.value > a._id.value ? -1 : 0
 				)
 				.map(b => ({
 					name: b._id.value,
@@ -648,8 +647,8 @@ class ProductsService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getProducts({ ids: id, limit: 1 }).then(
-			products => (products.data.length > 0 ? products.data[0] : {})
+		return this.getProducts({ ids: id, limit: 1 }).then(products =>
+			products.data.length > 0 ? products.data[0] : {}
 		);
 	}
 
@@ -688,10 +687,10 @@ class ProductsService {
 			.then(deleteResponse => {
 				if (deleteResponse.deletedCount > 0) {
 					// 2. delete directory with images
-					let deleteDir = path.resolve(
-						settings.productsUploadPath + '/' + productId
-					);
-					fse.remove(deleteDir, err => {});
+					let deleteDir = `${
+						settings.assetServer.productsUploadPath
+					}/${productId}`;
+					AssertService.deleteDir(deleteDir);
 				}
 				return deleteResponse.deletedCount > 0;
 			});
@@ -950,12 +949,12 @@ class ProductsService {
 		}
 	}
 
-	getSortedImagesWithUrls(item, assetsBaseURL) {
+	getSortedImagesWithUrls(item, assetsDomain) {
 		if (item.images && item.images.length > 0) {
 			return item.images
 				.map(image => {
 					image.url = this.getImageUrl(
-						assetsBaseURL,
+						assetsDomain,
 						item.id,
 						image.filename || ''
 					);
@@ -967,20 +966,20 @@ class ProductsService {
 		}
 	}
 
-	getImageUrl(assetsBaseURL, productId, imageFileName) {
+	getImageUrl(assetsDomain, productId, imageFileName) {
 		return url.resolve(
-			assetsBaseURL,
-			`${settings.productsUploadUrl}/${productId}/${imageFileName}`
+			assetsDomain,
+			`${settings.assetServer.productsUploadPath}/${productId}/${imageFileName}`
 		);
 	}
 
-	changeProperties(item, domain, assetsBaseURL) {
+	changeProperties(item, domain, assetsDomain) {
 		if (item) {
 			if (item.id) {
 				item.id = item.id.toString();
 			}
 
-			item.images = this.getSortedImagesWithUrls(item, assetsBaseURL);
+			item.images = this.getSortedImagesWithUrls(item, assetsDomain);
 
 			if (item.category_id) {
 				item.category_id = item.category_id.toString();

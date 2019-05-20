@@ -2,12 +2,13 @@ import { ObjectID } from 'mongodb';
 import path from 'path';
 import url from 'url';
 import formidable from 'formidable';
-import fse from 'fs-extra';
 import settings from '../../lib/settings';
 import { db } from '../../lib/mongo';
 import utils from '../../lib/utils';
 import parse from '../../lib/parse';
 import SettingsService from '../settings/settings';
+import AssetService from '../assets/assets';
+import { AssertionError } from 'assert';
 
 class ProductImagesService {
 	getErrorMessage(err) {
@@ -21,7 +22,8 @@ class ProductImagesService {
 		let productObjectID = new ObjectID(productId);
 
 		let domain =
-			settings.assetsBaseURL || (await SettingsService.getSettings()).domain;
+			settings.assetServer.domain ||
+			(await SettingsService.getSettings()).domain;
 
 		return db
 			.collection('products')
@@ -31,11 +33,9 @@ class ProductImagesService {
 					let images = product.images.map(image => {
 						image.url = url.resolve(
 							domain,
-							settings.productsUploadUrl +
-								'/' +
-								product._id +
-								'/' +
+							`${settings.assetServer.productsUploadPath}/${product._id}/${
 								image.filename
+							}`
 						);
 						return image;
 					});
@@ -63,16 +63,20 @@ class ProductImagesService {
 					);
 					if (imageData) {
 						let filename = imageData.filename;
-						let filepath = path.resolve(
-							settings.productsUploadPath + '/' + productId + '/' + filename
-						);
-						fse.removeSync(filepath);
-						return db
-							.collection('products')
-							.updateOne(
-								{ _id: productObjectID },
-								{ $pull: { images: { id: imageObjectID } } }
-							);
+						let filepath = `${settings.assetServer.localBasePath}/${
+							settings.assetServer.productsUploadPath
+						}/${productId}`;
+
+						AssetService.deleteFile(filepath, filename)
+							.then(() => {
+								return db
+									.collection('products')
+									.updateOne(
+										{ _id: productObjectID },
+										{ $pull: { images: { id: imageObjectID } } }
+									);
+							})
+							.catch(() => false);
 					} else {
 						return true;
 					}
@@ -90,52 +94,34 @@ class ProductImagesService {
 			return;
 		}
 
-		let uploadedFiles = [];
 		const productObjectID = new ObjectID(productId);
-		const uploadDir = path.resolve(
-			settings.productsUploadPath + '/' + productId
+		const uploadDir = `${settings.assetServer.localBasePath}/${
+			settings.assetServer.productsUploadPath
+		}/${productId}`;
+
+		AssetService.uploadFiles(
+			req,
+			res,
+			uploadDir,
+			async filename => {
+				const imageData = {
+					id: new ObjectID(),
+					alt: '',
+					position: 99,
+					filename: filename
+				};
+
+				await db.collection('products').updateOne(
+					{
+						_id: productObjectID
+					},
+					{
+						$push: { images: imageData }
+					}
+				);
+			},
+			() => {}
 		);
-		fse.ensureDirSync(uploadDir);
-
-		let form = new formidable.IncomingForm();
-		form.uploadDir = uploadDir;
-
-		form
-			.on('fileBegin', (name, file) => {
-				// Emitted whenever a field / value pair has been received.
-				file.name = utils.getCorrectFileName(file.name);
-				file.path = uploadDir + '/' + file.name;
-			})
-			.on('file', async (field, file) => {
-				// every time a file has been uploaded successfully,
-				if (file.name) {
-					const imageData = {
-						id: new ObjectID(),
-						alt: '',
-						position: 99,
-						filename: file.name
-					};
-
-					uploadedFiles.push(imageData);
-
-					await db.collection('products').updateOne(
-						{
-							_id: productObjectID
-						},
-						{
-							$push: { images: imageData }
-						}
-					);
-				}
-			})
-			.on('error', err => {
-				res.status(500).send(this.getErrorMessage(err));
-			})
-			.on('end', () => {
-				res.send(uploadedFiles);
-			});
-
-		form.parse(req);
 	}
 
 	updateImage(productId, imageId, data) {
