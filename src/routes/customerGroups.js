@@ -37,7 +37,7 @@ class CustomerGroupsRoute {
 
 	async getGroups(req, res, next) {
 		try {
-			let data = await CustomerGroupsService.getGroups(req.query);
+			const data = await CustomerGroupsService.getGroups(req.query);
 			return res.send(data);
 		} catch (err) {
 			return next(err);
@@ -46,12 +46,11 @@ class CustomerGroupsRoute {
 
 	async getSingleGroup(req, res, next) {
 		try {
-			let data = await CustomerGroupsService.getSingleGroup(req.params.id);
+			const data = await CustomerGroupsService.getSingleGroup(req.params.id);
 			if (data) {
 				return res.send(data);
-			} else {
-				return res.status(404).end();
 			}
+			return res.status(404).end();
 		} catch (err) {
 			return next(err);
 		}
@@ -59,7 +58,7 @@ class CustomerGroupsRoute {
 
 	async addGroup(req, res, next) {
 		try {
-			let data = CustomerGroupsService.addGroup(req.body);
+			const data = CustomerGroupsService.addGroup(req.body);
 			return res.send(data);
 		} catch (err) {
 			return next(err);
@@ -68,15 +67,14 @@ class CustomerGroupsRoute {
 
 	async updateGroup(req, res, next) {
 		try {
-			let data = await CustomerGroupsService.updateGroup(
+			const data = await CustomerGroupsService.updateGroup(
 				req.params.id,
 				req.body
 			);
 			if (data) {
 				return res.send(data);
-			} else {
-				return res.status(404).end();
 			}
+			return res.status(404).end();
 		} catch (err) {
 			return next(err);
 		}
@@ -84,7 +82,7 @@ class CustomerGroupsRoute {
 
 	async deleteGroup(req, res, next) {
 		try {
-			let data = await CustomerGroupsService.deleteGroup(req.params.id);
+			const data = await CustomerGroupsService.deleteGroup(req.params.id);
 			return res.status(data ? 200 : 404).end();
 		} catch (err) {
 			return next(err);

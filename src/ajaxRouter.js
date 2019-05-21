@@ -14,7 +14,7 @@ import SettingsService from './services/settings/settings';
 import OrderItemsService from './services/orders/orderItems';
 
 // cost factor for hashes
-const saltRounds = serverSettings.saltRounds;
+const { saltRounds } = serverSettings;
 
 const ajaxRouter = express.Router();
 const TOKEN_PAYLOAD = { email: 'store', scopes: ['admin'] };
@@ -51,9 +51,7 @@ const getIP = req => {
 	return ip;
 };
 
-const getUserAgent = req => {
-	return req.get('user-agent');
-};
+const getUserAgent = req => req.get('user-agent');
 
 const fillCartItemWithProductData = (products, cartItem) => {
 	const product = products.find(p => p.id === cartItem.product_id);
@@ -79,7 +77,7 @@ const fillCartItemWithProductData = (products, cartItem) => {
 };
 
 const fillCartItems = cartResponse => {
-	let cart = cartResponse.json;
+	const cart = cartResponse.json;
 	if (cart && cart.items && cart.items.length > 0) {
 		const productIds = cart.items.map(item => item.product_id);
 		return api.products
@@ -95,33 +93,32 @@ const fillCartItems = cartResponse => {
 				cartResponse.json.items = newCartItem;
 				return cartResponse;
 			});
-	} else {
-		return Promise.resolve(cartResponse);
 	}
+	return Promise.resolve(cartResponse);
 };
 
 ajaxRouter.get('/products', (req, res) => {
-	let filter = req.query;
+	const filter = req.query;
 	filter.enabled = true;
-	api.products.list(filter).then(({ status, json }) => {
-		return res
+	api.products.list(filter).then(({ status, json }) =>
+		res
 			.status(status)
 			.header('Cache-Control', PRODUCTS_CACHE_CONTROL)
-			.send(json);
-	});
+			.send(json)
+	);
 });
 
 ajaxRouter.get('/products/:id', (req, res) => {
-	api.products.retrieve(req.params.id).then(({ status, json }) => {
-		return res
+	api.products.retrieve(req.params.id).then(({ status, json }) =>
+		res
 			.status(status)
 			.header('Cache-Control', PRODUCT_DETAILS_CACHE_CONTROL)
-			.send(json);
-	});
+			.send(json)
+	);
 });
 
 ajaxRouter.get('/cart', (req, res) => {
-	const order_id = req.signedCookies.order_id;
+	const { order_id } = req.signedCookies;
 	if (order_id) {
 		api.orders
 			.retrieve(order_id)
@@ -136,7 +133,7 @@ ajaxRouter.get('/cart', (req, res) => {
 });
 
 ajaxRouter.post('/reset-password', async (req, res, next) => {
-	await bcrypt.hash(req.body.password, saltRounds, async function(err, hash) {
+	await bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
 		const data = {
 			status: false,
 			id: null,
@@ -174,7 +171,7 @@ ajaxRouter.post('/reset-password', async (req, res, next) => {
 		}
 
 		// if customer email exists send status back
-		let { status, json } = await api.customers.list(filter);
+		const { status, json } = await api.customers.list(filter);
 		if (json.total_count > 0) {
 			data.status = true;
 			data.id = AuthHeader.encodeUserLoginAuth(userId);
@@ -199,11 +196,11 @@ ajaxRouter.post('/forgot-password', async (req, res, next) => {
 				`forgot_password_${serverConfigs.language}`
 			)
 		]);
-		await handlebars.registerHelper('forgot_password_link', function(obj) {
-			var url = `${serverConfigs.storeBaseUrl}${
+		await handlebars.registerHelper('forgot_password_link', obj => {
+			const url = `${serverConfigs.storeBaseUrl}${
 				countryCode !== undefined ? `/${countryCode}/` : '/'
 			}reset-password?token=${AuthHeader.encodeUserLoginAuth(userId)}`;
-			var text = emailTemp.link;
+			let text = emailTemp.link;
 			if (text == undefined) {
 				text = url;
 			}
@@ -292,9 +289,9 @@ ajaxRouter.post('/login', async (req, res, next) => {
 			email: req.body.email.toLowerCase()
 		})
 		.limit(1)
-		.next(function getCustomerData(error, result) {
+		.next((error, result) => {
 			if (error) {
-				//alert
+				// alert
 				throw error;
 			}
 			if (!result) {
@@ -306,10 +303,10 @@ ajaxRouter.post('/login', async (req, res, next) => {
 				});
 				return;
 			}
-			var customerPassword = result.password;
-			var inputPassword = req.body.password;
+			const customerPassword = result.password;
+			const inputPassword = req.body.password;
 
-			bcrypt.compare(inputPassword, customerPassword, async function(err, out) {
+			bcrypt.compare(inputPassword, customerPassword, async (err, out) => {
 				if (out == true) {
 					customerData.token = AuthHeader.encodeUserLoginAuth(result._id);
 					customerData.authenticated = true;
@@ -334,7 +331,6 @@ ajaxRouter.post('/login', async (req, res, next) => {
 				let objJsonB64 = JSON.stringify(customerData);
 				objJsonB64 = Buffer.from(objJsonB64).toString('base64');
 				res.status(200).send(JSON.stringify(objJsonB64));
-				return;
 			});
 		});
 });
@@ -381,7 +377,7 @@ ajaxRouter.post('/register', async (req, res, next) => {
 					eMail
 				)
 			) {
-				//if (requestTokenArray.length < 1) {
+				// if (requestTokenArray.length < 1) {
 				data.isRightToken = false;
 				res.status('200').send(data);
 				return false;
@@ -426,11 +422,11 @@ ajaxRouter.post('/register', async (req, res, next) => {
 					`register_doi_${serverConfigs.language}`
 				)
 			]);
-			await handlebars.registerHelper('register_doi_link', function(obj) {
-				var url = `${serverConfigs.storeBaseUrl}${
+			await handlebars.registerHelper('register_doi_link', obj => {
+				const url = `${serverConfigs.storeBaseUrl}${
 					countryCode !== undefined ? `/${countryCode}/` : '/'
 				}register?token=${tokenConcatString}`;
-				var text = emailTemp.link;
+				let text = emailTemp.link;
 				if (text == undefined) {
 					text = url;
 				}
@@ -518,9 +514,9 @@ ajaxRouter.put('/customer-account', async (req, res, next) => {
 				$set: customerDraftObj
 			},
 			{ ordered: false },
-			async function(error, result) {
+			async (error, result) => {
 				if (error) {
-					//alert
+					// alert
 					res.status('200').send(error);
 				}
 				customerDataObj.customer_settings = result;
@@ -544,9 +540,9 @@ ajaxRouter.put('/customer-account', async (req, res, next) => {
 							billing_address: customerData.billing_address
 						}
 					},
-					function(error, result) {
+					(error, result) => {
 						if (error) {
-							//alert
+							// alert
 							res.status('200').send(error);
 						}
 						customerDataObj.order_statuses = result;
@@ -564,7 +560,7 @@ ajaxRouter.post('/cart/items', (req, res, next) => {
 	const isHttps = req.protocol === 'https';
 	const CART_COOKIE_OPTIONS = getCartCookieOptions(isHttps);
 
-	const order_id = req.signedCookies.order_id;
+	const { order_id } = req.signedCookies;
 	const item = req.body;
 	if (order_id) {
 		api.orders.items
@@ -574,7 +570,7 @@ ajaxRouter.post('/cart/items', (req, res, next) => {
 				res.status(status).send(json);
 			});
 	} else {
-		let orderDraft = {
+		const orderDraft = {
 			draft: true,
 			referrer_url: req.signedCookies.referrer_url,
 			landing_url: req.signedCookies.landing_url,
@@ -618,8 +614,8 @@ ajaxRouter.post('/cart/items', (req, res, next) => {
 });
 
 ajaxRouter.delete('/cart/items/:item_id', (req, res, next) => {
-	const order_id = req.signedCookies.order_id;
-	const item_id = req.params.item_id;
+	const { order_id } = req.signedCookies;
+	const { item_id } = req.params;
 	if (order_id && item_id) {
 		api.orders.items
 			.delete(order_id, item_id)
@@ -633,8 +629,8 @@ ajaxRouter.delete('/cart/items/:item_id', (req, res, next) => {
 });
 
 ajaxRouter.put('/cart/items/:item_id', (req, res, next) => {
-	const order_id = req.signedCookies.order_id;
-	const item_id = req.params.item_id;
+	const { order_id } = req.signedCookies;
+	const { item_id } = req.params;
 	const item = req.body;
 	if (order_id && item_id) {
 		api.orders.items
@@ -649,7 +645,7 @@ ajaxRouter.put('/cart/items/:item_id', (req, res, next) => {
 });
 
 ajaxRouter.put('/cart/checkout', (req, res, next) => {
-	const order_id = req.signedCookies.order_id;
+	const { order_id } = req.signedCookies;
 
 	if (order_id) {
 		api.orders
@@ -703,7 +699,7 @@ ajaxRouter.put('/cart', async (req, res) => {
 });
 
 ajaxRouter.put('/cart/shipping_address', (req, res) => {
-	const order_id = req.signedCookies.order_id;
+	const { order_id } = req.signedCookies;
 	if (order_id) {
 		api.orders
 			.updateShippingAddress(order_id, req.body)
@@ -717,7 +713,7 @@ ajaxRouter.put('/cart/shipping_address', (req, res) => {
 });
 
 ajaxRouter.put('/cart/billing_address', (req, res) => {
-	const order_id = req.signedCookies.order_id;
+	const { order_id } = req.signedCookies;
 	if (order_id) {
 		api.orders
 			.updateBillingAddress(order_id, req.body)
@@ -731,9 +727,9 @@ ajaxRouter.put('/cart/billing_address', (req, res) => {
 });
 
 ajaxRouter.post('/cart/charge', async (req, res) => {
-	const order_id = req.signedCookies.order_id;
+	const { order_id } = req.signedCookies;
 	if (order_id) {
-		const client = api.orders.client;
+		const { client } = api.orders;
 		const chargeResponse = await client.post(`/orders/${order_id}/charge`);
 		res.status(chargeResponse.status).send(chargeResponse.json);
 	} else {
@@ -761,7 +757,7 @@ ajaxRouter.get('/pages/:id', (req, res) => {
 
 ajaxRouter.get('/sitemap', async (req, res) => {
 	let result = null;
-	let filter = req.query;
+	const filter = req.query;
 	filter.enabled = true;
 
 	const sitemapResponse = await api.sitemap.retrieve(req.query);
@@ -809,7 +805,7 @@ ajaxRouter.get('/shipping_methods', (req, res) => {
 });
 
 ajaxRouter.get('/payment_form_settings', (req, res) => {
-	const order_id = req.signedCookies.order_id;
+	const { order_id } = req.signedCookies;
 	if (order_id) {
 		api.orders.getPaymentFormSettings(order_id).then(({ status, json }) => {
 			res.status(status).send(json);

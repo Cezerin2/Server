@@ -68,9 +68,7 @@ class ProductCategoriesRoute {
 
 	getCategories(req, res, next) {
 		CategoriesService.getCategories(req.query)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -79,18 +77,15 @@ class ProductCategoriesRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	addCategory(req, res, next) {
 		CategoriesService.addCategory(req.body)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -99,18 +94,15 @@ class ProductCategoriesRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	deleteCategory(req, res, next) {
 		CategoriesService.deleteCategory(req.params.id)
-			.then(data => {
-				return res.status(data ? 200 : 404).end();
-			})
+			.then(data => res.status(data ? 200 : 404).end())
 			.catch(next);
 	}
 

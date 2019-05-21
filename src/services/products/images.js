@@ -2,13 +2,13 @@ import { ObjectID } from 'mongodb';
 import path from 'path';
 import url from 'url';
 import formidable from 'formidable';
+import { AssertionError } from 'assert';
 import settings from '../../lib/settings';
 import { db } from '../../lib/mongo';
 import utils from '../../lib/utils';
 import parse from '../../lib/parse';
 import SettingsService from '../settings/settings';
 import AssetService from '../assets/assets';
-import { AssertionError } from 'assert';
 
 class ProductImagesService {
 	getErrorMessage(err) {
@@ -19,9 +19,9 @@ class ProductImagesService {
 		if (!ObjectID.isValid(productId)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let productObjectID = new ObjectID(productId);
+		const productObjectID = new ObjectID(productId);
 
-		let domain =
+		const domain =
 			settings.assetServer.domain ||
 			(await SettingsService.getSettings()).domain;
 
@@ -42,9 +42,8 @@ class ProductImagesService {
 
 					images = images.sort((a, b) => a.position - b.position);
 					return images;
-				} else {
-					return [];
 				}
+				return [];
 			});
 	}
 
@@ -52,30 +51,30 @@ class ProductImagesService {
 		if (!ObjectID.isValid(productId) || !ObjectID.isValid(imageId)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let productObjectID = new ObjectID(productId);
-		let imageObjectID = new ObjectID(imageId);
+		const productObjectID = new ObjectID(productId);
+		const imageObjectID = new ObjectID(imageId);
 
 		return this.getImages(productId)
 			.then(images => {
 				if (images && images.length > 0) {
-					let imageData = images.find(
+					const imageData = images.find(
 						i => i.id.toString() === imageId.toString()
 					);
 					if (imageData) {
-						let filename = imageData.filename;
-						let filepath = `${settings.assetServer.localBasePath}/${
+						const { filename } = imageData;
+						const filepath = `${settings.assetServer.localBasePath}/${
 							settings.assetServer.productsUploadPath
 						}/${productId}`;
 
 						AssetService.deleteFile(filepath, filename)
-							.then(() => {
-								return db
+							.then(() =>
+								db
 									.collection('products')
 									.updateOne(
 										{ _id: productObjectID },
 										{ $pull: { images: { id: imageObjectID } } }
-									);
-							})
+									)
+							)
 							.catch(() => false);
 					} else {
 						return true;
@@ -88,7 +87,7 @@ class ProductImagesService {
 	}
 
 	async addImage(req, res) {
-		const productId = req.params.productId;
+		const { productId } = req.params;
 		if (!ObjectID.isValid(productId)) {
 			res.status(500).send(this.getErrorMessage('Invalid identifier'));
 			return;
@@ -108,7 +107,7 @@ class ProductImagesService {
 					id: new ObjectID(),
 					alt: '',
 					position: 99,
-					filename: filename
+					filename
 				};
 
 				await db.collection('products').updateOne(
@@ -128,8 +127,8 @@ class ProductImagesService {
 		if (!ObjectID.isValid(productId) || !ObjectID.isValid(imageId)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let productObjectID = new ObjectID(productId);
-		let imageObjectID = new ObjectID(imageId);
+		const productObjectID = new ObjectID(productId);
+		const imageObjectID = new ObjectID(imageId);
 
 		const imageData = this.getValidDocumentForUpdate(data);
 
@@ -147,7 +146,7 @@ class ProductImagesService {
 			return new Error('Required fields are missing');
 		}
 
-		let image = {};
+		const image = {};
 
 		if (data.alt !== undefined) {
 			image['images.$.alt'] = parse.getString(data.alt);

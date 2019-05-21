@@ -45,9 +45,7 @@ class SettingsService {
 		return db
 			.collection('settings')
 			.findOne()
-			.then(settings => {
-				return this.changeProperties(settings);
-			});
+			.then(settings => this.changeProperties(settings));
 	}
 
 	updateSettings(data) {
@@ -73,8 +71,6 @@ class SettingsService {
 			.then(count => {
 				if (count === 0) {
 					return db.collection('settings').insertOne(this.defaultSettings);
-				} else {
-					return;
 				}
 			});
 	}
@@ -84,7 +80,7 @@ class SettingsService {
 			return new Error('Required fields are missing');
 		}
 
-		let settings = {};
+		const settings = {};
 
 		if (data.store_name) {
 			settings.store_name = parse.getString(data.store_name);

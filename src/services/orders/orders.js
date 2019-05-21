@@ -1,5 +1,6 @@
 import { ObjectID } from 'mongodb';
 import handlebars from 'handlebars';
+import bcrypt from 'bcrypt';
 import settings from '../../lib/settings';
 import { db } from '../../lib/mongo';
 import parse from '../../lib/parse';
@@ -14,14 +15,13 @@ import EmailTemplatesService from '../settings/emailTemplates';
 import ProductStockService from '../products/stock';
 import SettingsService from '../settings/settings';
 import PaymentGateways from '../../paymentGateways';
-import bcrypt from 'bcrypt';
 
-const saltRounds = settings.saltRounds;
+const { saltRounds } = settings;
 
 class OrdersService {
 	getFilter(params = {}) {
 		// TODO: sort, coupon, tag, channel
-		let filter = {};
+		const filter = {};
 		const id = parse.getObjectIDIfValid(params.id);
 		const status_id = parse.getObjectIDIfValid(params.status_id);
 		const customer_id = parse.getObjectIDIfValid(params.customer_id);
@@ -95,35 +95,35 @@ class OrdersService {
 		if (grand_total_min || grand_total_max) {
 			filter.grand_total = {};
 			if (grand_total_min) {
-				filter.grand_total['$gte'] = grand_total_min;
+				filter.grand_total.$gte = grand_total_min;
 			}
 			if (grand_total_max) {
-				filter.grand_total['$lte'] = grand_total_max;
+				filter.grand_total.$lte = grand_total_max;
 			}
 		}
 
 		if (date_placed_min || date_placed_max) {
 			filter.date_placed = {};
 			if (date_placed_min) {
-				filter.date_placed['$gte'] = date_placed_min;
+				filter.date_placed.$gte = date_placed_min;
 			}
 			if (date_placed_max) {
-				filter.date_placed['$lte'] = date_placed_max;
+				filter.date_placed.$lte = date_placed_max;
 			}
 		}
 
 		if (date_closed_min || date_closed_max) {
 			filter.date_closed = {};
 			if (date_closed_min) {
-				filter.date_closed['$gte'] = date_closed_min;
+				filter.date_closed.$gte = date_closed_min;
 			}
 			if (date_closed_max) {
-				filter.date_closed['$lte'] = date_closed_max;
+				filter.date_closed.$lte = date_closed_max;
 			}
 		}
 
 		if (params.search) {
-			let alternativeSearch = [];
+			const alternativeSearch = [];
 
 			const searchAsNumber = parse.getNumberIfPositive(params.search);
 			if (searchAsNumber) {
@@ -137,14 +137,14 @@ class OrdersService {
 			alternativeSearch.push({ mobile: new RegExp(params.search, 'i') });
 			alternativeSearch.push({ $text: { $search: params.search } });
 
-			filter['$or'] = alternativeSearch;
+			filter.$or = alternativeSearch;
 		}
 
 		return filter;
 	}
 
 	getOrders(params) {
-		let filter = this.getFilter(params);
+		const filter = this.getFilter(params);
 		const limit = parse.getNumberIfPositive(params.limit) || 1000;
 		const offset = parse.getNumberIfPositive(params.offset) || 0;
 
@@ -190,7 +190,7 @@ class OrdersService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getOrders({ id: id }).then(items =>
+		return this.getOrders({ id }).then(items =>
 			items.data.length > 0 ? items.data[0] : {}
 		);
 	}
@@ -207,41 +207,37 @@ class OrdersService {
 						if (customerExists) {
 							// if customer exists - set new customer_id
 							return customers.data[0].id;
-						} else {
-							// if customer not exists - create new customer and set new customer_id
-							let addresses = [];
-							if (order.shipping_address) {
-								addresses.push(order.shipping_address);
-							}
-
-							let customerFullName =
-								order.shipping_address && order.shipping_address.full_name
-									? order.shipping_address.full_name
-									: '';
-
-							// generate password-hash
-							const salt = bcrypt.genSaltSync(saltRounds);
-							const hashPassword = bcrypt.hashSync(order.password, salt);
-
-							return CustomersService.addCustomer({
-								first_name: order.first_name,
-								last_name: order.last_name,
-								password: hashPassword,
-								email: order.email.toLowerCase(),
-								full_name: order.first_name + ' ' + order.last_name,
-								mobile: order.mobile,
-								browser: order.browser,
-								//addresses: customer.addresses
-								addresses: order.shipping_address
-							}).then(customer => {
-								return customer.id;
-							});
 						}
+						// if customer not exists - create new customer and set new customer_id
+						const addresses = [];
+						if (order.shipping_address) {
+							addresses.push(order.shipping_address);
+						}
+
+						const customerFullName =
+							order.shipping_address && order.shipping_address.full_name
+								? order.shipping_address.full_name
+								: '';
+
+						// generate password-hash
+						const salt = bcrypt.genSaltSync(saltRounds);
+						const hashPassword = bcrypt.hashSync(order.password, salt);
+
+						return CustomersService.addCustomer({
+							first_name: order.first_name,
+							last_name: order.last_name,
+							password: hashPassword,
+							email: order.email.toLowerCase(),
+							full_name: `${order.first_name} ${order.last_name}`,
+							mobile: order.mobile,
+							browser: order.browser,
+							// addresses: customer.addresses
+							addresses: order.shipping_address
+						}).then(customer => customer.id);
 					}
 				);
-			} else {
-				return order.customer_id;
 			}
+			return order.customer_id;
 		});
 	}
 
@@ -348,7 +344,7 @@ class OrdersService {
 					orderNumber = items[0].number + 1;
 				}
 
-				let order = {
+				const order = {
 					date_created: new Date(),
 					date_placed: null,
 					date_updated: null,
@@ -441,7 +437,7 @@ class OrdersService {
 				reject(new Error('Required fields are missing'));
 			}
 
-			let order = {
+			const order = {
 				date_updated: new Date()
 			};
 
@@ -582,19 +578,19 @@ class OrdersService {
 			order.id = order._id.toString();
 			delete order._id;
 
-			let orderStatus =
+			const orderStatus =
 				order.status_id && orderStatuses.length > 0
 					? orderStatuses.find(
 							i => i.id.toString() === order.status_id.toString()
 					  )
 					: null;
-			let orderShippingMethod =
+			const orderShippingMethod =
 				order.shipping_method_id && shippingMethods.length > 0
 					? shippingMethods.find(
 							i => i.id.toString() === order.shipping_method_id.toString()
 					  )
 					: null;
-			let orderPaymentMethod =
+			const orderPaymentMethod =
 				order.payment_method_id && paymentMethods.length > 0
 					? paymentMethods.find(
 							i => i.id.toString() === order.payment_method_id.toString()
@@ -618,7 +614,7 @@ class OrdersService {
 
 			if (order.items && order.items.length > 0) {
 				order.items.forEach(item => {
-					let item_weight = item.weight * item.quantity;
+					const item_weight = item.weight * item.quantity;
 					if (item_weight > 0) {
 						sum_items_weight += item_weight;
 					}
@@ -649,7 +645,7 @@ class OrdersService {
 				});
 			}
 
-			let tax_included_total =
+			const tax_included_total =
 				(order.item_tax_included ? 0 : sum_items_tax_total) +
 				(order.shipping_tax_included ? 0 : order.shipping_tax);
 
@@ -661,22 +657,22 @@ class OrdersService {
 				});
 			}
 
-			let tax_total = sum_items_tax_total + order.shipping_tax;
-			let shipping_total = order.shipping_price - order.shipping_discount;
-			let discount_total = sum_items_discount_total + sum_discounts_amount;
-			let grand_total =
+			const tax_total = sum_items_tax_total + order.shipping_tax;
+			const shipping_total = order.shipping_price - order.shipping_discount;
+			const discount_total = sum_items_discount_total + sum_discounts_amount;
+			const grand_total =
 				sum_items_price_total +
 				shipping_total +
 				tax_included_total -
 				discount_total;
 
 			order.weight_total = sum_items_weight;
-			order.discount_total = discount_total; //sum(items.discount_total)+sum(discounts.amount)
-			order.subtotal = sum_items_price_total; //sum(items.price_total)
-			order.tax_included_total = tax_included_total; //if(item_tax_included, 0, item_tax) + if(shipment_tax_included, 0, shipping_tax)
-			order.tax_total = tax_total; //item_tax + shipping_tax
-			order.shipping_total = shipping_total; //shipping_price-shipping_discount
-			order.grand_total = grand_total; //subtotal + shipping_total + tax_included_total - (discount_total)
+			order.discount_total = discount_total; // sum(items.discount_total)+sum(discounts.amount)
+			order.subtotal = sum_items_price_total; // sum(items.price_total)
+			order.tax_included_total = tax_included_total; // if(item_tax_included, 0, item_tax) + if(shipment_tax_included, 0, shipping_tax)
+			order.tax_total = tax_total; // item_tax + shipping_tax
+			order.shipping_total = shipping_total; // shipping_price-shipping_discount
+			order.grand_total = grand_total; // subtotal + shipping_total + tax_included_total - (discount_total)
 		}
 
 		return order;
@@ -696,12 +692,12 @@ class OrdersService {
 		await Promise.all([
 			mailer.send({
 				to: toEmail,
-				subject: subject,
+				subject,
 				html: body
 			}),
 			mailer.send({
 				to: copyTo,
-				subject: subject,
+				subject,
 				html: body
 			})
 		]);
@@ -715,13 +711,13 @@ class OrdersService {
     - fire Webhooks
     */
 		const [order, emailTemplate, dashboardSettings] = await Promise.all([
-			this.getOrCreateCustomer(orderId).then(customer_id => {
-				return this.updateOrder(orderId, {
-					customer_id: customer_id,
+			this.getOrCreateCustomer(orderId).then(customer_id =>
+				this.updateOrder(orderId, {
+					customer_id,
 					date_placed: new Date(),
 					draft: false
-				});
-			}),
+				})
+			),
 			EmailTemplatesService.getEmailTemplate('order_confirmation'),
 			SettingsService.getSettings()
 		]);
@@ -790,9 +786,8 @@ class OrdersService {
 					ordersCount
 				);
 			});
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	async chargeOrder(orderId) {

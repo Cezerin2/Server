@@ -70,9 +70,7 @@ class SettingsRoute {
 
 	getSettings(req, res, next) {
 		SettingsService.getSettings()
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -81,18 +79,15 @@ class SettingsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	getEmailSettings(req, res, next) {
 		EmailSettingsService.getEmailSettings()
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -101,18 +96,15 @@ class SettingsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	getEmailTemplate(req, res, next) {
 		EmailTemplatesService.getEmailTemplate(req.params.name)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -121,26 +113,21 @@ class SettingsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	getCheckoutFields(req, res, next) {
 		CheckoutFieldsService.getCheckoutFields()
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
 	getCheckoutField(req, res, next) {
 		CheckoutFieldsService.getCheckoutField(req.params.name)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -149,9 +136,8 @@ class SettingsRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
@@ -162,9 +148,7 @@ class SettingsRoute {
 
 	deleteLogo(req, res, next) {
 		SettingsService.deleteLogo()
-			.then(() => {
-				return res.end();
-			})
+			.then(() => res.end())
 			.catch(next);
 	}
 }

@@ -43,7 +43,7 @@ class SecurityTokensRoute {
 
 	async getTokens(req, res, next) {
 		try {
-			let data = await SecurityTokensService.getTokens(req.query);
+			const data = await SecurityTokensService.getTokens(req.query);
 			return res.send(data);
 		} catch (err) {
 			return next(err);
@@ -52,7 +52,7 @@ class SecurityTokensRoute {
 
 	async getTokensBlacklist(req, res, next) {
 		try {
-			let data = await SecurityTokensService.getTokensBlacklist();
+			const data = await SecurityTokensService.getTokensBlacklist();
 			return res.send(data);
 		} catch (err) {
 			return next(err);
@@ -61,7 +61,7 @@ class SecurityTokensRoute {
 
 	async getSingleToken(req, res, next) {
 		try {
-			let data = await SecurityTokensService.getSingleToken(req.params.id);
+			const data = await SecurityTokensService.getSingleToken(req.params.id);
 			return data ? res.send(data) : res.status(404).end();
 		} catch (err) {
 			return next(err);
@@ -70,7 +70,7 @@ class SecurityTokensRoute {
 
 	async addToken(req, res, next) {
 		try {
-			let data = await SecurityTokensService.addToken(req.body);
+			const data = await SecurityTokensService.addToken(req.body);
 			return res.send(data);
 		} catch (err) {
 			return next(err);
@@ -79,7 +79,7 @@ class SecurityTokensRoute {
 
 	async updateToken(req, res, next) {
 		try {
-			let data = await SecurityTokensService.updateToken(
+			const data = await SecurityTokensService.updateToken(
 				req.params.id,
 				req.body
 			);
@@ -91,7 +91,7 @@ class SecurityTokensRoute {
 
 	async deleteToken(req, res, next) {
 		try {
-			let data = await SecurityTokensService.deleteToken(req.params.id);
+			const data = await SecurityTokensService.deleteToken(req.params.id);
 			return res.end();
 		} catch (err) {
 			return next(err);
@@ -100,7 +100,7 @@ class SecurityTokensRoute {
 
 	async sendDashboardSigninUrl(req, res, next) {
 		try {
-			let data = await SecurityTokensService.sendDashboardSigninUrl(req);
+			const data = await SecurityTokensService.sendDashboardSigninUrl(req);
 			return res.send(data);
 		} catch (err) {
 			return next(err);
