@@ -8,9 +8,8 @@ const sign = ({ data, secret }) => {
 		hmac.update(data);
 		const signature = hmac.digest('hex');
 		return signature;
-	} else {
-		return '';
 	}
+	return '';
 };
 
 const send = ({ event, payload, webhook }) => {
@@ -21,7 +20,7 @@ const send = ({ event, payload, webhook }) => {
 		webhook.url.length > 0
 	) {
 		const data = JSON.stringify(payload);
-		const signature = sign({ data: data, secret: webhook.secret });
+		const signature = sign({ data, secret: webhook.secret });
 
 		fetch(webhook.url, {
 			method: 'POST',
@@ -59,6 +58,6 @@ const events = {
 };
 
 export default {
-	trigger: trigger,
-	events: events
+	trigger,
+	events
 };

@@ -30,9 +30,7 @@ class FilesRoute {
 
 	getFiles(req, res, next) {
 		AssetsService.getFilesData(filesPath)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -47,9 +45,7 @@ class FilesRoute {
 
 	deleteFile(req, res, next) {
 		AssetsService.deleteFile(req.params.file)
-			.then(() => {
-				return res.end();
-			})
+			.then(() => res.end())
 			.catch(next);
 	}
 }

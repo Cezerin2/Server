@@ -6,8 +6,8 @@ import OrdertTansactionsService from '../services/orders/orderTransactions';
 const SANDBOX_URL = 'www.sandbox.paypal.com';
 const REGULAR_URL = 'www.paypal.com';
 
-const verify = (params, settings) => {
-	return new Promise((resolve, reject) => {
+const verify = (params, settings) =>
+	new Promise((resolve, reject) => {
 		if (!settings) {
 			settings = {
 				allow_sandbox: false
@@ -21,8 +21,8 @@ const verify = (params, settings) => {
 		params.cmd = '_notify-validate';
 		const body = qs.stringify(params);
 
-		//Set up the request to paypal
-		let req_options = {
+		// Set up the request to paypal
+		const req_options = {
 			host: params.test_ipn ? SANDBOX_URL : REGULAR_URL,
 			method: 'POST',
 			path: '/cgi-bin/webscr',
@@ -35,40 +35,38 @@ const verify = (params, settings) => {
 			);
 		}
 
-		let req = https.request(req_options, res => {
-			let data = [];
+		const req = https.request(req_options, res => {
+			const data = [];
 
 			res.on('data', d => {
 				data.push(d);
 			});
 
 			res.on('end', () => {
-				let response = data.join('');
+				const response = data.join('');
 
-				//Check if IPN is valid
+				// Check if IPN is valid
 				if (response === 'VERIFIED') {
 					return resolve(response);
-				} else {
-					return reject('IPN Verification status: ' + response);
 				}
+				return reject(`IPN Verification status: ${response}`);
 			});
 		});
 
-		//Add the post parameters to the request body
+		// Add the post parameters to the request body
 		req.write(body);
-		//Request error
+		// Request error
 		req.on('error', reject);
 		req.end();
 	});
-};
 
 const getPaymentFormSettings = options => {
 	const { gatewaySettings, order, amount, currency } = options;
 
 	const formSettings = {
 		order_id: order.id,
-		amount: amount,
-		currency: currency,
+		amount,
+		currency,
 		env: gatewaySettings.env,
 		client: gatewaySettings.client,
 		size: gatewaySettings.size,
@@ -118,6 +116,6 @@ const paymentNotification = options => {
 };
 
 export default {
-	getPaymentFormSettings: getPaymentFormSettings,
-	paymentNotification: paymentNotification
+	getPaymentFormSettings,
+	paymentNotification
 };
