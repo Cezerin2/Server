@@ -39,7 +39,7 @@ class WebhooksRoute {
 		try {
 			let data = await WebhooksService.getWebhooks(req.query);
 			return res.send(data);
-		} catch(err) {
+		} catch (err) {
 			return next(err);
 		}
 	}
@@ -47,8 +47,8 @@ class WebhooksRoute {
 	async getSingleWebhook(req, res, next) {
 		try {
 			let data = await WebhooksService.getSingleWebhook(req.params.id);
-			return (data) ? res.send(data) : res.status(404).end();
-		} catch(err) {
+			return data ? res.send(data) : res.status(404).end();
+		} catch (err) {
 			return next(err);
 		}
 	}
@@ -57,7 +57,7 @@ class WebhooksRoute {
 		try {
 			let data = await WebhooksService.addWebhook(req.body);
 			return res.send(data);
-		} catch(err) {
+		} catch (err) {
 			return next(err);
 		}
 	}
@@ -65,8 +65,8 @@ class WebhooksRoute {
 	async updateWebhook(req, res, next) {
 		try {
 			let data = await WebhooksService.updateWebhook(req.params.id, req.body);
-			return (data) ? res.send(data) : res.status(404).end();
-		} catch(err) {
+			return data ? res.send(data) : res.status(404).end();
+		} catch (err) {
 			return next(err);
 		}
 	}
@@ -75,7 +75,7 @@ class WebhooksRoute {
 		try {
 			let data = await WebhooksService.deleteWebhook(req.params.id);
 			return res.status(data ? 200 : 404).end();
-		} catch(err) {
+		} catch (err) {
 			return next(err);
 		}
 	}

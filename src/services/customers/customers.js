@@ -76,8 +76,8 @@ class CustomersService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getCustomers({ id: id }).then(
-			items => (items.data.length > 0 ? items.data[0] : {})
+		return this.getCustomers({ id: id }).then(items =>
+			items.data.length > 0 ? items.data[0] : {}
 		);
 	}
 
@@ -524,11 +524,13 @@ class CustomersService {
 
 	getAll() {
 		const requestOptions = {
-			method: 'GET',
+			method: 'GET'
 			//headers: authHeader()
 		};
 
-		return fetch(`${security.storeBaseUrl}/users`, requestOptions).then(handleResponse);
+		return fetch(`${security.storeBaseUrl}/users`, requestOptions).then(
+			handleResponse
+		);
 	}
 
 	handleResponse(response) {

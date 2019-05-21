@@ -37,16 +37,16 @@ class CustomerGroupsRoute {
 
 	async getGroups(req, res, next) {
 		try {
-			let data = await CustomerGroupsService.getGroups(req.query)
+			let data = await CustomerGroupsService.getGroups(req.query);
 			return res.send(data);
-		} catch(err) {
+		} catch (err) {
 			return next(err);
 		}
 	}
 
 	async getSingleGroup(req, res, next) {
 		try {
-			let data = await CustomerGroupsService.getSingleGroup(req.params.id)
+			let data = await CustomerGroupsService.getSingleGroup(req.params.id);
 			if (data) {
 				return res.send(data);
 			} else {
@@ -59,32 +59,35 @@ class CustomerGroupsRoute {
 
 	async addGroup(req, res, next) {
 		try {
-			let data = CustomerGroupsService.addGroup(req.body)
+			let data = CustomerGroupsService.addGroup(req.body);
 			return res.send(data);
-		} catch(err) {
+		} catch (err) {
 			return next(err);
 		}
 	}
 
 	async updateGroup(req, res, next) {
 		try {
-			let data = await CustomerGroupsService.updateGroup(req.params.id, req.body)
+			let data = await CustomerGroupsService.updateGroup(
+				req.params.id,
+				req.body
+			);
 			if (data) {
 				return res.send(data);
 			} else {
 				return res.status(404).end();
 			}
-		} catch(err) {
+		} catch (err) {
 			return next(err);
 		}
 	}
 
 	async deleteGroup(req, res, next) {
 		try {
-			let data = await CustomerGroupsService.deleteGroup(req.params.id)
+			let data = await CustomerGroupsService.deleteGroup(req.params.id);
 			return res.status(data ? 200 : 404).end();
-		} catch(err) {
-			return next(err)
+		} catch (err) {
+			return next(err);
 		}
 	}
 }
