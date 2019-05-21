@@ -10,14 +10,13 @@ class ProductOptionValuesService {
 			.collection('products')
 			.findOne({ _id: productObjectID }, { fields: { options: 1 } })
 			.then(product => (product && product.options ? product.options : null))
-			.then(
-				options =>
-					options && options.length > 0
-						? options.find(option => option.id.toString() === optionId)
-						: null
+			.then(options =>
+				options && options.length > 0
+					? options.find(option => option.id.toString() === optionId)
+					: null
 			)
-			.then(
-				option => (option && option.values.length > 0 ? option.values : [])
+			.then(option =>
+				option && option.values.length > 0 ? option.values : []
 			);
 	}
 

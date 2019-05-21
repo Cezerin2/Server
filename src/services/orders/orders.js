@@ -190,8 +190,8 @@ class OrdersService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getOrders({ id: id }).then(
-			items => (items.data.length > 0 ? items.data[0] : {})
+		return this.getOrders({ id: id }).then(items =>
+			items.data.length > 0 ? items.data[0] : {}
 		);
 	}
 

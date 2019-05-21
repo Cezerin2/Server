@@ -136,9 +136,8 @@ class SecurityTokensService {
 			return db
 				.collection('tokens')
 				.count({ email: email, is_revoked: false })
-				.then(
-					count =>
-						count === 0 ? email : Promise.reject('Token email must be unique')
+				.then(count =>
+					count === 0 ? email : Promise.reject('Token email must be unique')
 				);
 		} else {
 			return Promise.resolve(email);

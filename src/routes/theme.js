@@ -88,16 +88,16 @@ class ThemeRoute {
 		try {
 			let data = await ThemeSettingsService.getSettings();
 			return res.send(data);
-		} catch(err) {
+		} catch (err) {
 			return next(err);
 		}
 	}
 
 	async updateSettings(req, res, next) {
 		try {
-			await ThemeSettingsService.updateSettings(req.body)
+			await ThemeSettingsService.updateSettings(req.body);
 			return res.end();
-		} catch(err) {
+		} catch (err) {
 			return next(err);
 		}
 	}
@@ -106,7 +106,7 @@ class ThemeRoute {
 		try {
 			let data = await ThemeSettingsService.getSettingsSchema();
 			return res.send(data);
-		} catch(err) {
+		} catch (err) {
 			return next(err);
 		}
 	}
@@ -119,7 +119,7 @@ class ThemeRoute {
 		try {
 			await ThemeAssetsService.deleteFile(req.params.file);
 			return res.end();
-		} catch(err) {
+		} catch (err) {
 			return next(err);
 		}
 	}
@@ -128,16 +128,18 @@ class ThemeRoute {
 		try {
 			let data = await ThemePlaceholdersService.getPlaceholders();
 			return res.send(data);
-		} catch(err) {
+		} catch (err) {
 			return next(err);
 		}
 	}
 
 	async getSinglePlaceholder(req, res, next) {
 		try {
-			let data = await ThemePlaceholdersService.getSinglePlaceholder(req.params.key);
-			return (data) ? res.send(data) : res.status(404).end();
-		} catch(err) {
+			let data = await ThemePlaceholdersService.getSinglePlaceholder(
+				req.params.key
+			);
+			return data ? res.send(data) : res.status(404).end();
+		} catch (err) {
 			return next(err);
 		}
 	}
@@ -146,25 +148,30 @@ class ThemeRoute {
 		try {
 			let data = await ThemePlaceholdersService.addPlaceholder(req.body);
 			return res.send(data);
-		} catch(err) {
+		} catch (err) {
 			return next(err);
 		}
 	}
 
 	async updatePlaceholder(req, res, next) {
 		try {
-			let data = await ThemePlaceholdersService.updatePlaceholder(req.params.key, req.body);
-			return (data) ? res.send(data) : res.status(404).end();
-		} catch(err) {
+			let data = await ThemePlaceholdersService.updatePlaceholder(
+				req.params.key,
+				req.body
+			);
+			return data ? res.send(data) : res.status(404).end();
+		} catch (err) {
 			return next(err);
 		}
 	}
 
 	async deletePlaceholder(req, res, next) {
 		try {
-			let data = await ThemePlaceholdersService.deletePlaceholder(req.params.key);
+			let data = await ThemePlaceholdersService.deletePlaceholder(
+				req.params.key
+			);
 			return res.status(data ? 200 : 404).end();
-		} catch(err) {
+		} catch (err) {
 			return next(err);
 		}
 	}

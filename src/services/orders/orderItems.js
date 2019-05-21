@@ -155,7 +155,7 @@ class OrderItemsService {
 				variant => variant.id.toString() === variantId.toString()
 			);
 		}
-	
+
 		return null;
 	}
 
@@ -165,7 +165,7 @@ class OrderItemsService {
 				item => item.id.toString() === optionId.toString()
 			);
 		}
-		
+
 		return null;
 	}
 
@@ -176,7 +176,7 @@ class OrderItemsService {
 				item => item.id.toString() === valueId.toString()
 			);
 		}
-		
+
 		return null;
 	}
 
@@ -280,7 +280,7 @@ class OrderItemsService {
 					'items.$.price_total': variantPrice * item.quantity
 				};
 			}
-			
+
 			// variant not exists
 			return null;
 		} else {
@@ -309,7 +309,7 @@ class OrderItemsService {
 			}
 			return OrdersService.getSingleOrder(order_id);
 		}
-		
+
 		// order.items is empty
 		return null;
 	}
@@ -339,7 +339,7 @@ class OrderItemsService {
 	}
 
 	getValidDocumentForInsert(data) {
-		const productImage = parse.getObjectIDIfValid(data.product_id)
+		const productImage = parse.getObjectIDIfValid(data.product_id);
 		const item = {
 			product_image: [],
 			id: new ObjectID(),
