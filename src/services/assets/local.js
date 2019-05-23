@@ -104,8 +104,7 @@ class LocalService {
 
 	uploadFiles(req, res, dir, onFileUpload, onFilesEnd) {
 		const uploadedFiles = [];
-
-		fse.ensureDirSync(path);
+		fse.ensureDirSync(dir);
 
 		const form = new formidable.IncomingForm();
 		form.uploadDir = path.resolve(dir);
@@ -114,7 +113,7 @@ class LocalService {
 			.on('fileBegin', (name, file) => {
 				// Emitted whenever a field / value pair has been received.
 				file.name = utils.getCorrectFileName(file.name);
-				file.path = `${path}/${file.name}`;
+				file.path = `${dir}/${file.name}`;
 			})
 			.on('file', async (field, file) => {
 				// every time a file has been uploaded successfully,
