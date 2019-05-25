@@ -7,7 +7,7 @@ import utils from '../../lib/utils';
 import { db } from '../../lib/mongo';
 import parse from '../../lib/parse';
 
-const ThemeAssetsPath = `${settings.assetServer.themeAssetsUploadUrl}`;
+const ThemeAssetsPath = `${settings.assetServer.themeImageUploadPath }`;
 
 class SettingsService {
 	constructor() {
@@ -210,7 +210,7 @@ class SettingsService {
 		if (data.logo_file && data.logo_file.length > 0) {
 			data.logo = url.resolve(
 				settings.assetServer.domain,
-				`${settings.assetServer.themeAssetsUploadUrl}/${data.logo_file}`
+				`${ThemeAssetsPath}/${data.logo_file}`
 			);
 		} else {
 			data.logo = null;
