@@ -80,7 +80,7 @@ class SettingsService {
 			return new Error('Required fields are missing');
 		}
 
-		const settings = {};
+		let settings = {};
 
 		if (data.store_name) {
 			settings.store_name = parse.getString(data.store_name);
