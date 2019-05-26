@@ -2,13 +2,37 @@ import fse from 'fs-extra';
 import formidable from 'formidable';
 import path from 'path';
 import utils from '../../lib/utils';
+import settings from '../../lib/settings';
+
+const ResolveSystemPath = (dir, file = '') => {
+	const BaseAssetPath = `${settings.assetServer.localBasePath}`;
+
+	const paths = [BaseAssetPath, dir, file].filter(
+		x => typeof x === 'string' && x.length > 0
+	);
+
+	return path.resolve(paths.join('/'));
+};
+
+const ResolveUrlPath = (dir, file) => {
+	const BaseAssetPath = `${settings.assetServer.domain}`;
+
+	const paths = [BaseAssetPath, dir, file].filter(
+		x => typeof x === 'string' && x.length > 0
+	);
+
+	return paths.join('/');
+};
 
 class LocalService {
 	getFileData(dir, fileName) {
-		const filePath = path.resolve(`${dir}/${fileName}`);
-		const stats = fse.statSync(filePath);
+		const fileSystemPath = ResolveSystemPath(dir, fileName);
+		const fileUrlPath = ResolveUrlPath(dir, fileName);
+		const stats = fse.statSync(fileSystemPath);
+
 		if (stats.isFile()) {
 			return {
+				url: fileUrlPath,
 				file: fileName,
 				size: stats.size,
 				modified: stats.mtime
@@ -18,21 +42,24 @@ class LocalService {
 	}
 
 	getFilesData(dir, files) {
-		const folderPath = path.resolve(dir);
 		return files
-			.map(fileName => this.getFileData(folderPath, fileName))
+			.map(fileName => this.getFileData(dir, fileName))
 			.filter(fileData => fileData !== null)
 			.sort((a, b) => a.modified - b.modified);
 	}
 
 	getFiles(dir) {
 		return new Promise((resolve, reject) => {
-			const folderPath = path.resolve(dir);
+			const folderPath = ResolveSystemPath(dir);
+
+			// Will error if no folder exists
+			fse.ensureDirSync(folderPath);
+
 			fse.readdir(folderPath, (err, files) => {
 				if (err) {
 					reject(err);
 				} else {
-					const filesData = this.getFilesData(folderPath, files);
+					const filesData = this.getFilesData(dir, files);
 					resolve(filesData);
 				}
 			});
@@ -41,7 +68,7 @@ class LocalService {
 
 	deleteFile(dir, fileName) {
 		return new Promise((resolve, reject) => {
-			const filePath = path.resolve(`${dir}/${fileName}`);
+			const filePath = ResolveSystemPath(dir, fileName);
 			if (fse.existsSync(filePath)) {
 				fse.unlink(filePath, err => {
 					resolve();
@@ -53,18 +80,17 @@ class LocalService {
 	}
 
 	deleteDir(dir) {
-		const dirPath = path.resolve(dir);
+		const dirPath = ResolveSystemPath(dir);
 		fse.remove(dirPath, err => {});
 	}
 
 	emptyDir(dir) {
-		const dirPath = path.resolve(dir);
+		const dirPath = ResolveSystemPath(dir);
 		fse.emptyDirSync(dirPath);
 	}
 
 	uploadFile(req, res, dir, onUploadEnd) {
-		const uploadDir = path.resolve(dir);
-
+		const uploadDir = ResolveSystemPath(dir);
 		fse.ensureDirSync(uploadDir);
 
 		const form = new formidable.IncomingForm();
@@ -104,16 +130,18 @@ class LocalService {
 
 	uploadFiles(req, res, dir, onFileUpload, onFilesEnd) {
 		const uploadedFiles = [];
-		fse.ensureDirSync(dir);
+		const uploadDir = ResolveSystemPath(dir);
+
+		fse.ensureDirSync(uploadDir);
 
 		const form = new formidable.IncomingForm();
-		form.uploadDir = path.resolve(dir);
+		form.uploadDir = uploadDir;
 
 		form
 			.on('fileBegin', (name, file) => {
 				// Emitted whenever a field / value pair has been received.
 				file.name = utils.getCorrectFileName(file.name);
-				file.path = `${dir}/${file.name}`;
+				file.path = `${uploadDir}/${file.name}`;
 			})
 			.on('file', async (field, file) => {
 				// every time a file has been uploaded successfully,

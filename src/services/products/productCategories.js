@@ -289,9 +289,7 @@ class ProductCategoriesService {
 	}
 
 	deleteCategoryImage(id) {
-		const dir = `${settings.assetServer.localBasePath}/${
-			settings.assetServer.categoriesUploadPath
-		}/${id}`;
+		const dir = `${settings.assetServer.categoriesUploadPath}/${id}`;
 
 		AssetService.emptyDir(dir);
 		this.updateCategory(id, { image: '' });
@@ -299,9 +297,7 @@ class ProductCategoriesService {
 
 	uploadCategoryImage(req, res) {
 		const categoryId = req.params.id;
-		const dir = `${settings.assetServer.localBasePath}/${
-			settings.assetServer.categoriesUploadPath
-		}/${categoryId}`;
+		const dir = `${settings.assetServer.categoriesUploadPath}/${categoryId}`;
 
 		AssetService.uploadFile(req, res, dir, file_name => {
 			this.updateCategory(categoryId, { image: file_name });

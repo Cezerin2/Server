@@ -7,7 +7,7 @@ import utils from '../../lib/utils';
 import { db } from '../../lib/mongo';
 import parse from '../../lib/parse';
 
-const ThemeAssetsPath = `${settings.assetServer.themeImageUploadPath }`;
+const ThemeAssetsPath = `${settings.assetServer.themeImageUploadPath}`;
 
 class SettingsService {
 	constructor() {
@@ -80,7 +80,7 @@ class SettingsService {
 			return new Error('Required fields are missing');
 		}
 
-		let settings = {};
+		const settings = {};
 
 		if (data.store_name) {
 			settings.store_name = parse.getString(data.store_name);

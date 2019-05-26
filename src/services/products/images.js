@@ -62,11 +62,11 @@ class ProductImagesService {
 					);
 					if (imageData) {
 						const { filename } = imageData;
-						const filepath = `${settings.assetServer.localBasePath}/${
+						const filePath = `${
 							settings.assetServer.productsUploadPath
 						}/${productId}`;
 
-						AssetService.deleteFile(filepath, filename)
+						AssetService.deleteFile(filePath, filename)
 							.then(() =>
 								db
 									.collection('products')
@@ -94,9 +94,7 @@ class ProductImagesService {
 		}
 
 		const productObjectID = new ObjectID(productId);
-		const uploadDir = `${settings.assetServer.localBasePath}/${
-			settings.assetServer.productsUploadPath
-		}/${productId}`;
+		const uploadDir = `${settings.assetServer.productsUploadPath}/${productId}`;
 
 		AssetService.uploadFiles(
 			req,
