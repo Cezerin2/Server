@@ -21,9 +21,6 @@ module.exports = {
 	adminBaseURL: process.env.ADMIN_BASE_URL || 'http://localhost:3002',
 	adminLoginPath: process.env.ADMIN_LOGIN_PATH || '/login',
 
-	// used by API to service assets
-	assetsBaseURL: process.env.ASSETS_BASE_URL || 'http://localhost:3001',
-
 	apiListenPort: process.env.API_PORT || 3001,
 
 	// used by API
@@ -31,13 +28,13 @@ module.exports = {
 
 	// assest
 	assetServer: {
-		type: 'local', // 'local' | 's3'
-		domain: 'http://localhost:3001', // add localBasePath to S3 domain
+		type: process.env.ASSETS_TYPE || 'local', // 'local' | 's3'
+		domain: process.env.ASSETS_BASE_URL || 'http://localhost:3001', // add localBasePath to S3 domain
 		localBasePath: 'public/content',
 		categoriesUploadPath: 'images/categories',
 		productsUploadPath: 'images/products',
-		themeImageUploadPath: 'theme/assets/images',
-		filesUploadPath: 'files',
+		themeImageUploadPath: 'assets/images',
+		filesUploadPath: 'assets',
 
 		// S3 Config
 		bucket: 'cezerin2-asset-test'
