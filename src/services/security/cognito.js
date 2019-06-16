@@ -58,7 +58,7 @@ class CognitoService {
 
 		return cognitoClient
 			.listUsers({
-				UserPoolId: settings.cognitoUserPool,
+				UserPoolId: settings.security.cognitoUserPool,
 				AttributesToGet: [ 'email' ],
 				Filter: "status='Disabled'"
 			})
@@ -66,7 +66,7 @@ class CognitoService {
 			.then(items => {
 				users = items.Users.map(user => this.changeProperties(user))
 				cache.set(BLACKLIST_CACHE_KEY, users);
-				resolve(users)
+				return users
 			});
 	}
 
@@ -83,7 +83,15 @@ class CognitoService {
 	}
 
 	addToken(data) {
-		return Promise.reject()
+		const params = this.getValidDocumentForInsert(data);
+
+		return cognitoClient
+			.adminCreateUser(params)
+			.promise()
+			.then(item => {
+				// This returns the token, this is no longer possible
+				return this.changeProperties(item.User)
+			});
 	}
 
 	updateToken(id, data) {
@@ -95,7 +103,37 @@ class CognitoService {
 	}
 
 	getValidDocumentForInsert(data) {
-		return Promise.reject()
+		const email = parse.getString(data.email);
+		const scopes = parse.getArrayIfValid(data.scopes);
+		const name = parse.getString(data.name);
+
+		const params = {
+			UserPoolId: settings.security.cognitoUserPool,
+			Username: email,
+			DesiredDeliveryMediums: [ 'EMAIL' ],
+			UserAttributes: [
+				{
+				Name: 'email',
+				Value: email
+				},
+				{
+				Name: 'name',
+				Value: name
+				},
+				{
+				Name: 'custom:scopes',
+				Value: scopes.join(',')
+				}
+			],  
+			ValidationData: [
+				{
+				Name: 'email',
+				Value: email
+				}
+			]
+		}
+
+		return  params;
 	}
 
 	getValidDocumentForUpdate(id, data) {
