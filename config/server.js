@@ -51,11 +51,15 @@ module.exports = {
 		fromAddress: process.env.SMTP_FROM_ADDRESS || ''
 	},
 
-	// key to sign tokens
-	jwtSecretKey: process.env.JWT_SECRET_KEY || '-',
+	security: {
+		source: process.env.SECURITY_SOURCE || 'local', // 'local' | 'cognito'
+		// key to sign tokens
+		jwtSecretKey: process.env.JWT_SECRET_KEY || '-',
 
-	// key to sign store cookies
-	cookieSecretKey: process.env.COOKIE_SECRET_KEY || '-',
+		// key to sign store cookies
+		cookieSecretKey: process.env.COOKIE_SECRET_KEY || '-',
+
+	},
 
 	// store UI language
 	language: process.env.LANGUAGE || 'en',

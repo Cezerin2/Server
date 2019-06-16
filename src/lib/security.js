@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import expressJwt from 'express-jwt';
 import settings from './settings';
-import SecurityTokensService from '../services/security/tokens';
+import SecurityTokensService from '../services/security/cognito';
 
 const DEVELOPER_MODE = settings.developerMode === true;
 const SET_TOKEN_AS_REVOKEN_ON_EXCEPTION = true;
@@ -60,7 +60,7 @@ const checkUserScope = (requiredScope, req, res, next) => {
 
 const verifyToken = token =>
 	new Promise((resolve, reject) => {
-		jwt.verify(token, settings.jwtSecretKey, (err, decoded) => {
+		jwt.verify(token, settings.security.jwtSecretKey, (err, decoded) => {
 			if (err) {
 				reject(err);
 			} else {
@@ -85,7 +85,7 @@ const applyMiddleware = app => {
 	if (DEVELOPER_MODE === false) {
 		app.use(
 			expressJwt({
-				secret: settings.jwtSecretKey,
+				secret: settings.security.jwtSecretKey,
 				isRevoked: checkTokenInBlacklistCallback
 			}).unless({ path: PATHS_WITH_OPEN_ACCESS })
 		);

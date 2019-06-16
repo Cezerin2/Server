@@ -51,7 +51,7 @@ app.all('*', (req, res, next) => {
 });
 
 app.use(responseTime());
-app.use(cookieParser(settings.cookieSecretKey));
+app.use(cookieParser(settings.security.cookieSecretKey));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/ajax', ajaxRouter);

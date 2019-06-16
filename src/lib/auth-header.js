@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import serverConfigs from '../../config/server';
 
-const cert = serverConfigs.jwtSecretKey;
+const cert = serverConfigs.security.jwtSecretKey;
 class AuthHeader {
 	encodeUserLoginAuth(userId) {
 		return jwt.sign({ userId }, cert);
