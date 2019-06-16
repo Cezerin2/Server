@@ -71,11 +71,15 @@ class CognitoService {
 	}
 
 	getSingleToken(id) {
-		return Promise.reject()
+		return this.getTokens({ id }).then(items =>
+			items.length > 0 ? items[0] : null
+		);
 	}
 
 	getSingleTokenByEmail(email) {
-		return Promise.reject()
+		return this.getTokens({ email }).then(items =>
+			items.length > 0 ? items[0] : null
+		);
 	}
 
 	addToken(data) {
