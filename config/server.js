@@ -59,6 +59,10 @@ module.exports = {
 		// key to sign store cookies
 		cookieSecretKey: process.env.COOKIE_SECRET_KEY || '-',
 
+		// cognito settings
+		cognitoUserPool: process.env.COGNITO_USER_POOL,
+		cognitoClientId: process.env.COGNITO_CLIENT_ID,
+		cognitoRegion: process.env.COGNITO_REGION
 	},
 
 	// store UI language
