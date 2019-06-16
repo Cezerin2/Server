@@ -1,6 +1,12 @@
 import AWS from 'aws-sdk';
 import parse from '../../lib/parse';
+import lruCache from 'lru-cache';
 import settings from '../../lib/settings';
+
+const cache = lruCache({
+	max: 10000,
+	maxAge: 1000 * 60 * 60 * 24 // 24h
+});
 
 const cognitoClient = new AWS.CognitoIdentityServiceProvider(
 	{
@@ -9,6 +15,8 @@ const cognitoClient = new AWS.CognitoIdentityServiceProvider(
 		ClientId: settings.security.cognitoClientId
 	}
 );
+
+const BLACKLIST_CACHE_KEY = 'blacklist';
 
 class CognitoService {
 	getTokens(params = {}) {
@@ -42,7 +50,24 @@ class CognitoService {
 	}
 
 	getTokensBlacklist() {
-		return Promise.reject()
+		const blacklistFromCache = cache.get(BLACKLIST_CACHE_KEY);
+
+		if (blacklistFromCache) {
+			return Promise.resolve(blacklistFromCache);
+		}
+
+		return cognitoClient
+			.listUsers({
+				UserPoolId: settings.cognitoUserPool,
+				AttributesToGet: [ 'email' ],
+				Filter: "status='Disabled'"
+			})
+			.promise()
+			.then(items => {
+				users = items.Users.map(user => this.changeProperties(user))
+				cache.set(BLACKLIST_CACHE_KEY, users);
+				resolve(users)
+			});
 	}
 
 	getSingleToken(id) {
