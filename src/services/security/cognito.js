@@ -98,8 +98,55 @@ class CognitoService {
 		return Promise.reject()
 	}
 
+	disableToken(email) {
+		if (!email && !email.length > 0) {
+			return Promise.reject('Invalid Email')
+		}
+
+		return cognitoClient
+			.adminDisableUser(
+				{ 
+					UserPoolId: settings.cognitoUserPool,
+					Username: email.toLowerCase() 
+				})
+			.promise()
+			.then(item => {
+				cache.del(BLACKLIST_CACHE_KEY);
+			});
+	}
+
+	enableToken(email) {
+		if (!email && !email.length > 0) {
+			return Promise.reject('Invalid Email')
+		}
+
+		return cognitoClient
+			.adminEnableUser(
+				{ 
+					UserPoolId: settings.cognitoUserPool,
+					Username: email.toLowerCase() 
+				})
+			.promise()
+			.then(item => {
+				cache.del(BLACKLIST_CACHE_KEY);
+			});
+	}
+
 	deleteToken(email) {
-		return Promise.reject()
+		if (!email && !email.length > 0) {
+			return Promise.reject('Invalid Email')
+		}
+
+		return cognitoClient
+			.adminDeleteUser(
+				{ 
+					UserPoolId: settings.cognitoUserPool,
+					Username: email.toLowerCase() 
+				})
+			.promise()
+			.then(item => {
+				cache.del(BLACKLIST_CACHE_KEY);
+			});
 	}
 
 	getValidDocumentForInsert(data) {
