@@ -23,16 +23,16 @@ class CognitoService {
 		const email = parse.getString(params.email).toLowerCase();
 		const username = parse.getString(params.id)
 
-		let filter = "status='Enabled'";
+		let filter = '';
 
 		if (email && email.length > 0) {
 			filter += `email=\"${email}\`"`;
 		}
 
 		if (username && username.length > 0) {
-			filter += `username=\"${username}\`"`;
+			filter += `username=\"${username}\"`;
 		}
-
+		
 		var input = {
 			UserPoolId: settings.security.cognitoUserPool,
 			AttributesToGet: [

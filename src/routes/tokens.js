@@ -1,5 +1,5 @@
 import security from '../lib/security';
-import SecurityTokensService from '../services/security/tokens';
+import SecurityTokensService from '../services/security/cognito';
 
 class SecurityTokensRoute {
 	constructor(router) {
@@ -37,6 +37,16 @@ class SecurityTokensRoute {
 			'/v1/security/tokens/:id',
 			security.checkUserScope.bind(this, security.scope.ADMIN),
 			this.deleteToken.bind(this)
+		);
+		this.router.put(
+			'/v1/security/tokens/:id/revoke',
+			security.checkUserScope.bind(this, security.scope.ADMIN),
+			this.revokeToken.bind(this)
+		);
+		this.router.put(
+			'/v1/security/tokens/:id/reinstate',
+			security.checkUserScope.bind(this, security.scope.ADMIN),
+			this.reinstateToken.bind(this)
 		);
 		this.router.post('/v1/authorize', this.sendDashboardSigninUrl.bind(this));
 	}
@@ -84,6 +94,24 @@ class SecurityTokensRoute {
 				req.body
 			);
 			return data ? res.send(data) : res.status(404).end();
+		} catch (err) {
+			return next(err);
+		}
+	}
+
+	async revokeToken(req, res, next) {
+		try {
+			const data = await SecurityTokensService.disableToken(req.params.id);
+			return res.end();
+		} catch (err) {
+			return next(err);
+		}
+	}
+
+	async reinstateToken(req, res, next) {
+		try {
+			const data = await SecurityTokensService.enableToken(req.params.id);
+			return res.end();
 		} catch (err) {
 			return next(err);
 		}

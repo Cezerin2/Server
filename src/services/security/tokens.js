@@ -20,9 +20,7 @@ const BLACKLIST_CACHE_KEY = 'blacklist';
 
 class SecurityTokensService {
 	getTokens(params = {}) {
-		const filter = {
-			is_revoked: false
-		};
+		const filter = {};
 		const id = parse.getObjectIDIfValid(params.id);
 		if (id) {
 			filter._id = new ObjectID(id);
@@ -107,7 +105,30 @@ class SecurityTokensService {
 			.then(res => this.getSingleToken(id));
 	}
 
-	deleteToken(id) {
+	enableToken(id) {
+		if (!ObjectID.isValid(id)) {
+			return Promise.reject('Invalid identifier');
+		}
+		const tokenObjectID = new ObjectID(id);
+		return db
+			.collection('tokens')
+			.updateOne(
+				{
+					_id: tokenObjectID
+				},
+				{
+					$set: {
+						is_revoked: false,
+						date_updated: new Date()
+					}
+				}
+			)
+			.then(res => {
+				cache.del(BLACKLIST_CACHE_KEY);
+			});
+	}
+
+	disableToken(id) {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
@@ -121,8 +142,25 @@ class SecurityTokensService {
 				{
 					$set: {
 						is_revoked: true,
-						date_created: new Date()
+						date_updated: new Date()
 					}
+				}
+			)
+			.then(res => {
+				cache.del(BLACKLIST_CACHE_KEY);
+			});
+	}
+
+	deleteToken(id) {
+		if (!ObjectID.isValid(id)) {
+			return Promise.reject('Invalid identifier');
+		}
+		const tokenObjectID = new ObjectID(id);
+		return db
+			.collection('tokens')
+			.deleteOne(
+				{
+					_id: tokenObjectID
 				}
 			)
 			.then(res => {
@@ -185,7 +223,6 @@ class SecurityTokensService {
 		if (item) {
 			item.id = item._id.toString();
 			delete item._id;
-			delete item.is_revoked;
 		}
 
 		return item;
