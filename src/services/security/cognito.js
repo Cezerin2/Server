@@ -32,7 +32,7 @@ class CognitoService {
 		if (username && username.length > 0) {
 			filter += `username=\"${username}\"`;
 		}
-		
+
 		var input = {
 			UserPoolId: settings.security.cognitoUserPool,
 			AttributesToGet: [
@@ -106,7 +106,7 @@ class CognitoService {
 		return cognitoClient
 			.adminDisableUser(
 				{ 
-					UserPoolId: settings.cognitoUserPool,
+					UserPoolId: settings.security.cognitoUserPool,
 					Username: email.toLowerCase() 
 				})
 			.promise()
@@ -123,7 +123,7 @@ class CognitoService {
 		return cognitoClient
 			.adminEnableUser(
 				{ 
-					UserPoolId: settings.cognitoUserPool,
+					UserPoolId: settings.security.cognitoUserPool,
 					Username: email.toLowerCase() 
 				})
 			.promise()
@@ -140,7 +140,7 @@ class CognitoService {
 		return cognitoClient
 			.adminDeleteUser(
 				{ 
-					UserPoolId: settings.cognitoUserPool,
+					UserPoolId: settings.security.cognitoUserPool,
 					Username: email.toLowerCase() 
 				})
 			.promise()
