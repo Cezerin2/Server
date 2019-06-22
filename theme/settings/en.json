@@ -1,9 +1,4 @@
 [{
-  "section": "Footer",
-  "key": "footer_logo_url",
-  "type": "image",
-  "label": "Logo"
-}, {
   "section": "Product List",
   "key": "list_image_max_height",
   "type": "number",

@@ -62,15 +62,53 @@ class ThemeSettingsService {
 		if (settingsFromCache) {
 			return Promise.resolve(settingsFromCache);
 		}
+		
 		return this.readFile(SETTINGS_FILE).then(settings => {
-			cache.set(THEME_SETTINGS_CACHE_KEY, settings);
-			return settings;
+			const updatedSettings = this.changeGetProperties(settings)
+			cache.set(THEME_SETTINGS_CACHE_KEY, updatedSettings);
+			return updatedSettings;
 		});
 	}
 
 	updateSettings(settings) {
 		cache.set(THEME_SETTINGS_CACHE_KEY, settings);
-		return this.writeFile(SETTINGS_FILE, settings);
+		return this.writeFile(SETTINGS_FILE, this.changeUpdateProperties(settings));
+	}
+
+	changeGetProperties(settings) {
+		for (var key in settings) {
+			if (typeof settings[key] === 'object') {
+				for (var extra in settings[key]){
+					if (settings[key][extra].hasOwnProperty('image')) {
+						settings[key][extra].image = `${serverSettings.assetServer.domain}/${serverSettings.assetServer.themeImageUploadPath}/${settings[key][extra].image}`;
+					}
+				}
+				if (settings[key].hasOwnProperty('image')) {
+					settings[key].image = `${serverSettings.assetServer.domain}/${serverSettings.assetServer.themeImageUploadPath}/${settings[key][extra].image}`;
+				}
+			}
+		}
+
+		return settings;
+	}
+
+	changeUpdateProperties(settings) {
+		// required to deep copy of it will change the cached object
+		const settingsCopy = JSON.parse(JSON.stringify(settings))
+		for (var key in settingsCopy) {
+			if (typeof settingsCopy[key] === 'object') {
+				for (var extra in settingsCopy[key]){
+					if (settingsCopy[key][extra].hasOwnProperty('image')) {
+						settingsCopy[key][extra].image = settingsCopy[key][extra].image.replace(`${serverSettings.assetServer.domain}/${serverSettings.assetServer.themeImageUploadPath}/`, '');
+					}
+				}
+				if (settingsCopy[key].hasOwnProperty('image')) {
+					settingsCopy[key].image = settingsCopy[key].image.replace(`${serverSettings.assetServer.domain}/${serverSettings.assetServer.themeImageUploadPath}/`, '');
+				}
+			}
+		}
+
+		return settingsCopy;
 	}
 }
 

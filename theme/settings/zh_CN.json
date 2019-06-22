@@ -1,9 +1,4 @@
 [{
-  "section": "页脚",
-  "key": "footer_logo_url",
-  "type": "image",
-  "label": "Logo"
-}, {
   "section": "产品列表",
   "key": "list_image_max_height",
   "type": "number",
