@@ -117,7 +117,7 @@ class LocalService {
 				// Emitted when the entire request has been received, and all contained files have finished flushing to disk.
 				if (file_name) {
 					await onUploadEnd(file_name);
-					res.send({ file: file_name, size: file_size });
+					res.send({ file: file_name, size: file_size, url: `${settings.assetServer.domain}/${settings.assetServer.themeImageUploadPath}/${file_name}` });
 				} else {
 					res
 						.status(400)
