@@ -40,9 +40,14 @@ const getProjectionFromFields = fields => {
 	return Object.assign({}, ...fieldsArray.map(key => ({ [key]: 1 })));
 };
 
+const deepCopy = obj => {
+	return JSON.parse(JSON.stringify(obj)); 
+}
+
 export default {
 	cleanSlug,
 	getAvailableSlug,
 	getCorrectFileName,
-	getProjectionFromFields
+	getProjectionFromFields,
+	deepCopy
 };

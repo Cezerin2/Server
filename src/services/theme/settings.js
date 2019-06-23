@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import lruCache from 'lru-cache';
 import serverSettings from '../../lib/settings';
+import utils from '../../lib/utils';
 
 const cache = lruCache({
 	max: 10000,
@@ -14,6 +15,8 @@ const SETTINGS_SCHEMA_FILE = path.resolve(
 	`theme/settings/${serverSettings.language}.json`
 );
 const SETTINGS_SCHEMA_FILE_EN = path.resolve('theme/settings/en.json');
+const THEME_IMAGE_ASSET_BASE = 
+	`${serverSettings.assetServer.domain}/${serverSettings.assetServer.themeImageUploadPath}/`;
 
 class ThemeSettingsService {
 	readFile(file) {
@@ -62,9 +65,9 @@ class ThemeSettingsService {
 		if (settingsFromCache) {
 			return Promise.resolve(settingsFromCache);
 		}
-		
+
 		return this.readFile(SETTINGS_FILE).then(settings => {
-			const updatedSettings = this.changeGetProperties(settings)
+			const updatedSettings = this.changeProperties(settings, true);
 			cache.set(THEME_SETTINGS_CACHE_KEY, updatedSettings);
 			return updatedSettings;
 		});
@@ -72,43 +75,38 @@ class ThemeSettingsService {
 
 	updateSettings(settings) {
 		cache.set(THEME_SETTINGS_CACHE_KEY, settings);
-		return this.writeFile(SETTINGS_FILE, this.changeUpdateProperties(settings));
+		return this.writeFile(
+			SETTINGS_FILE, 
+			this.changeProperties(
+				utils.deepCopy(settings), 
+				false));
 	}
 
-	changeGetProperties(settings) {
-		for (var key in settings) {
-			if (typeof settings[key] === 'object') {
-				for (var extra in settings[key]){
-					if (settings[key][extra].hasOwnProperty('image')) {
-						settings[key][extra].image = `${serverSettings.assetServer.domain}/${serverSettings.assetServer.themeImageUploadPath}/${settings[key][extra].image}`;
+	changeProperties(settings, addAssetPath) {
+		Object.keys(settings).forEach(placeholder => {
+			if (settings[placeholder] instanceof Array) {
+				// iterate over properties in placeholder
+				settings[placeholder].forEach((_, index) => {
+					// look for image in placeholder property objects
+					if (settings[placeholder][index].hasOwnProperty('image')) {
+						const file = settings[placeholder][index].image;
+						settings[placeholder][index].image = addAssetPath ? 
+							THEME_IMAGE_ASSET_BASE + file :
+							file.replace(THEME_IMAGE_ASSET_BASE, '');
 					}
-				}
-				if (settings[key].hasOwnProperty('image')) {
-					settings[key].image = `${serverSettings.assetServer.domain}/${serverSettings.assetServer.themeImageUploadPath}/${settings[key][extra].image}`;
+				})
+			} else if (settings[placeholder] instanceof Object) {
+				// look for image in placeholder object
+				if (settings[placeholder].hasOwnProperty('image')) {
+					const file = settings[placeholder].image;
+					settings[placeholder].image = addAssetPath ? 
+						THEME_IMAGE_ASSET_BASE + file :
+						file.replace(THEME_IMAGE_ASSET_BASE, '');
 				}
 			}
-		}
+		})
 
 		return settings;
-	}
-
-	changeUpdateProperties(settings) {
-		// required to deep copy of it will change the cached object
-		const settingsCopy = JSON.parse(JSON.stringify(settings))
-		for (var key in settingsCopy) {
-			if (typeof settingsCopy[key] === 'object') {
-				for (var extra in settingsCopy[key]){
-					if (settingsCopy[key][extra].hasOwnProperty('image')) {
-						settingsCopy[key][extra].image = settingsCopy[key][extra].image.replace(`${serverSettings.assetServer.domain}/${serverSettings.assetServer.themeImageUploadPath}/`, '');
-					}
-				}
-				if (settingsCopy[key].hasOwnProperty('image')) {
-					settingsCopy[key].image = settingsCopy[key].image.replace(`${serverSettings.assetServer.domain}/${serverSettings.assetServer.themeImageUploadPath}/`, '');
-				}
-			}
-		}
-
-		return settingsCopy;
 	}
 }
 
