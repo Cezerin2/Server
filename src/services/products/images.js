@@ -33,9 +33,7 @@ class ProductImagesService {
 					let images = product.images.map(image => {
 						image.url = url.resolve(
 							domain,
-							`${settings.assetServer.productsUploadPath}/${product._id}/${
-								image.filename
-							}`
+							`${settings.assetServer.productsUploadPath}/${product._id}/${image.filename}`
 						);
 						return image;
 					});
@@ -62,9 +60,7 @@ class ProductImagesService {
 					);
 					if (imageData) {
 						const { filename } = imageData;
-						const filePath = `${
-							settings.assetServer.productsUploadPath
-						}/${productId}`;
+						const filePath = `${settings.assetServer.productsUploadPath}/${productId}`;
 
 						AssetService.deleteFile(filePath, filename)
 							.then(() =>
