@@ -2,8 +2,8 @@ import { ObjectID } from 'mongodb';
 import path from 'path';
 import url from 'url';
 import formidable from 'formidable';
-import fse from 'fs-extra';
 import settings from '../../lib/settings';
+import AssetService from '../assets/assets';
 import SettingsService from '../settings/settings';
 import { db } from '../../lib/mongo';
 import utils from '../../lib/utils';
@@ -11,7 +11,7 @@ import parse from '../../lib/parse';
 
 class ProductCategoriesService {
 	getFilter(params = {}) {
-		let filter = {};
+		const filter = {};
 		const enabled = parse.getBooleanIfValid(params.enabled);
 		if (enabled !== null) {
 			filter.enabled = enabled;
@@ -27,15 +27,15 @@ class ProductCategoriesService {
 		const filter = this.getFilter(params);
 		const projection = utils.getProjectionFromFields(params.fields);
 		const generalSettings = await SettingsService.getSettings();
-		const domain = generalSettings.domain;
-		const assetsBaseURL = settings.assetsBaseURL;
+		const { domain } = generalSettings;
+		const assetsDomain = settings.assetServer.domain;
 		const items = await db
 			.collection('productCategories')
-			.find(filter, { projection: projection })
+			.find(filter, { projection })
 			.sort({ position: 1 })
 			.toArray();
 		const result = items.map(category =>
-			this.changeProperties(category, domain, assetsBaseURL)
+			this.changeProperties(category, domain, assetsDomain)
 		);
 		return result;
 	}
@@ -44,9 +44,9 @@ class ProductCategoriesService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getCategories({ id: id }).then(categories => {
-			return categories.length > 0 ? categories[0] : null;
-		});
+		return this.getCategories({ id }).then(categories =>
+			categories.length > 0 ? categories[0] : null
+		);
 	}
 
 	async addCategory(data) {
@@ -69,7 +69,7 @@ class ProductCategoriesService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let categoryObjectID = new ObjectID(id);
+		const categoryObjectID = new ObjectID(id);
 
 		return this.getValidDocumentForUpdate(id, data)
 			.then(dataToSet =>
@@ -83,11 +83,11 @@ class ProductCategoriesService {
 	findAllChildren(items, id, result) {
 		if (id && ObjectID.isValid(id)) {
 			result.push(new ObjectID(id));
-			let finded = items.filter(
+			const finded = items.filter(
 				item => (item.parent_id || '').toString() === id.toString()
 			);
 			if (finded.length > 0) {
-				for (let item of finded) {
+				for (const item of finded) {
 					this.findAllChildren(items, item.id, result);
 				}
 			}
@@ -105,25 +105,24 @@ class ProductCategoriesService {
 		return this.getCategories()
 			.then(items => {
 				// 2. find category and children
-				let idsToDelete = [];
+				const idsToDelete = [];
 				this.findAllChildren(items, id, idsToDelete);
 				return idsToDelete;
 			})
 			.then(idsToDelete => {
 				// 3. delete categories
-				let objectsToDelete = idsToDelete.map(id => new ObjectID(id));
+				const objectsToDelete = idsToDelete.map(id => new ObjectID(id));
 				// return db.collection('productCategories').deleteMany({_id: { $in: objectsToDelete}}).then(() => idsToDelete);
 				return db
 					.collection('productCategories')
 					.deleteMany({ _id: { $in: objectsToDelete } })
-					.then(
-						deleteResponse =>
-							deleteResponse.deletedCount > 0 ? idsToDelete : null
+					.then(deleteResponse =>
+						deleteResponse.deletedCount > 0 ? idsToDelete : null
 					);
 			})
-			.then(idsToDelete => {
+			.then(idsToDelete =>
 				// 4. update category_id for products
-				return idsToDelete
+				idsToDelete
 					? db
 							.collection('products')
 							.updateMany(
@@ -131,11 +130,11 @@ class ProductCategoriesService {
 								{ $set: { category_id: null } }
 							)
 							.then(() => idsToDelete)
-					: null;
-			})
-			.then(idsToDelete => {
+					: null
+			)
+			.then(idsToDelete =>
 				// 5. update additional category_ids for products
-				return idsToDelete
+				idsToDelete
 					? db
 							.collection('products')
 							.updateMany(
@@ -143,21 +142,20 @@ class ProductCategoriesService {
 								{ $pull: { category_ids: { $all: idsToDelete } } }
 							)
 							.then(() => idsToDelete)
-					: null;
-			})
+					: null
+			)
 			.then(idsToDelete => {
 				// 6. delete directories with images
 				if (idsToDelete) {
-					for (let categoryId of idsToDelete) {
-						let deleteDir = path.resolve(
-							settings.categoriesUploadPath + '/' + categoryId
-						);
-						fse.remove(deleteDir, err => {});
+					for (const categoryId of idsToDelete) {
+						const deleteDir = `${
+							settings.assetServer.categoriesUploadPath
+						}/${categoryId}`;
+						AssetService.deleteFolder(deleteDir);
 					}
 					return Promise.resolve(true);
-				} else {
-					return Promise.resolve(false);
 				}
+				return Promise.resolve(false);
 			});
 	}
 
@@ -168,7 +166,7 @@ class ProductCategoriesService {
 	getValidDocumentForInsert(data, newPosition) {
 		//  Allow empty category to create draft
 
-		let category = {
+		const category = {
 			date_created: new Date(),
 			date_updated: null,
 			image: ''
@@ -183,15 +181,14 @@ class ProductCategoriesService {
 		category.parent_id = parse.getObjectIDIfValid(data.parent_id);
 		category.position = parse.getNumberIfValid(data.position) || newPosition;
 
-		let slug = !data.slug || data.slug.length === 0 ? data.name : data.slug;
+		const slug = !data.slug || data.slug.length === 0 ? data.name : data.slug;
 		if (!slug || slug.length === 0) {
 			return Promise.resolve(category);
-		} else {
-			return utils.getAvailableSlug(slug).then(newSlug => {
-				category.slug = newSlug;
-				return category;
-			});
 		}
+		return utils.getAvailableSlug(slug).then(newSlug => {
+			category.slug = newSlug;
+			return category;
+		});
 	}
 
 	getValidDocumentForUpdate(id, data) {
@@ -203,7 +200,7 @@ class ProductCategoriesService {
 				reject('Required fields are missing');
 			}
 
-			let category = {
+			const category = {
 				date_updated: new Date()
 			};
 
@@ -244,7 +241,7 @@ class ProductCategoriesService {
 			}
 
 			if (data.slug !== undefined) {
-				let slug = data.slug;
+				let { slug } = data;
 				if (!slug || slug.length === 0) {
 					slug = data.name;
 				}
@@ -264,7 +261,7 @@ class ProductCategoriesService {
 		});
 	}
 
-	changeProperties(item, domain, assetsBaseURL) {
+	changeProperties(item, domain, assetsDomain) {
 		if (item) {
 			item.id = item._id.toString();
 			item._id = undefined;
@@ -280,8 +277,10 @@ class ProductCategoriesService {
 
 			if (item.image) {
 				item.image = url.resolve(
-					assetsBaseURL,
-					`${settings.categoriesUploadUrl}/${item.id}/${item.image}`
+					assetsDomain,
+					`${settings.assetServer.categoriesUploadPath}/${item.id}/${
+						item.image
+					}`
 				);
 			}
 		}
@@ -290,48 +289,19 @@ class ProductCategoriesService {
 	}
 
 	deleteCategoryImage(id) {
-		let dir = path.resolve(settings.categoriesUploadPath + '/' + id);
-		fse.emptyDirSync(dir);
+		const dir = `${settings.assetServer.categoriesUploadPath}/${id}`;
+
+		AssetService.emptyDir(dir);
 		this.updateCategory(id, { image: '' });
 	}
 
 	uploadCategoryImage(req, res) {
-		let categoryId = req.params.id;
-		let form = new formidable.IncomingForm(),
-			file_name = null,
-			file_size = 0;
+		const categoryId = req.params.id;
+		const dir = `${settings.assetServer.categoriesUploadPath}/${categoryId}`;
 
-		form
-			.on('fileBegin', (name, file) => {
-				// Emitted whenever a field / value pair has been received.
-				let dir = path.resolve(
-					settings.categoriesUploadPath + '/' + categoryId
-				);
-				fse.emptyDirSync(dir);
-				file.name = utils.getCorrectFileName(file.name);
-				file.path = dir + '/' + file.name;
-			})
-			.on('file', function(field, file) {
-				// every time a file has been uploaded successfully,
-				file_name = file.name;
-				file_size = file.size;
-			})
-			.on('error', err => {
-				res.status(500).send(this.getErrorMessage(err));
-			})
-			.on('end', () => {
-				//Emitted when the entire request has been received, and all contained files have finished flushing to disk.
-				if (file_name) {
-					this.updateCategory(categoryId, { image: file_name });
-					res.send({ file: file_name, size: file_size });
-				} else {
-					res
-						.status(400)
-						.send(this.getErrorMessage('Required fields are missing'));
-				}
-			});
-
-		form.parse(req);
+		AssetService.uploadFile(req, res, dir, file_name => {
+			this.updateCategory(categoryId, { image: file_name });
+		});
 	}
 }
 

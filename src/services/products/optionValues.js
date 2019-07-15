@@ -4,20 +4,19 @@ import parse from '../../lib/parse';
 
 class ProductOptionValuesService {
 	getOptionValues(productId, optionId) {
-		let productObjectID = new ObjectID(productId);
+		const productObjectID = new ObjectID(productId);
 
 		return db
 			.collection('products')
 			.findOne({ _id: productObjectID }, { fields: { options: 1 } })
 			.then(product => (product && product.options ? product.options : null))
-			.then(
-				options =>
-					options && options.length > 0
-						? options.find(option => option.id.toString() === optionId)
-						: null
+			.then(options =>
+				options && options.length > 0
+					? options.find(option => option.id.toString() === optionId)
+					: null
 			)
-			.then(
-				option => (option && option.values.length > 0 ? option.values : [])
+			.then(option =>
+				option && option.values.length > 0 ? option.values : []
 			);
 	}
 
@@ -31,8 +30,8 @@ class ProductOptionValuesService {
 		if (!ObjectID.isValid(productId) || !ObjectID.isValid(optionId)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let productObjectID = new ObjectID(productId);
-		let optionObjectID = new ObjectID(optionId);
+		const productObjectID = new ObjectID(productId);
+		const optionObjectID = new ObjectID(optionId);
 
 		const optionValueData = this.getValidDocumentForInsert(data);
 
@@ -68,9 +67,8 @@ class ProductOptionValuesService {
 					this.overwriteAllValuesForOption(productId, optionId, values)
 				)
 				.then(updateResult => this.getOptionValues(productId, optionId));
-		} else {
-			return Promise.reject('Please, specify value name');
 		}
+		return Promise.reject('Please, specify value name');
 	}
 
 	deleteOptionValue(productId, optionId, valueId) {
@@ -96,9 +94,8 @@ class ProductOptionValuesService {
 					if (value.id.toString() === valueId) {
 						value.name = name;
 						return value;
-					} else {
-						return value;
 					}
+					return value;
 				});
 			}
 
@@ -117,8 +114,8 @@ class ProductOptionValuesService {
 	}
 
 	overwriteAllValuesForOption(productId, optionId, values) {
-		let productObjectID = new ObjectID(productId);
-		let optionObjectID = new ObjectID(optionId);
+		const productObjectID = new ObjectID(productId);
+		const optionObjectID = new ObjectID(optionId);
 
 		if (!values) {
 			return;
@@ -133,7 +130,7 @@ class ProductOptionValuesService {
 	}
 
 	getValidDocumentForInsert(data) {
-		let optionValue = {
+		const optionValue = {
 			id: new ObjectID(),
 			name: parse.getString(data.name)
 		};

@@ -1,12 +1,13 @@
 import path from 'path';
-import fse from 'fs-extra';
-import fs from 'fs';
 import url from 'url';
 import formidable from 'formidable';
+import AssetService from '../assets/assets';
 import settings from '../../lib/settings';
 import utils from '../../lib/utils';
 import { db } from '../../lib/mongo';
 import parse from '../../lib/parse';
+
+const ThemeAssetsPath = `${settings.assetServer.themeImageUploadPath}`;
 
 class SettingsService {
 	constructor() {
@@ -21,6 +22,8 @@ class SettingsService {
 			thousand_separator: ',',
 			decimal_separator: '.',
 			decimal_number: 2,
+			tax_rate: 0,
+			tax_included: true,
 			timezone: 'Asia/Singapore',
 			date_format: 'MMMM D, YYYY',
 			time_format: 'h:mm a',
@@ -35,16 +38,14 @@ class SettingsService {
 			length_unit: 'cm',
 			hide_billing_address: false,
 			order_confirmation_copy_to: ''
-		}
+		};
 	}
 
 	getSettings() {
 		return db
 			.collection('settings')
 			.findOne()
-			.then(settings => {
-				return this.changeProperties(settings);
-			});
+			.then(settings => this.changeProperties(settings));
 	}
 
 	updateSettings(data) {
@@ -70,8 +71,6 @@ class SettingsService {
 			.then(count => {
 				if (count === 0) {
 					return db.collection('settings').insertOne(this.defaultSettings);
-				} else {
-					return;
 				}
 			});
 	}
@@ -81,7 +80,7 @@ class SettingsService {
 			return new Error('Required fields are missing');
 		}
 
-		let settings = {};
+		const settings = {};
 
 		if (data.store_name) {
 			settings.store_name = parse.getString(data.store_name);
@@ -116,7 +115,16 @@ class SettingsService {
 		}
 
 		if (data.decimal_number !== undefined) {
-			settings.decimal_number = parse.getNumberIfPositive(data.decimal_number) || 0;
+			settings.decimal_number =
+				parse.getNumberIfPositive(data.decimal_number) || 0;
+		}
+
+		if (data.tax_rate !== undefined) {
+			settings.tax_rate = parse.getNumberIfPositive(data.tax_rate) || 0;
+		}
+
+		if (data.tax_included !== undefined) {
+			settings.tax_included = parse.getBooleanIfValid(data.tax_included, true);
 		}
 
 		if (data.timezone) {
@@ -132,19 +140,27 @@ class SettingsService {
 		}
 
 		if (data.default_shipping_country) {
-			settings.default_shipping_country = parse.getString(data.default_shipping_country);
+			settings.default_shipping_country = parse.getString(
+				data.default_shipping_country
+			);
 		}
 
 		if (data.default_shipping_state) {
-			settings.default_shipping_state = parse.getString(data.default_shipping_state);
+			settings.default_shipping_state = parse.getString(
+				data.default_shipping_state
+			);
 		}
 
 		if (data.default_shipping_city) {
-			settings.default_shipping_city = parse.getString(data.default_shipping_city);
+			settings.default_shipping_city = parse.getString(
+				data.default_shipping_city
+			);
 		}
 
 		if (data.default_product_sorting) {
-			settings.default_product_sorting = parse.getString(data.default_product_sorting);
+			settings.default_product_sorting = parse.getString(
+				data.default_product_sorting
+			);
 		}
 
 		if (data.product_fields) {
@@ -168,11 +184,16 @@ class SettingsService {
 		}
 
 		if (data.hide_billing_address !== undefined) {
-			settings.hide_billing_address = parse.getBooleanIfValid(data.hide_billing_address, false);
+			settings.hide_billing_address = parse.getBooleanIfValid(
+				data.hide_billing_address,
+				false
+			);
 		}
 
 		if (data.order_confirmation_copy_to) {
-			settings.order_confirmation_copy_to = parse.getString(data.order_confirmation_copy_to);
+			settings.order_confirmation_copy_to = parse.getString(
+				data.order_confirmation_copy_to
+			);
 		}
 
 		return settings;
@@ -188,8 +209,8 @@ class SettingsService {
 
 		if (data.logo_file && data.logo_file.length > 0) {
 			data.logo = url.resolve(
-				settings.assetsBaseURL,
-				settings.themeAssetsUploadUrl + '/' + data.logo_file
+				settings.assetServer.domain,
+				`${ThemeAssetsPath}/${data.logo_file}`
 			);
 		} else {
 			data.logo = null;
@@ -200,10 +221,7 @@ class SettingsService {
 	deleteLogo() {
 		return this.getSettings().then(data => {
 			if (data.logo_file && data.logo_file.length > 0) {
-				let filePath = path.resolve(
-					settings.themeAssetsUploadPath + '/' + data.logo_file
-				);
-				fs.unlink(filePath, err => {
+				AssetService.deleteFile(ThemeAssetsPath, data.logo_file).then(() => {
 					this.updateSettings({ logo_file: null });
 				});
 			}
@@ -211,42 +229,9 @@ class SettingsService {
 	}
 
 	uploadLogo(req, res, next) {
-		let uploadDir = path.resolve(settings.themeAssetsUploadPath);
-		fse.ensureDirSync(uploadDir);
-
-		let form = new formidable.IncomingForm(),
-			file_name = null,
-			file_size = 0;
-
-		form.uploadDir = uploadDir;
-
-		form
-			.on('fileBegin', (name, file) => {
-				// Emitted whenever a field / value pair has been received.
-				file.name = utils.getCorrectFileName(file.name);
-				file.path = uploadDir + '/' + file.name;
-			})
-			.on('file', function(field, file) {
-				// every time a file has been uploaded successfully,
-				file_name = file.name;
-				file_size = file.size;
-			})
-			.on('error', err => {
-				res.status(500).send(this.getErrorMessage(err));
-			})
-			.on('end', () => {
-				//Emitted when the entire request has been received, and all contained files have finished flushing to disk.
-				if (file_name) {
-					this.updateSettings({ logo_file: file_name });
-					res.send({ file: file_name, size: file_size });
-				} else {
-					res
-						.status(400)
-						.send(this.getErrorMessage('Required fields are missing'));
-				}
-			});
-
-		form.parse(req);
+		AssetService.uploadFile(req, res, ThemeAssetsPath, file_name => {
+			this.updateSettings({ logo_file: file_name });
+		});
 	}
 
 	getErrorMessage(err) {

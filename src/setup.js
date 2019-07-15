@@ -578,10 +578,7 @@ const addSettings = async (db, { domain }) => {
 	let db = null;
 
 	try {
-		client = await MongoClient.connect(
-			mongodbConnection,
-			CONNECT_OPTIONS
-		);
+		client = await MongoClient.connect(mongodbConnection, CONNECT_OPTIONS);
 		db = client.db(dbName);
 		winston.info(`Successfully connected to ${mongodbConnection}`);
 	} catch (e) {

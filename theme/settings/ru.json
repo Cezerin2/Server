@@ -1,9 +1,4 @@
 [{
-  "section": "Футер",
-  "key": "footer_logo_url",
-  "type": "image",
-  "label": "Логотип"
-}, {
   "section": "Список товаров",
   "key": "list_image_max_height",
   "type": "number",

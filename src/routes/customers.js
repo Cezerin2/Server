@@ -62,9 +62,7 @@ class CustomersRoute {
 
 	getCustomers(req, res, next) {
 		CustomersService.getCustomers(req.query)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -73,18 +71,15 @@ class CustomersRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	addCustomer(req, res, next) {
 		CustomersService.addCustomer(req.body)
-			.then(data => {
-				return res.send(data);
-			})
+			.then(data => res.send(data))
 			.catch(next);
 	}
 
@@ -93,67 +88,54 @@ class CustomersRoute {
 			.then(data => {
 				if (data) {
 					return res.send(data);
-				} else {
-					return res.status(404).end();
 				}
+				return res.status(404).end();
 			})
 			.catch(next);
 	}
 
 	deleteCustomer(req, res, next) {
 		CustomersService.deleteCustomer(req.params.id)
-			.then(data => {
-				return res.status(data ? 200 : 404).end();
-			})
+			.then(data => res.status(data ? 200 : 404).end())
 			.catch(next);
 	}
 
 	addAddress(req, res, next) {
 		const customer_id = req.params.id;
 		CustomersService.addAddress(customer_id, req.body)
-			.then(data => {
-				return res.end();
-			})
+			.then(data => res.end())
 			.catch(next);
 	}
 
 	updateAddress(req, res, next) {
 		const customer_id = req.params.id;
-		const address_id = req.params.address_id;
+		const { address_id } = req.params;
 		CustomersService.updateAddress(customer_id, address_id, req.body)
-			.then(data => {
-				return res.end();
-			})
+			.then(data => res.end())
 			.catch(next);
 	}
 
 	deleteAddress(req, res, next) {
 		const customer_id = req.params.id;
-		const address_id = req.params.address_id;
+		const { address_id } = req.params;
 		CustomersService.deleteAddress(customer_id, address_id)
-			.then(data => {
-				return res.end();
-			})
+			.then(data => res.end())
 			.catch(next);
 	}
 
 	setDefaultBilling(req, res, next) {
 		const customer_id = req.params.id;
-		const address_id = req.params.address_id;
+		const { address_id } = req.params;
 		CustomersService.setDefaultBilling(customer_id, address_id)
-			.then(data => {
-				return res.end();
-			})
+			.then(data => res.end())
 			.catch(next);
 	}
 
 	setDefaultShipping(req, res, next) {
 		const customer_id = req.params.id;
-		const address_id = req.params.address_id;
+		const { address_id } = req.params;
 		CustomersService.setDefaultShipping(customer_id, address_id)
-			.then(data => {
-				return res.end();
-			})
+			.then(data => res.end())
 			.catch(next);
 	}
 }

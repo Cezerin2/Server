@@ -16,24 +16,23 @@ class RedirectsService {
 
 		if (redirectsFromCache) {
 			return Promise.resolve(redirectsFromCache);
-		} else {
-			return db
-				.collection('redirects')
-				.find()
-				.toArray()
-				.then(items => items.map(item => this.changeProperties(item)))
-				.then(items => {
-					cache.set(REDIRECTS_CACHE_KEY, items);
-					return items;
-				});
 		}
+		return db
+			.collection('redirects')
+			.find()
+			.toArray()
+			.then(items => items.map(item => this.changeProperties(item)))
+			.then(items => {
+				cache.set(REDIRECTS_CACHE_KEY, items);
+				return items;
+			});
 	}
 
 	getSingleRedirect(id) {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		let redirectObjectID = new ObjectID(id);
+		const redirectObjectID = new ObjectID(id);
 
 		return db
 			.collection('redirects')
@@ -88,7 +87,7 @@ class RedirectsService {
 	}
 
 	getValidDocumentForInsert(data) {
-		let redirect = {
+		const redirect = {
 			from: parse.getString(data.from),
 			to: parse.getString(data.to),
 			status: 301
@@ -102,7 +101,7 @@ class RedirectsService {
 			return new Error('Required fields are missing');
 		}
 
-		let redirect = {};
+		const redirect = {};
 
 		if (data.from !== undefined) {
 			redirect.from = parse.getString(data.from);
