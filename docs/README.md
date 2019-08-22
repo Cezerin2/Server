@@ -4,6 +4,17 @@
 * Getting Started
   - [with GitHub](./using-source-code.md)
   - [with Docker](./using-docker.md)
+* Deploy on Web
+  - [Hosting](deploy-on-web-hosting.md)
+  - [Create droplet](deploy-on-web-droplet.md)
+  - [Install NGinx Web Server + MERN Stack](deploy-on-web-mern.md)
+  - [Run MongoDB](deploy-on-web-mongodb.md)
+  - [Run Cezerin](deploy-on-web-cezerin.md)
+  - [Run NGinx](deploy-on-web-nginx.md)
+  - [Setup domain with Cloudflare](deploy-on-web-cloudflare.md)
+  - [Cezerin configs changes](deploy-on-web-cezerin-configs.md)
+  - [Final checks](deploy-on-web-final-checks.md)
+  - [Turn off Developer Mode](deploy-on-web-production-mode.md)
 * [How to deploy a Cezerin2 on Ubuntu 16.04 (from Docker)](./how-to-deploy-a-cezerin2-on-ubuntu-16-04.md)
 * [How to deploy a Cezerin2 on Ubuntu 18.04.1 (from GitHub)](./how-to-deploy-a-cezerin2-on-ubuntu-18-04-1-github.md)
 * [Application Structure](./structure.md)
