@@ -92,7 +92,7 @@ Youtube video: **Cezerin Installation Manual. Part 1 - Backend (API) Installatio
     
   - **Install dependencies**
   ```shell
-  npm i
+  npm i --save ./theme
   ```
   
   - **Build project**
