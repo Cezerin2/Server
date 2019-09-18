@@ -9,7 +9,7 @@ public/content/*
 !public/content/assets/images/slide7.jpg
 !public/content/assets/images/slide8.jpg
 !public/content/assets/images/slide9.jpg
-
+.env
 theme/dist/*
 theme/assets/js/app-*
 theme/assets/js/theme-*
