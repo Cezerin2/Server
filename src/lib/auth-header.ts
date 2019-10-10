@@ -1,13 +1,13 @@
-import jwt from 'jsonwebtoken';
-import serverConfigs from '../../config/server';
+import * as jwt from 'jsonwebtoken';
+import * as serverConfigs from '../../config/server';
 
 const cert = serverConfigs.jwtSecretKey;
 class AuthHeader {
-	encodeUserLoginAuth(userId) {
+	encodeUserLoginAuth(userId: string) {
 		return jwt.sign({ userId }, cert);
 	}
 
-	decodeUserLoginAuth(token) {
+	decodeUserLoginAuth(token: string) {
 		try {
 			return jwt.verify(token, cert);
 		} catch (error) {
@@ -15,11 +15,11 @@ class AuthHeader {
 		}
 	}
 
-	encodeUserPassword(token) {
+	encodeUserPassword(token: string) {
 		return jwt.sign({ password: token }, cert);
 	}
 
-	decodeUserPassword(token) {
+	decodeUserPassword(token: string) {
 		return jwt.verify(token, cert);
 	}
 }

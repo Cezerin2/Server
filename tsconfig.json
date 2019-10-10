@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "outDir": "./built",
+      "allowJs": true,
+      "checkJs": false,
+      "noImplicitAny": true,
+      "strictNullChecks": true,
+      "target": "es2017",
+      "module": "ES6"
+    },
+    "include": [
+      "./src/**/*"
+    ],
+    "exclude": [
+      "./node_modules"
+    ]
+  }

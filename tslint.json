@@ -1,0 +1,86 @@
+{
+	"extends": [
+		"tslint:recommended"		
+	],
+	"rules": {
+		"no-any": true,
+		"no-debugger": true,
+		"only-arrow-functions": true,
+		"no-empty": true,
+		"no-eval": true,
+		"radix": true,
+		"ordered-imports": false,
+		"object-literal-sort-keys": false,
+		"arrow-parens": [
+			true,
+			"ban-single-arg-parens"
+		],
+		"max-classes-per-file": [
+			true,
+			1
+		],
+		"no-require-imports": true,
+		"cyclomatic-complexity": [
+			true,
+			5
+		],
+		"indent": [
+			true,
+			"tabs",
+			2
+		],
+		"max-line-length": {
+			"options": [
+				120
+			]
+		},
+		"quotemark": [
+			true,
+			"single"
+		],
+		"semicolon": [
+			true,
+			"always"
+		],
+		"new-parens": true,
+		"one-variable-per-declaration": true,
+		"no-arg": true,
+		"no-bitwise": true,
+		"no-conditional-assignment": false,
+		"no-consecutive-blank-lines": false,
+		"array-type": [
+			true,
+			"generic"
+		],
+		"trailing-comma": [
+			true,
+			{
+				"multiline": {
+					"objects": "never",
+					"arrays": "never",
+					"functions": "never",
+					"typeLiterals": "ignore"
+				},
+				"esSpecCompliant": true
+			}
+		],
+		"no-console": {
+			"severity": "warning",
+			"options": [
+				"debug",
+				"info",
+				"log",
+				"time",
+				"timeEnd",
+				"trace"
+			]
+		}
+	},
+	"jsRules": {
+		"max-line-length": {
+			"options": [
+				120
+			]
+		}
+	}
+}
