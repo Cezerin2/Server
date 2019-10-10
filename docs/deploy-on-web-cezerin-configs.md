@@ -46,4 +46,4 @@ npm run build
 pm2 reload admin
 ```
 
-P.S. Example of configs for cezerin.org domain you download ![here](https://github.com/Cezerin2/cezerin2/blob/master/docs/assets/cezerin2-config-sample.zip) 
+P.S. Example of configs for cezerin.org domain you download [cezerin2-config-sample.zip](https://github.com/Cezerin2/cezerin2/files/3710880/cezerin2-config-sample.zip) 
