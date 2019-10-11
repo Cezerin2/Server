@@ -1,7 +1,7 @@
-import winston from 'winston';
-import nodemailer from 'nodemailer';
-import smtpTransport from 'nodemailer-smtp-transport';
-import settings from './settings';
+import * as winston from 'winston';
+import * as nodemailer from 'nodemailer';
+import * as smtpTransport from 'nodemailer-smtp-transport';
+import settings, { EmailSettings, SmtpSettings } from './settings';
 import EmailSettingsService from '../services/settings/email';
 
 const SMTP_FROM_CONFIG_FILE = {
@@ -14,7 +14,7 @@ const SMTP_FROM_CONFIG_FILE = {
 	}
 };
 
-const getSmtpFromEmailSettings = emailSettings => ({
+const getSmtpFromEmailSettings = (emailSettings: EmailSettings): SmtpSettings => ({
 	host: emailSettings.host,
 	port: emailSettings.port,
 	secure: emailSettings.port === 465,
@@ -24,7 +24,7 @@ const getSmtpFromEmailSettings = emailSettings => ({
 	}
 });
 
-const getSmtp = emailSettings => {
+const getSmtp = (emailSettings: EmailSettings) => {
 	const useSmtpServerFromConfigFile = emailSettings.host === '';
 	const smtp = useSmtpServerFromConfigFile
 		? SMTP_FROM_CONFIG_FILE
@@ -33,9 +33,9 @@ const getSmtp = emailSettings => {
 	return smtp;
 };
 
-const sendMail = (smtp, message) =>
+const sendMail = (smtp: smtpTransport.SmtpOptions, message: Mail.Options) =>
 	new Promise((resolve, reject) => {
-		if (!message.to.includes('@')) {
+		if (!(message.to! as String).includes('@')) {
 			reject('Invalid email address');
 			return;
 		}
@@ -50,14 +50,14 @@ const sendMail = (smtp, message) =>
 		});
 	});
 
-const getFrom = emailSettings => {
+const getFrom = (emailSettings: EmailSettings) => {
 	const useSmtpServerFromConfigFile = emailSettings.host === '';
 	return useSmtpServerFromConfigFile
 		? `"${settings.smtpServer.fromName}" <${settings.smtpServer.fromAddress}>`
 		: `"${emailSettings.from_name}" <${emailSettings.from_address}>`;
 };
 
-const send = async message => {
+const send = async (message: Mail.Options) => {
 	const emailSettings = await EmailSettingsService.getEmailSettings();
 	const smtp = getSmtp(emailSettings);
 	message.from = getFrom(emailSettings);
