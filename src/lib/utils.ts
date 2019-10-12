@@ -7,9 +7,11 @@ const slugConfig = {
 	lower: true // result in lower case
 };
 
-const cleanSlug = text => slug(text || '', slugConfig);
 
-const getAvailableSlug = (path, resource, enableCleanPath = true) =>
+
+const cleanSlug = (text: string) => slug(text || '', slugConfig);
+
+const getAvailableSlug = (path: string, resource: string, enableCleanPath = true) =>
 	SitemapService.getPaths().then(paths => {
 		if (enableCleanPath) {
 			path = cleanSlug(path);
@@ -27,7 +29,7 @@ const getAvailableSlug = (path, resource, enableCleanPath = true) =>
 		return path;
 	});
 
-const getCorrectFileName = filename => {
+const getCorrectFileName = (filename: string) => {
 	if (filename) {
 		// replace unsafe characters
 		return filename.replace(/[\s*/:;&?@$()<>#%\{\}|\\\^\~\[\]]/g, '-');
@@ -35,13 +37,13 @@ const getCorrectFileName = filename => {
 	return filename;
 };
 
-const getProjectionFromFields = fields => {
+const getProjectionFromFields = (fields: string) => {
 	const fieldsArray = fields && fields.length > 0 ? fields.split(',') : [];
 	return Object.assign({}, ...fieldsArray.map(key => ({ [key]: 1 })));
 };
 
-const deepCopy = obj => {
-	return JSON.parse(JSON.stringify(obj)); 
+const deepCopy = (obj: unknown) => {
+	return JSON.parse(JSON.stringify(obj));
 }
 
 export default {

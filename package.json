@@ -95,11 +95,15 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.1",
+    "@types/formidable": "^1.0.31",
+    "@types/fs-extra": "^8.0.0",
     "@types/jsonwebtoken": "^8.3.4",
     "@types/lru-cache": "^5.1.0",
     "@types/mongodb": "^3.3.6",
+    "@types/node-fetch": "^2.5.2",
     "@types/nodemailer": "^6.2.1",
     "@types/nodemailer-smtp-transport": "^2.7.4",
+    "@types/slug": "^0.9.1",
     "@types/winston": "^2.4.4",
     "@types/ws": "^6.0.3"
   }

@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import fetch from 'node-fetch';
 import WebhooksService from '../services/webhooks';
 
-const sign = ({ data, secret }) => {
+const sign = ({ data, secret }): string => {
 	if (secret && secret.length > 0) {
 		const hmac = crypto.createHmac('sha256', secret);
 		hmac.update(data);

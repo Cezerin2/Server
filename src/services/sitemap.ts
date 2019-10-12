@@ -1,9 +1,20 @@
 import { db } from '../lib/mongo';
 import parse from '../lib/parse';
 
+export interface Path {
+	path: string;
+	type: string;
+	resource?: string;
+}
+
+export interface Filter {
+	slug?: string;
+	enabled?: boolean;
+}
+
 class SitemapService {
-	getPaths(onlyEnabled) {
-		const slug = null;
+	getPaths(onlyEnabled: boolean | null = null) {
+		const slug: string | null = null;
 		onlyEnabled = parse.getBooleanIfValid(onlyEnabled, false);
 
 		return Promise.all([
@@ -17,7 +28,7 @@ class SitemapService {
 		});
 	}
 
-	getPathsWithoutSlashes(slug, onlyEnabled) {
+	getPathsWithoutSlashes(slug: string | null, onlyEnabled: boolean) {
 		return Promise.all([
 			this.getSlugArrayFromReserved(),
 			this.getSlugArrayFromProductCategories(slug, onlyEnabled),
@@ -28,7 +39,7 @@ class SitemapService {
 		});
 	}
 
-	getPathsWithSlash(slug, onlyEnabled) {
+	getPathsWithSlash(slug: string | null, onlyEnabled: boolean) {
 		return Promise.all([
 			this.getSlugArrayFromProducts(slug, onlyEnabled),
 			this.getSlugArrayFromPages(slug, onlyEnabled)
@@ -39,7 +50,7 @@ class SitemapService {
 	}
 
 	getSlugArrayFromReserved() {
-		const paths = [];
+		const paths: Path[] = [];
 
 		paths.push({ path: '/api', type: 'reserved' });
 		paths.push({ path: '/ajax', type: 'reserved' });
@@ -70,9 +81,9 @@ class SitemapService {
 		return paths;
 	}
 
-	getSlugArrayFromProducts(slug, onlyEnabled) {
-		const categoriesFilter = {};
-		const productFilter = {};
+	getSlugArrayFromProducts(slug: string | null, onlyEnabled: boolean) {
+		const categoriesFilter: Filter = {};
+		const productFilter: Filter = {};
 
 		if (slug) {
 			const slugParts = slug.split('/');
@@ -85,12 +96,12 @@ class SitemapService {
 		}
 
 		return Promise.all([
-			db
+			db!
 				.collection('productCategories')
 				.find(categoriesFilter)
 				.project({ slug: 1 })
 				.toArray(),
-			db
+			db!
 				.collection('products')
 				.find(productFilter)
 				.project({ slug: 1, category_id: 1 })
@@ -110,13 +121,13 @@ class SitemapService {
 		);
 	}
 
-	getSlugArrayFromPages(slug, onlyEnabled) {
+	getSlugArrayFromPages(slug: string | null, onlyEnabled: boolean) {
 		const filter = this.getFilterWithoutSlashes(slug);
 		if (onlyEnabled === true) {
 			filter.enabled = true;
 		}
 
-		return db
+		return db!
 			.collection('pages')
 			.find(filter)
 			.project({ slug: 1 })
@@ -130,13 +141,13 @@ class SitemapService {
 			);
 	}
 
-	getSlugArrayFromProductCategories(slug, onlyEnabled) {
+	getSlugArrayFromProductCategories(slug: string | null, onlyEnabled: boolean) {
 		const filter = this.getFilterWithoutSlashes(slug);
 		if (onlyEnabled === true) {
 			filter.enabled = true;
 		}
 
-		return db
+		return db!
 			.collection('productCategories')
 			.find(filter)
 			.project({ slug: 1 })
@@ -150,14 +161,14 @@ class SitemapService {
 			);
 	}
 
-	getFilterWithoutSlashes(slug) {
+	getFilterWithoutSlashes(slug: string | null): Filter {
 		if (slug) {
-			return { slug };
+			return { slug: slug };
 		}
 		return {};
 	}
 
-	getSinglePath(path, onlyEnabled = false) {
+	getSinglePath(path: string, onlyEnabled = false) {
 		onlyEnabled = parse.getBooleanIfValid(onlyEnabled, false);
 		// convert path to slash (remove first slash)
 		const slug = path.substr(1);

@@ -28,7 +28,7 @@ const getNumberIfPositive = (value: number) => {
 	return n && n >= 0 ? n : null;
 };
 
-const getBooleanIfValid = (value: string, defaultValue: unknown = null) => {
+const getBooleanIfValid = (value: string | boolean | null, defaultValue: boolean) => {
 	if (value === 'true' || value === 'false') {
 		return value === 'true';
 	}
