@@ -1,9 +1,9 @@
-import AWS from 'aws-sdk';
-import fs from 'fs';
-import formidable from 'formidable';
-import path from 'path';
+import * as AWS from 'aws-sdk';
+import * as fs from 'fs';
+import * as formidable from 'formidable';
+import * as path from 'path';
 import utils from '../../lib/utils';
-import serverConfig from '../../lib/settings';
+import serverConfig from '../../../config/server';
 
 const BUCKET = serverConfig.assetServer.bucket;
 const s3 = new AWS.S3();
@@ -109,7 +109,7 @@ class S3Service {
 				params.Delete.Objects.push({ Key: content.Key });
 			});
 
-			s3.deleteObjects(params, (err, data) => {});
+			s3.deleteObjects(params, (err, data) => { });
 		});
 	}
 

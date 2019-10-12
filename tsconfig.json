@@ -4,8 +4,9 @@
     "allowJs": true,
     "checkJs": false,
     "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true,
     "strictNullChecks": true,
-    "target": "es2017",
+    "target": "es5",
     "module": "commonjs",
     "types": []
   },

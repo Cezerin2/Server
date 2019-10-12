@@ -1,8 +1,8 @@
 import LocalService from './local';
 import S3Service from './s3';
-import settings from '../../lib/settings';
+import { serverConfig } from '../../lib/settings';
 
-const service = settings.assetServer.type === 's3' ? S3Service : LocalService;
+const service = serverConfig.assetServer.type === 's3' ? S3Service : LocalService;
 
 class AssetsService {
 	getFileData(path, fileName) {
