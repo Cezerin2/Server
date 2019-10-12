@@ -3,9 +3,9 @@ import fs from 'fs';
 import formidable from 'formidable';
 import path from 'path';
 import utils from '../../lib/utils';
-import settings from '../../lib/settings';
+import serverConfig from '../../lib/settings';
 
-const BUCKET = settings.assetServer.bucket;
+const BUCKET = serverConfig.assetServer.bucket;
 const s3 = new AWS.S3();
 
 const upload = (file_name, file) => {

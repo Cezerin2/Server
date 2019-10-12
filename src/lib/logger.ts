@@ -1,4 +1,5 @@
-import winston from 'winston';
+import * as winston from 'winston';
+import { Request, Response } from 'express';
 const LOGS_FILE = 'logs/server.log';
 
 winston.configure({
@@ -20,21 +21,21 @@ winston.configure({
 	]
 });
 
-const getResponse = message => ({
+const getResponse = (message: string) => ({
 	error: true,
 	message
 });
 
-const logUnauthorizedRequests = req => {
+const logUnauthorizedRequests = (req: Request) => {
 	// todo
 };
 
-const sendResponse = (err, req, res, next) => {
+const sendResponse = (err: Error, req: Request, res: Response, next: any) => {
 	if (err && err.name === 'UnauthorizedError') {
 		logUnauthorizedRequests(req);
 		res.status(401).send(getResponse(err.message));
 	} else if (err) {
-		winston.error(err.stack);
+		winston.error(err.stack!);
 		res.status(500).send(getResponse(err.message));
 	} else {
 		next();
