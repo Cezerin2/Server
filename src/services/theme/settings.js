@@ -1,9 +1,8 @@
 import fs from 'fs';
-import path from 'path';
-import lruCache from 'lru-cache';
-import serverSettings from '../../lib/settings';
+import * as path from 'path';
+import * as lruCache from 'lru-cache';
+import { serverConfig } from '../../lib/settings';
 import utils from '../../lib/utils';
-
 const cache = lruCache({
 	max: 10000,
 	maxAge: 1000 * 60 * 60 * 24 // 24h
@@ -12,11 +11,11 @@ const cache = lruCache({
 const THEME_SETTINGS_CACHE_KEY = 'themesettings';
 const SETTINGS_FILE = path.resolve('theme/settings/settings.json');
 const SETTINGS_SCHEMA_FILE = path.resolve(
-	`theme/settings/${serverSettings.language}.json`
+	`theme/settings/${serverConfig.language}.json`
 );
 const SETTINGS_SCHEMA_FILE_EN = path.resolve('theme/settings/en.json');
-const THEME_IMAGE_ASSET_BASE = 
-	`${serverSettings.assetServer.domain}/${serverSettings.assetServer.themeImageUploadPath}/`;
+const THEME_IMAGE_ASSET_BASE =
+	`${serverConfig.assetServer.domain}/${serverConfig.assetServer.themeImageUploadPath}/`;
 
 class ThemeSettingsService {
 	readFile(file) {
@@ -76,9 +75,9 @@ class ThemeSettingsService {
 	updateSettings(settings) {
 		cache.set(THEME_SETTINGS_CACHE_KEY, settings);
 		return this.writeFile(
-			SETTINGS_FILE, 
+			SETTINGS_FILE,
 			this.changeProperties(
-				utils.deepCopy(settings), 
+				utils.deepCopy(settings),
 				false));
 	}
 
@@ -90,7 +89,7 @@ class ThemeSettingsService {
 					// look for image in placeholder property objects
 					if (settings[placeholder][index].hasOwnProperty('image')) {
 						const file = settings[placeholder][index].image;
-						settings[placeholder][index].image = addAssetPath ? 
+						settings[placeholder][index].image = addAssetPath ?
 							THEME_IMAGE_ASSET_BASE + file :
 							file.replace(THEME_IMAGE_ASSET_BASE, '');
 					}
@@ -99,7 +98,7 @@ class ThemeSettingsService {
 				// look for image in placeholder object
 				if (settings[placeholder].hasOwnProperty('image')) {
 					const file = settings[placeholder].image;
-					settings[placeholder].image = addAssetPath ? 
+					settings[placeholder].image = addAssetPath ?
 						THEME_IMAGE_ASSET_BASE + file :
 						file.replace(THEME_IMAGE_ASSET_BASE, '');
 				}

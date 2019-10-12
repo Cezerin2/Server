@@ -1,9 +1,9 @@
 import path from 'path';
 import formidable from 'formidable';
 import AssetService from '../assets/assets';
-import settings from '../../lib/settings';
+import { serverConfig } from '../../lib/settings';
 
-const ThemeAssetPath = `${settings.assetServer.themeImageUploadPath}`;
+const ThemeAssetPath = `${serverConfig.assetServer.themeImageUploadPath}`;
 
 class ThemeAssetsService {
 	deleteFile(fileName) {
@@ -11,7 +11,7 @@ class ThemeAssetsService {
 	}
 
 	uploadFile(req, res, next) {
-		AssetService.uploadFile(req, res, ThemeAssetPath, () => {});
+		AssetService.uploadFile(req, res, ThemeAssetPath, () => { });
 	}
 
 	getErrorMessage(err) {

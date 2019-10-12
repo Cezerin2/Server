@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import ProductsRoute from './routes/products';
 import ProductCategoriesRoute from './routes/productCategories';
 import SitemapRoute from './routes/sitemap';

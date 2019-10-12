@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import uaParser from 'ua-parser-js';
 import handlebars from 'handlebars';
-import lruCache from 'lru-cache';
+import * as lruCache from 'lru-cache';
 import { db } from '../../lib/mongo';
 import parse from '../../lib/parse';
 import { serverConfig } from '../../lib/settings';

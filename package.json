@@ -41,7 +41,7 @@
     "theme:install": "./scripts/theme-install.sh",
     "theme:export": "./scripts/theme-export.sh",
     "prettier": "prettier --write \"src/**/*.ts\" \"theme/**/*.js\"",
-    "start": "node -r esm build/src/index.js",
+    "start": "tsc && node -r esm build/src/index.js",
     "tslint": "tslint -c tslint.json 'src/**/*.ts'"
   },
   "dependencies": {
@@ -96,6 +96,7 @@
   "devDependencies": {
     "@types/express": "^4.17.1",
     "@types/jsonwebtoken": "^8.3.4",
+    "@types/lru-cache": "^5.1.0",
     "@types/mongodb": "^3.3.6",
     "@types/nodemailer": "^6.2.1",
     "@types/nodemailer-smtp-transport": "^2.7.4",

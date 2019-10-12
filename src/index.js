@@ -1,11 +1,11 @@
-import express from 'express';
-import helmet from 'helmet';
-import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
-import responseTime from 'response-time';
-import winston from 'winston';
+import * as express from 'express';
+import * as helmet from 'helmet';
+import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
+import * as responseTime from 'response-time';
+import * as winston from 'winston';
 import logger from './lib/logger';
-import settings from './lib/settings';
+import { serverConfig } from './lib/settings';
 import security from './lib/security';
 import dashboardWebSocket from './lib/dashboardWebSocket';
 import ajaxRouter from './ajaxRouter';
@@ -49,14 +49,14 @@ app.all('*', (req, res, next) => {
 });
 
 app.use(responseTime());
-app.use(cookieParser(settings.cookieSecretKey));
+app.use(cookieParser(serverConfig.cookieSecretKey));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/ajax', ajaxRouter);
 app.use('/api', apiRouter);
 app.use(logger.sendResponse);
 
-const server = app.listen(settings.apiListenPort, () => {
+const server = app.listen(serverConfig.apiListenPort, () => {
 	const serverAddress = server.address();
 	winston.info(`API running at http://localhost:${serverAddress.port}`);
 });

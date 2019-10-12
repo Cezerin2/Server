@@ -1,7 +1,7 @@
 import { ObjectID } from 'mongodb';
 import handlebars from 'handlebars';
 import bcrypt from 'bcrypt';
-import settings from '../../lib/settings';
+import { serverConfig } from '../../lib/settings';
 import { db } from '../../lib/mongo';
 import parse from '../../lib/parse';
 import webhooks from '../../lib/webhooks';
@@ -16,7 +16,7 @@ import ProductStockService from '../products/stock';
 import SettingsService from '../settings/settings';
 import PaymentGateways from '../../paymentGateways';
 
-const { saltRounds } = settings;
+const { saltRounds } = serverConfig;
 
 class OrdersService {
 	getFilter(params = {}) {
@@ -288,46 +288,46 @@ class OrdersService {
 	parseDiscountItem(discount) {
 		return discount
 			? {
-					id: new ObjectID(),
-					name: parse.getString(discount.name),
-					amount: parse.getNumberIfPositive(discount.amount)
-			  }
+				id: new ObjectID(),
+				name: parse.getString(discount.name),
+				amount: parse.getNumberIfPositive(discount.amount)
+			}
 			: null;
 	}
 
 	parseProductItem(item) {
 		return item
 			? {
-					id: new ObjectID(),
-					product_id: parse.getObjectIDIfValid(item.product_id),
-					variant_id: parse.getObjectIDIfValid(item.variant_id),
-					quantity: parse.getNumberIfPositive(item.quantity)
-					// "sku":"",
-					// "name":"",
-					// "variant_name":"",
-					// "price":"",
-					// "tax_class":"",
-					// "tax_total":"",
-					// "weight":"",
-					// "discount_total":"",
-					// "price_total":"", //price * quantity
-			  }
+				id: new ObjectID(),
+				product_id: parse.getObjectIDIfValid(item.product_id),
+				variant_id: parse.getObjectIDIfValid(item.variant_id),
+				quantity: parse.getNumberIfPositive(item.quantity)
+				// "sku":"",
+				// "name":"",
+				// "variant_name":"",
+				// "price":"",
+				// "tax_class":"",
+				// "tax_total":"",
+				// "weight":"",
+				// "discount_total":"",
+				// "price_total":"", //price * quantity
+			}
 			: null;
 	}
 
 	parseTransactionItem(transaction) {
 		return transaction
 			? {
-					id: new ObjectID(),
-					transaction_id: parse.getString(transaction.transaction_id),
-					amount: parse.getNumberIfPositive(transaction.amount),
-					currency: parse.getString(transaction.currency),
-					status: parse.getString(transaction.status),
-					details: transaction.details,
-					success: parse.getBooleanIfValid(transaction.success),
-					date_created: new Date(),
-					date_updated: null
-			  }
+				id: new ObjectID(),
+				transaction_id: parse.getString(transaction.transaction_id),
+				amount: parse.getNumberIfPositive(transaction.amount),
+				currency: parse.getString(transaction.currency),
+				status: parse.getString(transaction.status),
+				details: transaction.details,
+				success: parse.getBooleanIfValid(transaction.success),
+				date_created: new Date(),
+				date_updated: null
+			}
 			: null;
 	}
 
@@ -339,7 +339,7 @@ class OrdersService {
 			.limit(1)
 			.toArray()
 			.then(items => {
-				let orderNumber = settings.orderStartNumber;
+				let orderNumber = serverConfig.orderStartNumber;
 				if (items && items.length > 0) {
 					orderNumber = items[0].number + 1;
 				}
@@ -369,8 +369,8 @@ class OrdersService {
 				order.transactions =
 					data.transactions && data.transactions.length > 0
 						? data.transactions.map(transaction =>
-								this.parseTransactionItem(transaction)
-						  )
+							this.parseTransactionItem(transaction)
+						)
 						: [];
 				order.discounts =
 					data.discounts && data.discounts.length > 0
@@ -581,20 +581,20 @@ class OrdersService {
 			const orderStatus =
 				order.status_id && orderStatuses.length > 0
 					? orderStatuses.find(
-							i => i.id.toString() === order.status_id.toString()
-					  )
+						i => i.id.toString() === order.status_id.toString()
+					)
 					: null;
 			const orderShippingMethod =
 				order.shipping_method_id && shippingMethods.length > 0
 					? shippingMethods.find(
-							i => i.id.toString() === order.shipping_method_id.toString()
-					  )
+						i => i.id.toString() === order.shipping_method_id.toString()
+					)
 					: null;
 			const orderPaymentMethod =
 				order.payment_method_id && paymentMethods.length > 0
 					? paymentMethods.find(
-							i => i.id.toString() === order.payment_method_id.toString()
-					  )
+						i => i.id.toString() === order.payment_method_id.toString()
+					)
 					: null;
 
 			order.status = orderStatus ? orderStatus.name : '';

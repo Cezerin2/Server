@@ -3,6 +3,7 @@
     "outDir": "./build",
     "allowJs": true,
     "checkJs": false,
+    "sourceMap": true,
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
     "strictNullChecks": true,
