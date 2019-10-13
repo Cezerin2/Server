@@ -6,6 +6,7 @@
 Cezerin2 is React and Node.js based eCommerce platform. Allows creating a Progressive Web Apps. This is based from cezerin after project went dead. (https://github.com/cezerin/cezerin)
 
 Built with:
+* Typescript
 * Node.js v8.9
 * React v16
 * Redux
