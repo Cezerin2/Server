@@ -2,8 +2,13 @@ import { ObjectID } from 'mongodb';
 import { db } from '../../lib/mongo';
 import parse from '../../lib/parse';
 
+export interface IData {
+	name: string;
+	description: string;
+}
+
 class CustomerGroupsService {
-	getGroups(params = {}) {
+	public getGroups(params = {}) {
 		return db
 			.collection('customerGroups')
 			.find()
@@ -11,7 +16,7 @@ class CustomerGroupsService {
 			.then(items => items.map(item => this.changeProperties(item)));
 	}
 
-	getSingleGroup(id) {
+	public getSingleGroup(id: string) {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
@@ -23,15 +28,15 @@ class CustomerGroupsService {
 			.then(item => this.changeProperties(item));
 	}
 
-	addGroup(data) {
+	public addGroup(data: IData) {
 		const group = this.getValidDocumentForInsert(data);
 		return db
 			.collection('customerGroups')
 			.insertMany([group])
-			.then(res => this.getSingleGroup(res.ops[0]._id.toString()));
+			.then(res => this.getSingleGroup((res.ops[0]._id as number).toString()));
 	}
 
-	updateGroup(id, data) {
+	public updateGroup(id: string, data: IData) {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
@@ -49,7 +54,7 @@ class CustomerGroupsService {
 			.then(res => this.getSingleGroup(id));
 	}
 
-	deleteGroup(id) {
+	public deleteGroup(id: string) {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
@@ -57,27 +62,28 @@ class CustomerGroupsService {
 		return db
 			.collection('customerGroups')
 			.deleteOne({ _id: groupObjectID })
-			.then(deleteResponse => deleteResponse.deletedCount > 0);
+			.then(deleteResponse => (deleteResponse.deletedCount as number) > 0);
 	}
 
-	getValidDocumentForInsert(data) {
+
+	public getValidDocumentForInsert(data: { name: string, description: string }) {
 		const group = {
-			date_created: new Date()
+			date_created: new Date(),
+			name: parse.getString(data.name),
+			description: parse.getString(data.description)
 		};
-
-		group.name = parse.getString(data.name);
-		group.description = parse.getString(data.description);
-
 		return group;
 	}
 
-	getValidDocumentForUpdate(id, data) {
+	public getValidDocumentForUpdate(id: string, data: IData) {
 		if (Object.keys(data).length === 0) {
 			return new Error('Required fields are missing');
 		}
 
 		const group = {
-			date_updated: new Date()
+			date_updated: new Date(),
+			name: '',
+			description: ''
 		};
 
 		if (data.name !== undefined) {
@@ -91,7 +97,7 @@ class CustomerGroupsService {
 		return group;
 	}
 
-	changeProperties(item) {
+	public changeProperties(item: any) {
 		if (item) {
 			item.id = item._id.toString();
 			delete item._id;

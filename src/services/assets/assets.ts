@@ -1,4 +1,4 @@
-import LocalService, { File } from './local';
+import LocalService, { IFile } from './local';
 import S3Service from './s3';
 import { Request, Response } from 'express';
 import { serverConfig } from '../../lib/settings';
@@ -6,35 +6,40 @@ import { serverConfig } from '../../lib/settings';
 const service = serverConfig.assetServer.type === 's3' ? S3Service : LocalService;
 
 class AssetsService {
-	getFileData(path: string, fileName: string) {
+	public getFileData(path: string, fileName: string) {
 		return service.getFileData(path, fileName);
 	}
 
-	getFilesData(path: string, files: string[]) {
+	public getFilesData(path: string, files: string[]) {
 		return service.getFilesData(path, files);
 	}
 
-	getFiles(path: string) {
+	public getFiles(path: string) {
 		return service.getFiles(path);
 	}
 
-	deleteFile(path: string, fileName: string) {
+	public deleteFile(path: string, fileName: string) {
 		return service.deleteFile(path, fileName);
 	}
 
-	deleteDir(path: string) {
+	public deleteDir(path: string) {
 		return service.deleteDir(path);
 	}
 
-	emptyDir(path: string) {
+	public emptyDir(path: string) {
 		return service.emptyDir(path);
 	}
 
-	uploadFile(req: Request, res: Response, path: string, onUploadEnd: (fileName: string) => void) {
+	public uploadFile(req: Request, res: Response, path: string, onUploadEnd: (fileName: string) => void) {
 		return service.uploadFile(req, res, path, onUploadEnd);
 	}
 
-	uploadFiles(req: Request, res: Response, path: string, onFileUpload: (fielName: string) => void, onFilesEnd: (files: File[]) => void) {
+	public uploadFiles(
+		req: Request,
+		res: Response,
+		path: string,
+		onFileUpload: (fielName: string) => void,
+		onFilesEnd: (files: Array<IFile>) => void) {
 		return service.uploadFiles(req, res, path, onFileUpload, onFilesEnd);
 	}
 }

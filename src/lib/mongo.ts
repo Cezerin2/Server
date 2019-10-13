@@ -22,7 +22,7 @@ const onReconnect = () => {
 	winston.info('MongoDB reconnected');
 };
 
-export let db: Db | null = null;
+export let db: Db;
 
 const connectWithRetry = () => {
 	MongoClient.connect(mongodbConnection as string, CONNECT_OPTIONS, (err, client) => {

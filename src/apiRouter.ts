@@ -21,6 +21,7 @@ import WebhooksRoute from './routes/webhooks';
 
 const apiRouter = express.Router();
 
+// tslint:disable
 new ProductsRoute(apiRouter);
 new ProductCategoriesRoute(apiRouter);
 new SitemapRoute(apiRouter);

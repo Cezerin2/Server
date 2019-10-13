@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 import utils from '../../lib/utils';
 import * as settings from '../../lib/settings';
 
-export interface File {
+export interface IFile {
 	url: string;
 	file: string;
 	size: number;
@@ -33,7 +33,7 @@ const ResolveUrlPath = (dir: string, file: string) => {
 };
 
 class LocalService {
-	getFileData(dir: string, fileName: string): File | null {
+	public getFileData(dir: string, fileName: string): IFile | null {
 		const fileSystemPath = ResolveSystemPath(dir, fileName);
 		const fileUrlPath = ResolveUrlPath(dir, fileName);
 		const stats = fse.statSync(fileSystemPath);
@@ -49,21 +49,21 @@ class LocalService {
 		return null;
 	}
 
-	getFilesData(dir: string, files: string[]) {
+	public getFilesData(dir: string, files: string[]) {
 		return files
 			.map(fileName => this.getFileData(dir, fileName))
 			.filter(fileData => fileData !== null)
 			.sort((a, b) => a!.modified.getTime() - b!.modified.getTime());
 	}
 
-	getFiles(dir: string) {
+	public getFiles(dir: string) {
 		return new Promise((resolve, reject) => {
 			const folderPath = ResolveSystemPath(dir);
 
 			// Will error if no folder exists
 			fse.ensureDirSync(folderPath);
 
-			fse.readdir(folderPath, (err, files) => {
+			fse.readdir(folderPath, (err: Error, files: Array<string>) => {
 				if (err) {
 					reject(err);
 				} else {
@@ -74,7 +74,7 @@ class LocalService {
 		});
 	}
 
-	deleteFile(dir: string, fileName: string) {
+	public deleteFile(dir: string, fileName: string) {
 		return new Promise((resolve, reject) => {
 			const filePath = ResolveSystemPath(dir, fileName);
 			if (fse.existsSync(filePath)) {
@@ -87,17 +87,17 @@ class LocalService {
 		});
 	}
 
-	deleteDir(dir: string) {
+	public deleteDir(dir: string) {
 		const dirPath = ResolveSystemPath(dir);
-		fse.remove(dirPath, err => { });
+		fse.remove(dirPath, (err: Error) => ({}));
 	}
 
-	emptyDir(dir: string) {
+	public emptyDir(dir: string) {
 		const dirPath = ResolveSystemPath(dir);
 		fse.emptyDirSync(dirPath);
 	}
 
-	uploadFile(req: Request, res: Response, dir: string, onUploadEnd: (fielName: string) => void) {
+	public uploadFile(req: Request, res: Response, dir: string, onUploadEnd: (fielName: string) => void) {
 		const uploadDir = ResolveSystemPath(dir);
 		fse.ensureDirSync(uploadDir);
 
@@ -140,8 +140,12 @@ class LocalService {
 		form.parse(req);
 	}
 
-	uploadFiles(req: Request, res: Response, dir: string, onFileUpload: (fielName: string) => void, onFilesEnd: (files: File[]) => void) {
-		const uploadedFiles: File[] = [];
+	public uploadFiles(
+		req: Request,
+		res: Response,
+		dir: string,
+		onFileUpload: (fielName: string) => void, onFilesEnd: (files: Array<IFile>) => void) {
+		const uploadedFiles: Array<IFile> = [];
 		const uploadDir = ResolveSystemPath(dir);
 
 		fse.ensureDirSync(uploadDir);

@@ -1,7 +1,6 @@
-import winston from 'winston';
+import * as winston from 'winston';
 import url from 'url';
 import { MongoClient } from 'mongodb';
-import logger from './lib/logger';
 import settings from './lib/settings';
 
 const mongodbConnection = settings.mongodbServerUrl;
@@ -185,7 +184,7 @@ const addOrderConfirmationEmailTemplates = async db => {
 			<div><b>Order number</b>: {{number}}</div>
 			<div><b>Shipping method</b>: {{shipping_method}}</div>
 			<div><b>Payment method</b>: {{payment_method}}</div>
-		  
+
 			<div style="width: 100%; margin-top: 20px;">
 			  Shipping to<br /><br />
 			  <b>Full name</b>: {{shipping_address.full_name}}<br />
@@ -196,7 +195,7 @@ const addOrderConfirmationEmailTemplates = async db => {
 			  <b>State</b>: {{shipping_address.state}}<br />
 			  <b>Phone</b>: {{shipping_address.phone}}
 			</div>
-		  
+
 			<table style="width: 100%; margin-top: 20px;">
 			  <tr>
 				<td style="width: 40%; padding: 10px 0px; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; text-align: left;">Item</td>
@@ -204,7 +203,7 @@ const addOrderConfirmationEmailTemplates = async db => {
 				<td style="width: 10%; padding: 10px 0px; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; text-align: right;">Qty</td>
 				<td style="width: 25%; padding: 10px 0px; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; text-align: right;">Total</td>
 			  </tr>
-		  
+
 			  {{#each items}}
 			  <tr>
 				<td style="padding: 10px 0px; border-bottom: 1px solid #ccc; text-align: left;">{{name}}<br />{{variant_name}}</td>
@@ -213,9 +212,9 @@ const addOrderConfirmationEmailTemplates = async db => {
 				<td style="padding: 10px 0px; border-bottom: 1px solid #ccc; text-align: right;">$ {{price_total}}</td>
 			  </tr>
 			  {{/each}}
-		  
+
 			</table>
-		  
+
 			<table style="width: 100%; margin: 20px 0;">
 			  <tr>
 				<td style="width: 80%; padding: 10px 0px; text-align: right;"><b>Subtotal</b></td>
@@ -230,7 +229,7 @@ const addOrderConfirmationEmailTemplates = async db => {
 				<td style="width: 20%; padding: 10px 0px; text-align: right;">$ {{grand_total}}</td>
 			  </tr>
 			</table>
-		  
+
 		  </div>`
 		});
 

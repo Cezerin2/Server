@@ -10,6 +10,7 @@ import security from './lib/security';
 import dashboardWebSocket from './lib/dashboardWebSocket';
 import ajaxRouter from './ajaxRouter';
 import apiRouter from './apiRouter';
+import { AddressInfo } from 'net';
 const app = express();
 
 const STATIC_OPTIONS = {
@@ -32,8 +33,8 @@ security.applyMiddleware(app);
 app.all('*', (req, res, next) => {
 	// CORS headers
 	const allowedOrigins = security.getAccessControlAllowOrigin();
-	const { origin } = req.headers;
-	if (allowedOrigins === '*') {
+	const origin = req.headers.origin as string;
+	if (allowedOrigins.find(singleOrigin => singleOrigin === '*')) {
 		res.setHeader('Access-Control-Allow-Origin', allowedOrigins);
 	} else if (allowedOrigins.indexOf(origin) > -1) {
 		res.setHeader('Access-Control-Allow-Origin', origin);
@@ -57,7 +58,7 @@ app.use('/api', apiRouter);
 app.use(logger.sendResponse);
 
 const server = app.listen(serverConfig.apiListenPort, () => {
-	const serverAddress = server.address();
+	const serverAddress = server.address() as AddressInfo;
 	winston.info(`API running at http://localhost:${serverAddress.port}`);
 });
 
