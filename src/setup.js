@@ -1,9 +1,9 @@
 import * as winston from 'winston';
 import url from 'url';
 import { MongoClient } from 'mongodb';
-import settings from './lib/settings';
+import { serverConfig } from './lib/settings';
 
-const mongodbConnection = settings.mongodbServerUrl;
+const mongodbConnection = serverConfig.mongodbServerUrl;
 const mongoPathName = url.parse(mongodbConnection).pathname;
 const dbName = mongoPathName.substring(mongoPathName.lastIndexOf('/') + 1);
 

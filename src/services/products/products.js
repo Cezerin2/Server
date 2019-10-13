@@ -2,7 +2,7 @@ import { ObjectID } from 'mongodb';
 import path from 'path';
 import url from 'url';
 import AssertService from '../assets/assets';
-import settings from '../../lib/settings';
+import { serverConfig } from '../../lib/settings';
 import { db } from '../../lib/mongo';
 import utils from '../../lib/utils';
 import parse from '../../lib/parse';
@@ -93,7 +93,7 @@ class ProductsService {
 		]);
 
 		const domain = generalSettings.domain || '';
-		const assetsDomain = settings.assetServer.domain || domain;
+		const assetsDomain = serverConfig.assetServer.domain || domain;
 		const ids = this.getArrayFromCSV(parse.getString(params.ids));
 		const sku = this.getArrayFromCSV(parse.getString(params.sku));
 
@@ -682,8 +682,8 @@ class ProductsService {
 				if (deleteResponse.deletedCount > 0) {
 					// 2. delete directory with images
 					const deleteDir = `${
-						settings.assetServer.productsUploadPath
-					}/${productId}`;
+						serverConfig.assetServer.productsUploadPath
+						}/${productId}`;
 					AssertService.deleteDir(deleteDir);
 				}
 				return deleteResponse.deletedCount > 0;
@@ -960,7 +960,7 @@ class ProductsService {
 	getImageUrl(assetsDomain, productId, imageFileName) {
 		return url.resolve(
 			assetsDomain,
-			`${settings.assetServer.productsUploadPath}/${productId}/${imageFileName}`
+			`${serverConfig.assetServer.productsUploadPath}/${productId}/${imageFileName}`
 		);
 	}
 

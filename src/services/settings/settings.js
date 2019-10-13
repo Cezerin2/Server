@@ -1,5 +1,5 @@
 import path from 'path';
-import url from 'url';
+import * as url from 'url';
 import formidable from 'formidable';
 import AssetService from '../assets/assets';
 import { serverConfig } from '../../lib/settings';

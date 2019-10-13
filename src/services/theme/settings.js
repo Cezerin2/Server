@@ -1,4 +1,4 @@
-import fs from 'fs';
+import * as fs from 'fs';
 import * as path from 'path';
 import * as lruCache from 'lru-cache';
 import { serverConfig } from '../../lib/settings';

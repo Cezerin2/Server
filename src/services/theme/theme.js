@@ -2,7 +2,7 @@ import { exec } from 'child_process';
 import path from 'path';
 import formidable from 'formidable';
 import winston from 'winston';
-import settings from '../../lib/settings';
+import { serverConfig } from '../../lib/settings';
 import dashboardWebSocket from '../../lib/dashboardWebSocket';
 
 class ThemesService {
@@ -54,7 +54,7 @@ class ThemesService {
 	}
 
 	saveThemeFile(req, res, callback) {
-		const uploadDir = path.resolve(settings.assetServer.filesUploadPath);
+		const uploadDir = path.resolve(serverConfig.assetServer.filesUploadPath);
 
 		const form = new formidable.IncomingForm();
 		let file_name = null;
