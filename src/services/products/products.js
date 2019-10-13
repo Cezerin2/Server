@@ -1,6 +1,5 @@
 import { ObjectID } from 'mongodb';
-import path from 'path';
-import url from 'url';
+import * as url from 'url';
 import AssertService from '../assets/assets';
 import { serverConfig } from '../../lib/settings';
 import { db } from '../../lib/mongo';

@@ -1,5 +1,5 @@
 import { ObjectID } from 'mongodb';
-import url from 'url';
+import * as url from 'url';
 import { db } from '../../lib/mongo';
 import utils from '../../lib/utils';
 import parse from '../../lib/parse';

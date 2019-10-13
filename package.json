@@ -41,8 +41,25 @@
     "theme:install": "./scripts/theme-install.sh",
     "theme:export": "./scripts/theme-export.sh",
     "prettier": "prettier --write \"src/**/*.ts\" \"theme/**/*.js\"",
-    "start": "tsc && node -r esm build/src/index.js",
-    "tslint": "tslint -c tslint.json 'src/**/*.ts'"
+    "start:build": "npm run build && node -r esm build/src/index.js",
+    "build": "tsc",
+    "tslint": "tslint -c tslint.json 'src/**/*.ts'",
+    "start": "node --inspect=5858 -r ts-node/register ./src/index.ts",
+    "start:watch": "nodemon"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src/"
+    ],
+    "exec": "npm start",
+    "ext": "ts,js,json",
+    "delay": "2500"
   },
   "dependencies": {
     "aws-sdk": "^2.455.0",
@@ -109,6 +126,9 @@
     "@types/response-time": "^2.3.4",
     "@types/slug": "^0.9.1",
     "@types/winston": "^2.4.4",
-    "@types/ws": "^6.0.3"
+    "@types/ws": "^6.0.3",
+    "nodemon": "^1.19.3",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4"
   }
 }
