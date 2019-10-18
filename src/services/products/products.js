@@ -1,5 +1,4 @@
 import { ObjectID } from 'mongodb';
-import path from 'path';
 import url from 'url';
 import AssertService from '../assets/assets';
 import settings from '../../lib/settings';
@@ -681,9 +680,7 @@ class ProductsService {
 			.then(deleteResponse => {
 				if (deleteResponse.deletedCount > 0) {
 					// 2. delete directory with images
-					const deleteDir = `${
-						settings.assetServer.productsUploadPath
-					}/${productId}`;
+					const deleteDir = `${settings.assetServer.productsUploadPath}/${productId}`;
 					AssertService.deleteDir(deleteDir);
 				}
 				return deleteResponse.deletedCount > 0;

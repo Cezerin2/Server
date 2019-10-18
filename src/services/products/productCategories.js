@@ -1,7 +1,5 @@
 import { ObjectID } from 'mongodb';
-import path from 'path';
 import url from 'url';
-import formidable from 'formidable';
 import settings from '../../lib/settings';
 import AssetService from '../assets/assets';
 import SettingsService from '../settings/settings';
@@ -148,9 +146,7 @@ class ProductCategoriesService {
 				// 6. delete directories with images
 				if (idsToDelete) {
 					for (const categoryId of idsToDelete) {
-						const deleteDir = `${
-							settings.assetServer.categoriesUploadPath
-						}/${categoryId}`;
+						const deleteDir = `${settings.assetServer.categoriesUploadPath}/${categoryId}`;
 						AssetService.deleteFolder(deleteDir);
 					}
 					return Promise.resolve(true);
@@ -278,9 +274,7 @@ class ProductCategoriesService {
 			if (item.image) {
 				item.image = url.resolve(
 					assetsDomain,
-					`${settings.assetServer.categoriesUploadPath}/${item.id}/${
-						item.image
-					}`
+					`${settings.assetServer.categoriesUploadPath}/${item.id}/${item.image}`
 				);
 			}
 		}
