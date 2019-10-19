@@ -1,5 +1,5 @@
 import { ObjectID } from 'mongodb';
-import lruCache from 'lru-cache';
+import * as lruCache from 'lru-cache';
 import { db } from '../lib/mongo';
 import utils from '../lib/utils';
 import parse from '../lib/parse';

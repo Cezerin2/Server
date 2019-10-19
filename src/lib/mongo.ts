@@ -1,11 +1,11 @@
-import winston from 'winston';
-import url from 'url';
-import { MongoClient } from 'mongodb';
-import settings from './settings';
+import * as winston from 'winston';
+import * as url from 'url';
+import { MongoClient, Db } from 'mongodb';
+import { serverConfig } from './settings';
 
-const mongodbConnection = settings.mongodbServerUrl;
-const mongoPathName = url.parse(mongodbConnection).pathname;
-const dbName = mongoPathName.substring(mongoPathName.lastIndexOf('/') + 1);
+const mongodbConnection = serverConfig.mongodbServerUrl;
+const mongoPathName = url.parse(mongodbConnection as string).pathname;
+const dbName = mongoPathName!.substring(mongoPathName!.lastIndexOf('/') + 1);
 
 const RECONNECT_INTERVAL = 1000;
 const CONNECT_OPTIONS = {
@@ -22,10 +22,10 @@ const onReconnect = () => {
 	winston.info('MongoDB reconnected');
 };
 
-export let db = null;
+export let db: Db;
 
 const connectWithRetry = () => {
-	MongoClient.connect(mongodbConnection, CONNECT_OPTIONS, (err, client) => {
+	MongoClient.connect(mongodbConnection as string, CONNECT_OPTIONS, (err, client) => {
 		if (err) {
 			winston.error(
 				`MongoDB connection was failed: ${err.message}`,

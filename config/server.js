@@ -1,16 +1,8 @@
 // config used by server side only
-const dbHost = process.env.DB_HOST || '127.0.0.1';
-const dbPort = process.env.DB_PORT || 27017;
-const dbName = process.env.DB_NAME || 'shop';
-const dbUser = process.env.DB_USER || '';
-const dbPass = process.env.DB_PASS || '';
-const dbCred =
-	dbUser.length > 0 || dbPass.length > 0 ? `${dbUser}:${dbPass}@` : '';
+require('dotenv/config');
+const dbUrl = process.env.DB_URL;
 
-const dbUrl =
-	process.env.DB_URL || `mongodb://${dbCred}${dbHost}:${dbPort}/${dbName}`;
-
-module.exports = {
+const serverConfig = {
 	// used by Store (server side)
 	apiBaseUrl: process.env.API_BASE_URL || `http://localhost:3001/api/v1`,
 
@@ -69,3 +61,5 @@ module.exports = {
 
 	developerMode: process.env.DEVELOPER_MODE || true
 };
+
+export default serverConfig;

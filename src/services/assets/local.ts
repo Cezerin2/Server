@@ -1,11 +1,19 @@
 import fse from 'fs-extra';
 import formidable from 'formidable';
 import path from 'path';
+import { Request, Response } from 'express';
 import utils from '../../lib/utils';
-import settings from '../../lib/settings';
+import * as settings from '../../lib/settings';
 
-const ResolveSystemPath = (dir, file = '') => {
-	const BaseAssetPath = `${settings.assetServer.localBasePath}`;
+export interface IFile {
+	url: string;
+	file: string;
+	size: number;
+	modified: Date;
+}
+
+const ResolveSystemPath = (dir: string, file = '') => {
+	const BaseAssetPath = `${settings.serverConfig.assetServer.localBasePath}`;
 
 	const paths = [BaseAssetPath, dir, file].filter(
 		x => typeof x === 'string' && x.length > 0
@@ -14,8 +22,8 @@ const ResolveSystemPath = (dir, file = '') => {
 	return path.resolve(paths.join('/'));
 };
 
-const ResolveUrlPath = (dir, file) => {
-	const BaseAssetPath = `${settings.assetServer.domain}`;
+const ResolveUrlPath = (dir: string, file: string) => {
+	const BaseAssetPath = `${settings.serverConfig.assetServer.domain}`;
 
 	const paths = [BaseAssetPath, dir, file].filter(
 		x => typeof x === 'string' && x.length > 0
@@ -25,7 +33,7 @@ const ResolveUrlPath = (dir, file) => {
 };
 
 class LocalService {
-	getFileData(dir, fileName) {
+	public getFileData(dir: string, fileName: string): IFile | null {
 		const fileSystemPath = ResolveSystemPath(dir, fileName);
 		const fileUrlPath = ResolveUrlPath(dir, fileName);
 		const stats = fse.statSync(fileSystemPath);
@@ -41,21 +49,21 @@ class LocalService {
 		return null;
 	}
 
-	getFilesData(dir, files) {
+	public getFilesData(dir: string, files: string[]) {
 		return files
 			.map(fileName => this.getFileData(dir, fileName))
 			.filter(fileData => fileData !== null)
-			.sort((a, b) => a.modified - b.modified);
+			.sort((a, b) => a!.modified.getTime() - b!.modified.getTime());
 	}
 
-	getFiles(dir) {
+	public getFiles(dir: string) {
 		return new Promise((resolve, reject) => {
 			const folderPath = ResolveSystemPath(dir);
 
 			// Will error if no folder exists
 			fse.ensureDirSync(folderPath);
 
-			fse.readdir(folderPath, (err, files) => {
+			fse.readdir(folderPath, (err: Error, files: Array<string>) => {
 				if (err) {
 					reject(err);
 				} else {
@@ -66,7 +74,7 @@ class LocalService {
 		});
 	}
 
-	deleteFile(dir, fileName) {
+	public deleteFile(dir: string, fileName: string) {
 		return new Promise((resolve, reject) => {
 			const filePath = ResolveSystemPath(dir, fileName);
 			if (fse.existsSync(filePath)) {
@@ -79,22 +87,22 @@ class LocalService {
 		});
 	}
 
-	deleteDir(dir) {
+	public deleteDir(dir: string) {
 		const dirPath = ResolveSystemPath(dir);
-		fse.remove(dirPath, err => {});
+		fse.remove(dirPath, (err: Error) => ({}));
 	}
 
-	emptyDir(dir) {
+	public emptyDir(dir: string) {
 		const dirPath = ResolveSystemPath(dir);
 		fse.emptyDirSync(dirPath);
 	}
 
-	uploadFile(req, res, dir, onUploadEnd) {
+	public uploadFile(req: Request, res: Response, dir: string, onUploadEnd: (fielName: string) => void) {
 		const uploadDir = ResolveSystemPath(dir);
 		fse.ensureDirSync(uploadDir);
 
 		const form = new formidable.IncomingForm();
-		let file_name = null;
+		let file_name: string | null = null;
 		let file_size = 0;
 
 		form.uploadDir = uploadDir;
@@ -120,7 +128,7 @@ class LocalService {
 					res.send({
 						file: file_name,
 						size: file_size,
-						url: `${settings.assetServer.domain}/${settings.assetServer.themeImageUploadPath}/${file_name}`
+						url: `${settings.serverConfig.assetServer.domain}/${settings.serverConfig.assetServer.themeImageUploadPath}/${file_name}`
 					});
 				} else {
 					res
@@ -132,8 +140,12 @@ class LocalService {
 		form.parse(req);
 	}
 
-	uploadFiles(req, res, dir, onFileUpload, onFilesEnd) {
-		const uploadedFiles = [];
+	public uploadFiles(
+		req: Request,
+		res: Response,
+		dir: string,
+		onFileUpload: (fielName: string) => void, onFilesEnd: (files: Array<IFile>) => void) {
+		const uploadedFiles: Array<IFile> = [];
 		const uploadDir = ResolveSystemPath(dir);
 
 		fse.ensureDirSync(uploadDir);
@@ -166,7 +178,7 @@ class LocalService {
 		form.parse(req);
 	}
 
-	getErrorMessage(err) {
+	getErrorMessage(err: Error | string) {
 		return { error: true, message: err.toString() };
 	}
 }

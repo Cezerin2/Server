@@ -1,10 +1,12 @@
-import WebSocket from 'ws';
-import url from 'url';
+import * as WebSocket from 'ws';
+import * as url from 'url';
 import security from './security';
+import * as http from 'http';
+import * as https from 'https';
 
-let wss = null;
+let wss: WebSocket.Server | null = null;
 
-const getTokenFromRequestPath = requestPath => {
+const getTokenFromRequestPath = (requestPath: string) => {
 	try {
 		const urlObj = url.parse(requestPath, true);
 		return urlObj.query.token;
@@ -13,7 +15,7 @@ const getTokenFromRequestPath = requestPath => {
 	}
 };
 
-const verifyClient = (info, done) => {
+const verifyClient = (info: any, done: (success: boolean, code?: number) => void) => {
 	if (security.DEVELOPER_MODE === true) {
 		done(true);
 	} else {
@@ -31,20 +33,21 @@ const verifyClient = (info, done) => {
 	}
 };
 
-const onConnection = (ws, req) => {
+const onConnection = (ws: WebSocket.Server, req: any) => {
 	// TODO: ws.user = token.email
-	ws.on('error', () => {});
+	ws.on('error', () => { });
+	ws.on('message', (data: any) => broadcastToAll(data));
 };
 
-const broadcastToAll = data => {
-	wss.clients.forEach(client => {
+const broadcastToAll = (data: any) => {
+	wss!.clients.forEach(client => {
 		if (client.readyState === WebSocket.OPEN) {
-			client.send(data, error => {});
+			client.send(data, error => { });
 		}
 	});
 };
 
-const listen = server => {
+const listen = (server: http.Server | https.Server) => {
 	wss = new WebSocket.Server({
 		path: '/ws/dashboard', // Accept only connections matching this path
 		maxPayload: 1024, // The maximum allowed message size
@@ -54,11 +57,10 @@ const listen = server => {
 	});
 
 	wss.on('connection', onConnection);
-	wss.broadcast = broadcastToAll;
 };
 
-const send = ({ event, payload }) => {
-	wss.broadcast(JSON.stringify({ event, payload }));
+const send = (data: { event: any, payload: any }) => {
+	broadcastToAll(JSON.stringify({ event: data.event, payload: data.payload }));
 };
 
 const events = {

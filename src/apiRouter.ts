@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import ProductsRoute from './routes/products';
 import ProductCategoriesRoute from './routes/productCategories';
 import SitemapRoute from './routes/sitemap';
@@ -21,6 +21,7 @@ import WebhooksRoute from './routes/webhooks';
 
 const apiRouter = express.Router();
 
+// tslint:disable
 new ProductsRoute(apiRouter);
 new ProductCategoriesRoute(apiRouter);
 new SitemapRoute(apiRouter);

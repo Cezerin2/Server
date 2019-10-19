@@ -1,13 +1,13 @@
 import path from 'path';
-import url from 'url';
+import * as url from 'url';
 import formidable from 'formidable';
 import AssetService from '../assets/assets';
-import settings from '../../lib/settings';
+import { serverConfig } from '../../lib/settings';
 import utils from '../../lib/utils';
 import { db } from '../../lib/mongo';
 import parse from '../../lib/parse';
 
-const ThemeAssetsPath = `${settings.assetServer.themeImageUploadPath}`;
+const ThemeAssetsPath = `${serverConfig.assetServer.themeImageUploadPath}`;
 
 class SettingsService {
 	constructor() {
@@ -209,7 +209,7 @@ class SettingsService {
 
 		if (data.logo_file && data.logo_file.length > 0) {
 			data.logo = url.resolve(
-				settings.assetServer.domain,
+				serverConfig.assetServer.domain,
 				`${ThemeAssetsPath}/${data.logo_file}`
 			);
 		} else {

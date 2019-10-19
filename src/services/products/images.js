@@ -1,11 +1,7 @@
 import { ObjectID } from 'mongodb';
-import path from 'path';
 import url from 'url';
-import formidable from 'formidable';
-import { AssertionError } from 'assert';
-import settings from '../../lib/settings';
+import { serverConfig } from '../../lib/settings';
 import { db } from '../../lib/mongo';
-import utils from '../../lib/utils';
 import parse from '../../lib/parse';
 import SettingsService from '../settings/settings';
 import AssetService from '../assets/assets';
@@ -22,7 +18,7 @@ class ProductImagesService {
 		const productObjectID = new ObjectID(productId);
 
 		const domain =
-			settings.assetServer.domain ||
+			serverConfig.assetServer.domain ||
 			(await SettingsService.getSettings()).domain;
 
 		return db
@@ -33,7 +29,7 @@ class ProductImagesService {
 					let images = product.images.map(image => {
 						image.url = url.resolve(
 							domain,
-							`${settings.assetServer.productsUploadPath}/${product._id}/${image.filename}`
+							`${serverConfig.assetServer.productsUploadPath}/${product._id}/${image.filename}`
 						);
 						return image;
 					});
@@ -60,7 +56,7 @@ class ProductImagesService {
 					);
 					if (imageData) {
 						const { filename } = imageData;
-						const filePath = `${settings.assetServer.productsUploadPath}/${productId}`;
+						const filePath = `${serverConfig.assetServer.productsUploadPath}/${productId}`;
 
 						AssetService.deleteFile(filePath, filename)
 							.then(() =>
@@ -90,7 +86,7 @@ class ProductImagesService {
 		}
 
 		const productObjectID = new ObjectID(productId);
-		const uploadDir = `${settings.assetServer.productsUploadPath}/${productId}`;
+		const uploadDir = `${serverConfig.assetServer.productsUploadPath}/${productId}`;
 
 		AssetService.uploadFiles(
 			req,
@@ -113,7 +109,7 @@ class ProductImagesService {
 					}
 				);
 			},
-			() => {}
+			() => { }
 		);
 	}
 

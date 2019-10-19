@@ -4,10 +4,10 @@ import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import uaParser from 'ua-parser-js';
 import handlebars from 'handlebars';
-import lruCache from 'lru-cache';
+import * as lruCache from 'lru-cache';
 import { db } from '../../lib/mongo';
 import parse from '../../lib/parse';
-import settings from '../../lib/settings';
+import { serverConfig } from '../../lib/settings';
 import mailer from '../../lib/mailer';
 import SettingsService from '../settings/settings';
 
@@ -209,7 +209,7 @@ class SecurityTokensService {
 				jwtOptions.expiresIn = token.expiration * 60 * 60;
 			}
 
-			jwt.sign(payload, settings.jwtSecretKey, jwtOptions, (err, token) => {
+			jwt.sign(payload, serverConfig.jwtSecretKey, jwtOptions, (err, token) => {
 				if (err) {
 					reject(err);
 				} else {
@@ -225,8 +225,8 @@ class SecurityTokensService {
 				if (token) {
 					return this.getSignedToken(token).then(signedToken => {
 						const loginUrl = url.resolve(
-							settings.adminBaseURL,
-							settings.adminLoginPath
+							serverConfig.adminBaseURL,
+							serverConfig.adminLoginPath
 						);
 						return `${loginUrl}?token=${signedToken}`;
 					});
@@ -290,7 +290,7 @@ class SecurityTokensService {
 				: '';
 			const requestFrom = `${device}${userAgent.os.name}, ${
 				userAgent.browser.name
-			}<br />
+				}<br />
       ${date}<br />
       IP: ${ip}<br />
       ${country}`;

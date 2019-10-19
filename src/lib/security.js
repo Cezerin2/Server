@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import expressJwt from 'express-jwt';
-import settings from './settings';
+import { serverConfig } from './settings';
 import SecurityTokensService from '../services/security/tokens';
 
-const DEVELOPER_MODE = settings.developerMode === true;
+const DEVELOPER_MODE = serverConfig.developerMode === true;
 const SET_TOKEN_AS_REVOKEN_ON_EXCEPTION = true;
 
 const PATHS_WITH_OPEN_ACCESS = [
@@ -60,7 +60,7 @@ const checkUserScope = (requiredScope, req, res, next) => {
 
 const verifyToken = token =>
 	new Promise((resolve, reject) => {
-		jwt.verify(token, settings.jwtSecretKey, (err, decoded) => {
+		jwt.verify(token, serverConfig.jwtSecretKey, (err, decoded) => {
 			if (err) {
 				reject(err);
 			} else {
@@ -85,7 +85,7 @@ const applyMiddleware = app => {
 	if (DEVELOPER_MODE === false) {
 		app.use(
 			expressJwt({
-				secret: settings.jwtSecretKey,
+				secret: serverConfig.jwtSecretKey,
 				isRevoked: checkTokenInBlacklistCallback
 			}).unless({ path: PATHS_WITH_OPEN_ACCESS })
 		);
@@ -93,7 +93,7 @@ const applyMiddleware = app => {
 };
 
 const getAccessControlAllowOrigin = () =>
-	[settings.storeBaseUrl, settings.adminBaseURL] || '*';
+	[serverConfig.storeBaseUrl, serverConfig.adminBaseURL] || '*';
 
 export default {
 	checkUserScope,

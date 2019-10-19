@@ -1,8 +1,6 @@
 import { ObjectID } from 'mongodb';
-import path from 'path';
-import url from 'url';
-import formidable from 'formidable';
-import settings from '../../lib/settings';
+import * as url from 'url';
+import { serverConfig } from '../../lib/settings';
 import AssetService from '../assets/assets';
 import SettingsService from '../settings/settings';
 import { db } from '../../lib/mongo';
@@ -28,7 +26,7 @@ class ProductCategoriesService {
 		const projection = utils.getProjectionFromFields(params.fields);
 		const generalSettings = await SettingsService.getSettings();
 		const { domain } = generalSettings;
-		const assetsDomain = settings.assetServer.domain;
+		const assetsDomain = serverConfig.assetServer.domain;
 		const items = await db
 			.collection('productCategories')
 			.find(filter, { projection })
@@ -124,24 +122,24 @@ class ProductCategoriesService {
 				// 4. update category_id for products
 				idsToDelete
 					? db
-							.collection('products')
-							.updateMany(
-								{ category_id: { $in: idsToDelete } },
-								{ $set: { category_id: null } }
-							)
-							.then(() => idsToDelete)
+						.collection('products')
+						.updateMany(
+							{ category_id: { $in: idsToDelete } },
+							{ $set: { category_id: null } }
+						)
+						.then(() => idsToDelete)
 					: null
 			)
 			.then(idsToDelete =>
 				// 5. update additional category_ids for products
 				idsToDelete
 					? db
-							.collection('products')
-							.updateMany(
-								{ category_ids: { $all: idsToDelete } },
-								{ $pull: { category_ids: { $all: idsToDelete } } }
-							)
-							.then(() => idsToDelete)
+						.collection('products')
+						.updateMany(
+							{ category_ids: { $all: idsToDelete } },
+							{ $pull: { category_ids: { $all: idsToDelete } } }
+						)
+						.then(() => idsToDelete)
 					: null
 			)
 			.then(idsToDelete => {
@@ -149,8 +147,8 @@ class ProductCategoriesService {
 				if (idsToDelete) {
 					for (const categoryId of idsToDelete) {
 						const deleteDir = `${
-							settings.assetServer.categoriesUploadPath
-						}/${categoryId}`;
+							serverConfig.assetServer.categoriesUploadPath
+							}/${categoryId}`;
 						AssetService.deleteFolder(deleteDir);
 					}
 					return Promise.resolve(true);
@@ -278,8 +276,8 @@ class ProductCategoriesService {
 			if (item.image) {
 				item.image = url.resolve(
 					assetsDomain,
-					`${settings.assetServer.categoriesUploadPath}/${item.id}/${
-						item.image
+					`${serverConfig.assetServer.categoriesUploadPath}/${item.id}/${
+					item.image
 					}`
 				);
 			}
@@ -289,7 +287,7 @@ class ProductCategoriesService {
 	}
 
 	deleteCategoryImage(id) {
-		const dir = `${settings.assetServer.categoriesUploadPath}/${id}`;
+		const dir = `${serverConfig.assetServer.categoriesUploadPath}/${id}`;
 
 		AssetService.emptyDir(dir);
 		this.updateCategory(id, { image: '' });
@@ -297,7 +295,7 @@ class ProductCategoriesService {
 
 	uploadCategoryImage(req, res) {
 		const categoryId = req.params.id;
-		const dir = `${settings.assetServer.categoriesUploadPath}/${categoryId}`;
+		const dir = `${serverConfig.assetServer.categoriesUploadPath}/${categoryId}`;
 
 		AssetService.uploadFile(req, res, dir, file_name => {
 			this.updateCategory(categoryId, { image: file_name });

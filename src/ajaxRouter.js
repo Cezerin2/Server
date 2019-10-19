@@ -1,11 +1,10 @@
-import express from 'express';
-import jwt from 'jsonwebtoken';
+import * as express from 'express';
+import * as jwt from 'jsonwebtoken';
 import { ObjectID } from 'mongodb';
 import CezerinClient from 'cezerin2-client';
 import handlebars from 'handlebars';
 import bcrypt from 'bcrypt';
-import serverSettings from './lib/settings';
-import serverConfigs from '../config/server';
+import serverConfig from '../config/server';
 import { db } from './lib/mongo';
 import AuthHeader from './lib/auth-header';
 import mailer from './lib/mailer';
@@ -14,14 +13,14 @@ import SettingsService from './services/settings/settings';
 import OrderItemsService from './services/orders/orderItems';
 
 // cost factor for hashes
-const { saltRounds } = serverSettings;
+const { saltRounds } = serverConfig;
 
 const ajaxRouter = express.Router();
 const TOKEN_PAYLOAD = { email: 'store', scopes: ['admin'] };
-const STORE_ACCESS_TOKEN = jwt.sign(TOKEN_PAYLOAD, serverSettings.jwtSecretKey);
+const STORE_ACCESS_TOKEN = jwt.sign(TOKEN_PAYLOAD, serverConfig.jwtSecretKey);
 
 const api = new CezerinClient({
-	apiBaseUrl: serverSettings.apiBaseUrl,
+	apiBaseUrl: serverConfig.apiBaseUrl,
 	apiToken: STORE_ACCESS_TOKEN
 });
 
@@ -193,13 +192,13 @@ ajaxRouter.post('/forgot-password', async (req, res, next) => {
 		const countryCode = undefined;
 		const [emailTemp] = await Promise.all([
 			EmailTemplatesService.getEmailTemplate(
-				`forgot_password_${serverConfigs.language}`
+				`forgot_password_${serverConfig.language}`
 			)
 		]);
 		await handlebars.registerHelper('forgot_password_link', obj => {
-			const url = `${serverConfigs.storeBaseUrl}${
+			const url = `${serverConfig.storeBaseUrl}${
 				countryCode !== undefined ? `/${countryCode}/` : '/'
-			}reset-password?token=${AuthHeader.encodeUserLoginAuth(userId)}`;
+				}reset-password?token=${AuthHeader.encodeUserLoginAuth(userId)}`;
 			let text = emailTemp.link;
 			if (text == undefined) {
 				text = url;
@@ -419,13 +418,13 @@ ajaxRouter.post('/register', async (req, res, next) => {
 			const countryCode = undefined;
 			const [emailTemp] = await Promise.all([
 				EmailTemplatesService.getEmailTemplate(
-					`register_doi_${serverConfigs.language}`
+					`register_doi_${serverConfig.language}`
 				)
 			]);
 			await handlebars.registerHelper('register_doi_link', obj => {
-				const url = `${serverConfigs.storeBaseUrl}${
+				const url = `${serverConfig.storeBaseUrl}${
 					countryCode !== undefined ? `/${countryCode}/` : '/'
-				}register?token=${tokenConcatString}`;
+					}register?token=${tokenConcatString}`;
 				let text = emailTemp.link;
 				if (text == undefined) {
 					text = url;
@@ -444,7 +443,7 @@ ajaxRouter.post('/register', async (req, res, next) => {
 				req.body.last_name
 			)}xXx${AuthHeader.encodeUserLoginAuth(req.body.email)}xXx${
 				req.body.password
-			}`;
+				}`;
 			await Promise.all([
 				mailer.send({
 					to: req.body.email,
@@ -553,7 +552,7 @@ ajaxRouter.put('/customer-account', async (req, res, next) => {
 				);
 			}
 		);
-	} catch (error) {}
+	} catch (error) { }
 });
 
 ajaxRouter.post('/cart/items', (req, res, next) => {
@@ -657,8 +656,8 @@ ajaxRouter.put('/cart/checkout', (req, res, next) => {
 				[].slice.call(json.items).forEach(items => {
 					paths +=
 						json.items.length < 2
-							? `${serverSettings.storeBaseUrl}${items.path}`
-							: `${serverSettings.storeBaseUrl}${items.path},`;
+							? `${serverConfig.storeBaseUrl}${items.path}`
+							: `${serverConfig.storeBaseUrl}${items.path},`;
 				});
 				const data = {
 					landing_url: paths
