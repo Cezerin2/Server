@@ -4,14 +4,16 @@ import ProductOptionsService from '../services/products/options';
 import ProductOptionValuesService from '../services/products/optionValues';
 import ProductVariantsService from '../services/products/variants';
 import ProductImagesService from '../services/products/images';
+import { Router, Request, Response, NextFunction } from 'express';
 
 class ProductsRoute {
-	constructor(router) {
+	public router: Router;
+	constructor(router: Router) {
 		this.router = router;
 		this.registerRoutes();
 	}
 
-	registerRoutes() {
+	public registerRoutes() {
 		this.router.get(
 			'/v1/products',
 			security.checkUserScope.bind(this, security.scope.READ_PRODUCTS),
@@ -149,13 +151,13 @@ class ProductsRoute {
 		);
 	}
 
-	getProducts(req, res, next) {
+	public getProducts(req: Request, res: Response, next: NextFunction) {
 		ProductsService.getProducts(req.query)
 			.then(data => res.send(data))
 			.catch(next);
 	}
 
-	getSingleProduct(req, res, next) {
+	public getSingleProduct(req: Request, res: Response, next: NextFunction) {
 		ProductsService.getSingleProduct(req.params.productId)
 			.then(data => {
 				if (data) {
@@ -166,13 +168,13 @@ class ProductsRoute {
 			.catch(next);
 	}
 
-	addProduct(req, res, next) {
+	public addProduct(req: Request, res: Response, next: NextFunction) {
 		ProductsService.addProduct(req.body)
 			.then(data => res.send(data))
 			.catch(next);
 	}
 
-	updateProduct(req, res, next) {
+	public updateProduct(req: Request, res: Response, next: NextFunction) {
 		ProductsService.updateProduct(req.params.productId, req.body)
 			.then(data => {
 				if (data) {
@@ -183,23 +185,24 @@ class ProductsRoute {
 			.catch(next);
 	}
 
-	deleteProduct(req, res, next) {
+	public deleteProduct(req: Request, res: Response, next: NextFunction) {
 		ProductsService.deleteProduct(req.params.productId)
 			.then(data => res.status(data ? 200 : 404).end())
 			.catch(next);
 	}
 
-	getImages(req, res, next) {
+	public getImages(req: Request, res: Response, next: NextFunction) {
 		ProductImagesService.getImages(req.params.productId)
 			.then(data => res.send(data))
 			.catch(next);
 	}
 
-	async addImage(req, res, next) {
-		await ProductImagesService.addImage(req, res, next);
+	public async addImage(req: Request, res: Response, next: NextFunction) {
+		console.log(req, res);
+		await ProductImagesService.addImage(req, res);
 	}
 
-	updateImage(req, res, next) {
+	public updateImage(req: Request, res: Response, next: NextFunction) {
 		ProductImagesService.updateImage(
 			req.params.productId,
 			req.params.imageId,
@@ -207,32 +210,32 @@ class ProductsRoute {
 		).then(data => res.end());
 	}
 
-	deleteImage(req, res, next) {
+	public deleteImage(req: Request, res: Response, next: NextFunction) {
 		ProductImagesService.deleteImage(
 			req.params.productId,
 			req.params.imageId
 		).then(data => res.end());
 	}
 
-	isSkuExists(req, res, next) {
+	public isSkuExists(req: Request, res: Response, next: NextFunction) {
 		ProductsService.isSkuExists(req.query.sku, req.params.productId)
 			.then(exists => res.status(exists ? 200 : 404).end())
 			.catch(next);
 	}
 
-	isSlugExists(req, res, next) {
+	public isSlugExists(req: Request, res: Response, next: NextFunction) {
 		ProductsService.isSlugExists(req.query.slug, req.params.productId)
 			.then(exists => res.status(exists ? 200 : 404).end())
 			.catch(next);
 	}
 
-	getOptions(req, res, next) {
+	public getOptions(req: Request, res: Response, next: NextFunction) {
 		ProductOptionsService.getOptions(req.params.productId)
 			.then(data => res.send(data))
 			.catch(next);
 	}
 
-	getSingleOption(req, res, next) {
+	public getSingleOption(req: Request, res: Response, next: NextFunction) {
 		ProductOptionsService.getSingleOption(
 			req.params.productId,
 			req.params.optionId
@@ -246,13 +249,13 @@ class ProductsRoute {
 			.catch(next);
 	}
 
-	addOption(req, res, next) {
+	public addOption(req: Request, res: Response, next: NextFunction) {
 		ProductOptionsService.addOption(req.params.productId, req.body)
 			.then(data => res.send(data))
 			.catch(next);
 	}
 
-	updateOption(req, res, next) {
+	public updateOption(req: Request, res: Response, next: NextFunction) {
 		ProductOptionsService.updateOption(
 			req.params.productId,
 			req.params.optionId,
@@ -262,7 +265,7 @@ class ProductsRoute {
 			.catch(next);
 	}
 
-	deleteOption(req, res, next) {
+	public deleteOption(req: Request, res: Response, next: NextFunction) {
 		ProductOptionsService.deleteOption(
 			req.params.productId,
 			req.params.optionId
@@ -271,7 +274,7 @@ class ProductsRoute {
 			.catch(next);
 	}
 
-	getOptionValues(req, res, next) {
+	public getOptionValues(req: Request, res: Response, next: NextFunction) {
 		ProductOptionValuesService.getOptionValues(
 			req.params.productId,
 			req.params.optionId
@@ -280,7 +283,7 @@ class ProductsRoute {
 			.catch(next);
 	}
 
-	getSingleOptionValue(req, res, next) {
+	public getSingleOptionValue(req: Request, res: Response, next: NextFunction) {
 		ProductOptionValuesService.getSingleOptionValue(
 			req.params.productId,
 			req.params.optionId,
@@ -295,7 +298,7 @@ class ProductsRoute {
 			.catch(next);
 	}
 
-	addOptionValue(req, res, next) {
+	public addOptionValue(req: Request, res: Response, next: NextFunction) {
 		ProductOptionValuesService.addOptionValue(
 			req.params.productId,
 			req.params.optionId,
@@ -305,7 +308,7 @@ class ProductsRoute {
 			.catch(next);
 	}
 
-	updateOptionValue(req, res, next) {
+	public updateOptionValue(req: Request, res: Response, next: NextFunction) {
 		ProductOptionValuesService.updateOptionValue(
 			req.params.productId,
 			req.params.optionId,
@@ -316,7 +319,7 @@ class ProductsRoute {
 			.catch(next);
 	}
 
-	deleteOptionValue(req, res, next) {
+	public deleteOptionValue(req: Request, res: Response, next: NextFunction) {
 		ProductOptionValuesService.deleteOptionValue(
 			req.params.productId,
 			req.params.optionId,
@@ -326,19 +329,19 @@ class ProductsRoute {
 			.catch(next);
 	}
 
-	getVariants(req, res, next) {
+	public getVariants(req: Request, res: Response, next: NextFunction) {
 		ProductVariantsService.getVariants(req.params.productId)
 			.then(data => res.send(data))
 			.catch(next);
 	}
 
-	addVariant(req, res, next) {
+	public addVariant(req: Request, res: Response, next: NextFunction) {
 		ProductVariantsService.addVariant(req.params.productId, req.body)
 			.then(data => res.send(data))
 			.catch(next);
 	}
 
-	updateVariant(req, res, next) {
+	public updateVariant(req: Request, res: Response, next: NextFunction) {
 		ProductVariantsService.updateVariant(
 			req.params.productId,
 			req.params.variantId,
@@ -348,7 +351,7 @@ class ProductsRoute {
 			.catch(next);
 	}
 
-	deleteVariant(req, res, next) {
+	public deleteVariant(req: Request, res: Response, next: NextFunction) {
 		ProductVariantsService.deleteVariant(
 			req.params.productId,
 			req.params.variantId
@@ -357,7 +360,7 @@ class ProductsRoute {
 			.catch(next);
 	}
 
-	setVariantOption(req, res, next) {
+	public setVariantOption(req: Request, res: Response, next: NextFunction) {
 		ProductVariantsService.setVariantOption(
 			req.params.productId,
 			req.params.variantId,

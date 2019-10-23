@@ -1,4 +1,4 @@
-import slug from 'slug';
+import * as slug from 'slug';
 import SitemapService from '../services/sitemap';
 
 const slugConfig = {
@@ -6,8 +6,6 @@ const slugConfig = {
 	remove: null, // (optional) regex to remove characters
 	lower: true // result in lower case
 };
-
-
 
 const cleanSlug = (text: string) => slug(text || '', slugConfig);
 
