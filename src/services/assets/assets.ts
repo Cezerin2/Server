@@ -10,7 +10,7 @@ class AssetsService {
 		return service.getFileData(path, fileName);
 	}
 
-	public getFilesData(path: string, files: string[]) {
+	public getFilesData(path: string, files: Array<string>) {
 		return service.getFilesData(path, files);
 	}
 

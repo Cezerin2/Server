@@ -24,7 +24,12 @@
     cd ../
     ```
   
-  - **Install dependencies**
+	- **Create an `.env` file and set the DB_URL route to match your database**
+  
+    In order to connect to mongo, you'll have to set the process' DB_URL variable to the path of your database connection. A common example would be `	DB_URL = "mongodb+srv://USER:PASSWORD@PATH-TO-DB/COLLECTION"`
+
+  
+	- **Install dependencies**
   ```shell
   npm i
   ```
