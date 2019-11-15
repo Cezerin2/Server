@@ -1,5 +1,7 @@
 import { ObjectID } from 'mongodb';
+import path from 'path';
 import url from 'url';
+import formidable from 'formidable';
 import settings from '../../lib/settings';
 import AssetService from '../assets/assets';
 import SettingsService from '../settings/settings';
@@ -147,7 +149,7 @@ class ProductCategoriesService {
 				if (idsToDelete) {
 					for (const categoryId of idsToDelete) {
 						const deleteDir = `${settings.assetServer.categoriesUploadPath}/${categoryId}`;
-						AssetService.deleteFolder(deleteDir);
+						AssetService.deleteDir(deleteDir);
 					}
 					return Promise.resolve(true);
 				}
