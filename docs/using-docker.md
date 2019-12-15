@@ -78,7 +78,7 @@ services:
   cezerin2:
     image: cezerin2/cezerin2
     environment:
-      - LANGUAGE=ru
+      - LANGUAGE=en
     ports:
       - 3001:80
     environment:
@@ -96,7 +96,7 @@ services:
   cezerin2-store:
     image: cezerin2/cezerin2-store
     environment:
-      - LANGUAGE=ru
+      - LANGUAGE=en
       - API_BASE_URL=http://cezerin2/api/v1
       - AJAX_BASE_URL=http://cezerin2/ajax
     ports:
@@ -108,7 +108,7 @@ services:
   admin:
     image: cezerin2/cezerin2-admin
     environment:
-      - LANGUAGE=ru
+      - LANGUAGE=en
     ports:
       - 3002:80
     depends_on:
