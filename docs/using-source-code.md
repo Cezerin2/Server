@@ -43,17 +43,35 @@
     ```
 
   - This script will add token with email admin@example.com and my domain to http://localhost
-    
-  - **Start application in the background**
-  ```shell
-  pm2 start process.json
-  ```
+  
+	- **Start application in the background**
+  
+	- Install pm2 [if not already installed] 
+	
+		```shell
+		npm install -g pm2
+		```
+		
+	- Run application in the background
+		```shell
+		pm2 start process.json
+		```
+		
+	- Process will be offline - Make it online
+		```shell
+		pm2 start 0
+		```
 
   - or you can start app in your terminal (you will see debug information, that is useful for debug):  
   
-  ```shell
-  npm start
-  ```
+	- **Build project**
+		```shell
+		npm run build
+		```
+	- start FrontEnd Site 
+	  ```shell
+		npm start
+		```
   
   - At this setup, we have api running on port 3001 and available at **http://localhost:3001**
   
