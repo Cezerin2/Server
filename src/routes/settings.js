@@ -1,5 +1,6 @@
 import security from '../lib/security';
 import SettingsService from '../services/settings/settings';
+import ImportSettingsService from '../services/settings/import';
 import EmailSettingsService from '../services/settings/email';
 import EmailTemplatesService from '../services/settings/emailTemplates';
 import CheckoutFieldsService from '../services/settings/checkoutFields';
@@ -20,6 +21,16 @@ class SettingsRoute {
 			'/v1/settings',
 			security.checkUserScope.bind(this, security.scope.WRITE_SETTINGS),
 			this.updateSettings.bind(this)
+		);
+		this.router.get(
+			'/v1/settings/import',
+			security.checkUserScope.bind(this, security.scope.READ_SETTINGS),
+			this.getImportSettings.bind(this)
+		);
+		this.router.put(
+			'/v1/settings/import',
+			security.checkUserScope.bind(this, security.scope.WRITE_SETTINGS),
+			this.updateImportSettings.bind(this)
 		);
 		this.router.get(
 			'/v1/settings/email',
@@ -81,6 +92,26 @@ class SettingsRoute {
 					return res.send(data);
 				}
 				return res.status(404).end();
+			})
+			.catch(next);
+	}
+
+	getImportSettings(req, res, next) {
+		ImportSettingsService.getImportSettings()
+			.then(data => {
+				res.send(data);
+			})
+			.catch(next);
+	}
+
+	updateImportSettings(req, res, next) {
+		ImportSettingsService.updateImportSettings(req.body)
+			.then(data => {
+				if (data) {
+					res.send(data);
+				} else {
+					res.status(404).end();
+				}
 			})
 			.catch(next);
 	}

@@ -148,10 +148,8 @@ class ProductCategoriesService {
 				// 6. delete directories with images
 				if (idsToDelete) {
 					for (const categoryId of idsToDelete) {
-						const deleteDir = `${
-							settings.assetServer.categoriesUploadPath
-						}/${categoryId}`;
-						AssetService.deleteFolder(deleteDir);
+						const deleteDir = `${settings.assetServer.categoriesUploadPath}/${categoryId}`;
+						AssetService.deleteDir(deleteDir);
 					}
 					return Promise.resolve(true);
 				}
@@ -278,9 +276,7 @@ class ProductCategoriesService {
 			if (item.image) {
 				item.image = url.resolve(
 					assetsDomain,
-					`${settings.assetServer.categoriesUploadPath}/${item.id}/${
-						item.image
-					}`
+					`${settings.assetServer.categoriesUploadPath}/${item.id}/${item.image}`
 				);
 			}
 		}

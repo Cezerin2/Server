@@ -5,7 +5,6 @@ import CezerinClient from 'cezerin2-client';
 import handlebars from 'handlebars';
 import bcrypt from 'bcrypt';
 import serverSettings from './lib/settings';
-import serverConfigs from '../config/server';
 import { db } from './lib/mongo';
 import AuthHeader from './lib/auth-header';
 import mailer from './lib/mailer';
@@ -193,11 +192,11 @@ ajaxRouter.post('/forgot-password', async (req, res, next) => {
 		const countryCode = undefined;
 		const [emailTemp] = await Promise.all([
 			EmailTemplatesService.getEmailTemplate(
-				`forgot_password_${serverConfigs.language}`
+				`forgot_password_${serverSettings.language}`
 			)
 		]);
 		await handlebars.registerHelper('forgot_password_link', obj => {
-			const url = `${serverConfigs.storeBaseUrl}${
+			const url = `${serverSettings.storeBaseUrl}${
 				countryCode !== undefined ? `/${countryCode}/` : '/'
 			}reset-password?token=${AuthHeader.encodeUserLoginAuth(userId)}`;
 			let text = emailTemp.link;
@@ -419,11 +418,11 @@ ajaxRouter.post('/register', async (req, res, next) => {
 			const countryCode = undefined;
 			const [emailTemp] = await Promise.all([
 				EmailTemplatesService.getEmailTemplate(
-					`register_doi_${serverConfigs.language}`
+					`register_doi_${serverSettings.language}`
 				)
 			]);
 			await handlebars.registerHelper('register_doi_link', obj => {
-				const url = `${serverConfigs.storeBaseUrl}${
+				const url = `${serverSettings.storeBaseUrl}${
 					countryCode !== undefined ? `/${countryCode}/` : '/'
 				}register?token=${tokenConcatString}`;
 				let text = emailTemp.link;
