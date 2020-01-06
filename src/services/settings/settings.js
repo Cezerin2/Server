@@ -32,7 +32,7 @@ class SettingsService {
 			default_shipping_city: '',
 			default_product_sorting: 'stock_status,price,position',
 			product_fields:
-				'path,id,name,category_id,,category_ids,category_name,sku,images,enabled,discontinued,stock_status,stock_quantity,price,on_sale,regular_price,attributes,tags,position',
+				'path,id,name,category_id,category_ids,category_name,sku,images,enabled,discontinued,stock_status,stock_quantity,price,on_sale,regular_price,attributes,tags,position',
 			products_limit: 30,
 			weight_unit: 'kg',
 			length_unit: 'cm',
