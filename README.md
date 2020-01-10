@@ -24,7 +24,7 @@ Built with:
 - [Twitter](https://twitter.com/cezerin2)
 
 ## Dashboard
-Client-side dashboard use JSON Web Token (JWT) to access REST API.
+Client-side dashboard use JSON Web Token (JWT) to access REST API.[Demo dashboard](https://admin.cezerin.net)
 
 ![Cezerin Dashboard](https://cezerin.org/assets/images/cezerin-dashboard-products.png)
 
