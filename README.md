@@ -26,16 +26,15 @@ Built with:
 ## Dashboard
 Client-side dashboard use JSON Web Token (JWT) to access REST API.
 
-![Cezerin Dashboard](https://cezerin.com/assets/images/cezerin-dashboard-products.png?)
+![Cezerin Dashboard](https://cezerin.org/assets/images/cezerin-dashboard-products.png)
 
-![Signin email](https://cezerin.com/assets/images/cezerin-signin-email.png)
 
 ## Store
 Single-Page Application with React server-side rendering. [Demo store](https://demo.cezerin.net)
 
-[![Cezerin Store](https://cezerin.com/assets/images/cezerin-mobile-product.png)](https://demo.cezerin.net)
+[![Cezerin Store](https://cezerin.org/assets/images/cezerin-mobile-order-summary.png)](https://demo.cezerin.net)
 
-[![Cezerin Store](https://cezerin.com/assets/images/cezerin-mobile-order-summary.png)](https://demo.cezerin.net)
+[![Cezerin Dashboard](https://cezerin.org/assets/images/cezerin-dashboard-products.png)](https://admin.cezerin.net)
 
 ## Installation
 
