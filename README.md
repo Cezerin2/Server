@@ -17,7 +17,7 @@ Built with:
 ## Links
 - [GitHub](https://github.com/cezerin2/cezerin2)
 - [Community Site](https://cezerin.org)
-- [Demo Store](https://store.cezerin.com)
+- [Demo Store](https://demo.cezerin.net)
 - [Gitter.im Chat Cezerin2](https://gitter.im/cezerin2)
 - [Docs](https://github.com/cezerin2/cezerin2/blob/master/docs)
 - [Facebook](https://facebook.com/cezerin)
@@ -31,11 +31,11 @@ Client-side dashboard use JSON Web Token (JWT) to access REST API.
 ![Signin email](https://cezerin.com/assets/images/cezerin-signin-email.png)
 
 ## Store
-Single-Page Application with React server-side rendering. [Demo store](https://store.cezerin.com)
+Single-Page Application with React server-side rendering. [Demo store](https://demo.cezerin.net)
 
-[![Cezerin Store](https://cezerin.com/assets/images/cezerin-mobile-product.png)](https://store.cezerin.com)
+[![Cezerin Store](https://cezerin.com/assets/images/cezerin-mobile-product.png)](https://demo.cezerin.net)
 
-[![Cezerin Store](https://cezerin.com/assets/images/cezerin-mobile-order-summary.png)](https://store.cezerin.com)
+[![Cezerin Store](https://cezerin.com/assets/images/cezerin-mobile-order-summary.png)](https://demo.cezerin.net)
 
 ## Installation
 
