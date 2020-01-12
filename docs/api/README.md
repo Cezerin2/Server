@@ -3,6 +3,7 @@
 * [Apps](./apps.md)
 * [Products](./products.md)
 * [Product Categories](./product-categories.md)
+* [Product Import](./product-import.md)
 * Orders
 * Order Statuses
 * Customers
