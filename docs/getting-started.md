@@ -6,4 +6,4 @@
 
 - Help
   - [Cezerin Community Site](https://cezerin.org)
-  - [Gitter.im Chat Cezerin2](https://gitter.im/cezerin2)
+  - [Telegram Chat: Cezerin](https://t.me/cezerin)
