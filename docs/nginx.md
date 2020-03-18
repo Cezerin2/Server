@@ -45,7 +45,7 @@ server {
         }
 
         location /assets/ {
-                alias /var/www/cezerin2-store/theme/assets/;
+                alias /var/www/cezerin2/public/content/assets/;
         }
 
         location /sw.js {
