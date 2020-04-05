@@ -4,7 +4,7 @@ import lruCache from 'lru-cache';
 import serverSettings from '../../lib/settings';
 import utils from '../../lib/utils';
 
-const cache = lruCache({
+const cache = new lruCache({
 	max: 10000,
 	maxAge: 1000 * 60 * 60 * 24 // 24h
 });
