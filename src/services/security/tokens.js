@@ -11,7 +11,7 @@ import settings from '../../lib/settings';
 import mailer from '../../lib/mailer';
 import SettingsService from '../settings/settings';
 
-const cache = lruCache({
+const cache = new lruCache({
 	max: 10000,
 	maxAge: 1000 * 60 * 60 * 24 // 24h
 });

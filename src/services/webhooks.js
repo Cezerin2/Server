@@ -4,7 +4,7 @@ import { db } from '../lib/mongo';
 import utils from '../lib/utils';
 import parse from '../lib/parse';
 
-const cache = lruCache({
+const cache = new lruCache({
 	max: 10000,
 	maxAge: 1000 * 60 * 60 * 24 // 24h
 });
