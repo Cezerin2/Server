@@ -2,8 +2,9 @@
 node_modules
 
 # Public Content
-public/content/*
+#public/content/*
 !public/content/*.md
+
 # Initial Setup Content
 !public/content/assets/images/logo.webp
 !public/content/assets/images/slide7.webp
