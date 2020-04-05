@@ -34,12 +34,12 @@
   "home_slider": [
     {
       "path": "/page-1",
-      "image": "slide8.jpg",
+      "image": "slide8.webp",
       "description": "COMFORT. SPORT. STYLE.",
       "title": "THE FRESH FOAM CRUZ"
     },
-    { "path": "/page-2", "image": "slide7.jpg" },
-    { "image": "slide9.jpg", "path": "/page-3" }
+    { "path": "/page-2", "image": "slide7.webp" },
+    { "image": "slide9.webp", "path": "/page-3" }
   ],
   "home_slider_color": "#ffffff",
   "button_addtocart_text": "",
@@ -57,7 +57,7 @@
   "sortNewest": "-date_created",
   "sortPriceLow": "price",
   "sortPriceHigh": "-price",
-  "footer_logo_url": "logo.png",
+  "footer_logo_url": "logo.webp",
   "limit_viewed_products": 4,
   "show_viewed_products": true,
   "product_gallery_shownav": true,
