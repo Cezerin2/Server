@@ -1,7 +1,7 @@
 {
   "name": "cezerin2",
-  "version": "0.35.0",
-  "description": "Cezerin2 is React and Node.js based eCommerce platform. https://cezerin.com",
+  "version": "0.36.0",
+  "description": "Cezerin2 is React and Node.js based eCommerce platform. https://cezerin.org",
   "keywords": [
     "cezerin2",
     "cezerin",
@@ -10,27 +10,10 @@
     "shop",
     "cms"
   ],
-  "homepage": "https://cezerin.com",
+  "homepage": "https://cezerin.org",
   "bugs": "https://github.com/cezerin2/cezerin2/issues",
   "license": "MIT",
-  "author": {
-    "name": "Restmount <jsonmount@gmail.com>",
-    "url": "https://github.com/restmount"
-  },
-  "contributors": [
-    {
-      "name": "Luke Busstra <luke.busstra@gmail.com>",
-      "url": "https://github.com/lubuss"
-    },
-    {
-      "name": "Restmount <jsonmount@gmail.com>",
-      "url": "https://github.com/restmount"
-    },
-    {
-      "name": "Sergey Onufrienko <sergey@onufrienko.com>",
-      "url": "https://github.com/sonufrienko"
-    }
-  ],
+ 
   "main": "src/index.js",
   "repository": {
     "type": "git",
@@ -40,17 +23,7 @@
     "setup": "node -r esm src/setup.js",
     "theme:install": "./scripts/theme-install.sh",
     "theme:export": "./scripts/theme-export.sh",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "prettier": "prettier --write \"src/**/*.js\" \"theme/**/*.js\"",
-    "precommit": "lint-staged",
     "start": "node -r esm src/index.js"
-  },
-  "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "git add"
-    ]
   },
   "dependencies": {
     "aws-sdk": "^2.653.0",
@@ -70,13 +43,6 @@
     "concurrently": "^5.1.0",
     "cookie-parser": "^1.4.5",
     "cryptr": "^6.0.2",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb": "^18.1.0",
-    "eslint-config-prettier": "^6.10.1",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-react": "^7.19.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "express-jwt": "^5.3.1",
@@ -98,7 +64,6 @@
     "nodemailer": "^6.4.6",
     "nodemailer-smtp-transport": "^2.7.4",
     "postcss-loader": "^3.0.0",
-    "prettier": "^2.0.2",
     "query-string": "^6.11.1",
     "response-time": "^2.3.2",
     "sass-loader": "^8.0.2",
@@ -111,9 +76,5 @@
     "winston": "^3.2.1",
     "workbox-webpack-plugin": "^5.1.2",
     "ws": "^7.2.3"
-  },
-  "engines": {
-    "node": ">= 8.0.0",
-    "npm": ">= 5.0.0"
   }
 }
