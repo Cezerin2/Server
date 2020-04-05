@@ -52,7 +52,7 @@ Single-Page Application with React server-side rendering. [Demo store](https://d
 
 ## Documentation
 
-[Documentation](https://github.com/cezerin2/cezerin2/tree/master/docs)
+[Documentation](https://cezerin.org/docs)
 
 ## Application Structure
 
