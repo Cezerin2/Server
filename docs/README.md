@@ -24,9 +24,6 @@
   - [Final checks](deploy-on-web-final-checks.md)
   - [Turn off Developer Mode](deploy-on-web-production-mode.md)
 
-- Docker
-  - [Single Instanse](single-instance)
-
 - API
 
   - [API Reference](api)
