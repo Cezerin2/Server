@@ -2,7 +2,7 @@
   <img src="https://cezerin.org/assets/images/shortcut.png" alt="cezerin2" />
 </p>
 <h5 align="center">
-Open Source React and Node.js based eCommerce platform
+Cezerin2 is React and Node.js based eCommerce platform. Allows creating a Progressive Web Apps. This is based from original cezerin after project went dead.
 </h5>
 
 [Demo Store](https://demo.cezerin.net)
