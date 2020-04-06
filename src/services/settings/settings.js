@@ -14,7 +14,7 @@ class SettingsService {
     this.defaultSettings = {
       store_name: "Cezerin",
       domain: "",
-      logo_file: "logo.png",
+      logo_file: "logo.webp",
       language: "en",
       currency_code: "USD",
       currency_symbol: "$",
