@@ -1,8 +1,12 @@
-# Cezerin API - Backend for Cezerin - React and Node.js based eCommerce platform.
+# Cezerin is React and Node.js based eCommerce platform. React Shopping Cart.
 
 [![CircleCI](https://circleci.com/gh/Cezerin2/cezerin2/tree/master.svg?style=svg)](https://circleci.com/gh/Cezerin2/cezerin2/tree/master)
 
 Cezerin - Ecommerce Progressive Progressive Web Apps. This is based from original cezerin after project abandoned by author.
+
+[Cezerin API](https://github.com/cezerin2/cezerin2)
+[Cezerin Store](https://github.com/cezerin2/cezerin2-store)
+[Cezerin Admin](https://github.com/cezerin2/cezerin2-admin)
 
 Built with:
 
