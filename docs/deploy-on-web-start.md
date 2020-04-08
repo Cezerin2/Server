@@ -205,7 +205,7 @@ Dashboard: https://admin.your-domain-name.com
 
 
 ## 9. Turn off Developer Mode
-By default, Cezerin is in developer mode. This means you can access API and Dashboard without authorizetion (access tokens).
+By default, Cezerin is in developer mode. This means you can access API and Dashboard without authorization (access tokens).
 
 Don't forget to switch off developer mode at working store.
 At dev mode api's and dashboard available for all without any restrictions.

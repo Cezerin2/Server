@@ -2,7 +2,7 @@
 node_modules
 
 # Public Content
-public/content/*
+#public/content/*
 !public/content/*.md
 # Initial Setup Content
 !public/content/assets/images/logo.png

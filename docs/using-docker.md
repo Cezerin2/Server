@@ -9,13 +9,11 @@
  - [Download docker-compose.yml](https://raw.githubusercontent.com/Cezerin2/docker-cezerin2/master/docker-compose.yml)
 
  ```shell
-version: '3'
+ version: '3'
 
-services:
+ services:
   cezerin2:
     image: cezerin2/cezerin2
-    environment:
-      - LANGUAGE=en
     ports:
       - 3001:80
     environment:
@@ -33,7 +31,6 @@ services:
   cezerin2-store:
     image: cezerin2/cezerin2-store
     environment:
-      - LANGUAGE=en
       - API_BASE_URL=http://cezerin2/api/v1
       - AJAX_BASE_URL=http://cezerin2/ajax
     ports:
@@ -44,8 +41,6 @@ services:
 
   admin:
     image: cezerin2/cezerin2-admin
-    environment:
-      - LANGUAGE=en
     ports:
       - 3002:80
     depends_on:
@@ -53,7 +48,7 @@ services:
     restart: always
 
   db:
-    image: mongo:3.4
+    image: mongo:3.6
     ports:
       - 27017:27017
     volumes:
