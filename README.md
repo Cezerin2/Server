@@ -36,7 +36,9 @@ Client-side dashboard use JSON Web Token (JWT) to access REST API. [Demo dashboa
 
 Single-Page Application with React server-side rendering. [Demo store](https://demo.cezerin.net)
 
-[![Cezerin Store](https://cezerin.org/assets/images/cezerin-mobile-order-summary.png)](https://demo.cezerin.net)
+[![Cezerin Store](https://cezerin.org/assets/images/cezerin-mobile-product.png)](https://demo.cezerin.net/)
+
+[![Cezerin Store](https://cezerin.org/assets/images/cezerin-mobile-order-summary.png)](https://demo.cezerin.net/)
 
 - Getting Started
 
