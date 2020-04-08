@@ -26,7 +26,7 @@ Built with:
 
 ## Dashboard
 
-Client-side dashboard use JSON Web Token (JWT) to access REST API.[Demo dashboard](https://admin.cezerin.net)
+Client-side dashboard use JSON Web Token (JWT) to access REST API. [Demo dashboard](https://admin.cezerin.net)
 
 ![Cezerin Dashboard](https://cezerin.org/assets/images/cezerin-dashboard-products.png)
 
@@ -36,14 +36,39 @@ Single-Page Application with React server-side rendering. [Demo store](https://d
 
 [![Cezerin Store](https://cezerin.org/assets/images/cezerin-mobile-order-summary.png)](https://demo.cezerin.net)
 
-[![Cezerin Dashboard](https://cezerin.org/assets/images/cezerin-dashboard-products.png)](https://admin.cezerin.net)
+- Getting Started
 
-## Installation
+  - [Overview](./docs/overview.md)
+  
+- Installation Guides
 
-- [with GitHub](https://github.com/cezerin2/cezerin2/blob/master/docs/using-source-code.md)
-- [with Docker](https://github.com/cezerin2/cezerin2/blob/master/docs/using-docker.md)
-- [How to deploy a Cezerin2 on Ubuntu 16.04](https://github.com/cezerin2/cezerin2/blob/master/docs/how-to-deploy-a-cezerin2-on-ubuntu-16-04.md)
-- [How to deploy a Cezerin2 on Ubuntu 18.04.1 (from GitHub)](https://github.com/cezerin2/cezerin2/blob/master/docs/how-to-deploy-a-cezerin2-on-ubuntu-18-04-1-github.md)
+  - [Prerequisites](./docs/prerequisites.md)
+  - [Setup Database](./docs/setup-database.md)
+  - [Using source code](./docs/using-source-code.md)
+  - [Using docker](./docs/using-docker.md)
+
+- Deploy on Web
+
+  - [Hosting](./docs/deploy-on-web-hosting.md)
+  - [Create droplet](./docs/deploy-on-web-droplet.md)
+  - [Install NGinx Web Server + MERN Stack](./docs/deploy-on-web-mern.md)
+  - [Run MongoDB](./docs/deploy-on-web-mongodb.md)
+  - [Run Cezerin](./docs/deploy-on-web-cezerin.md)
+  - [Run NGinx](./docs/deploy-on-web-nginx.md)
+  - [Setup domain with Cloudflare](./docs/deploy-on-web-cloudflare.md)
+  - [Cezerin configs changes](./docs/deploy-on-web-cezerin-configs.md)
+  - [Final checks](./docs/deploy-on-web-final-checks.md)
+  - [Turn off Developer Mode](./docs/deploy-on-web-production-mode.md)
+
+- API
+
+  - [API Reference](./docs/api)
+  - [API Client](https://github.com/cezerin/client)
+
+- Help
+  - [FAQ](./docs/faq.md)
+  - [HowTos](./docs/howtos.md)
+  - [Help and Support](./docs/help-and-support.md)
 
 ### Requirements
 
