@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/Cezerin2/cezerin2/tree/master.svg?style=svg)](https://circleci.com/gh/Cezerin2/cezerin2/tree/master)
 
-Cezerin - Ecommerce Progressive Progressive Web Apps. This is based from original cezerin after project abandoned by original author.
+Cezerin - Ecommerce Progressive Progressive Web Apps. This is based from original cezerin after project abandoned by author.
 
 Built with:
 
