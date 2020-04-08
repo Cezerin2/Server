@@ -1,7 +1,7 @@
 {
   "name": "cezerin2",
   "version": "0.35.0",
-  "description": "Cezerin2 is React and Node.js based eCommerce platform. https://cezerin.com",
+  "description": "Cezerin2 is React and Node.js based eCommerce platform. https://cezerin.org",
   "keywords": [
     "cezerin2",
     "cezerin",
@@ -10,7 +10,7 @@
     "shop",
     "cms"
   ],
-  "homepage": "https://cezerin.com",
+  "homepage": "https://cezerin.org",
   "bugs": "https://github.com/cezerin2/cezerin2/issues",
   "license": "MIT",
   "author": {
