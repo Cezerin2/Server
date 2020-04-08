@@ -6,14 +6,20 @@
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
-		"strict": true,
-		"forceConsistentCasingInFileNames": true,
+		"strict": false,
+		"forceConsistentCasingInFileNames": false,
 		"module": "esnext",
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
-		"jsx": "react"
+		"jsx": "react",
+		"outDir": "./src/",
+		"noEmitOnError": false,
+		"noImplicitAny": false,
+		"strictNullChecks": false,
+		"removeComments": true,
+		"noUnusedParameters": false
 	},
-	"include": ["src"]
+	"include": ["./typesrc/**/*"]
 }
