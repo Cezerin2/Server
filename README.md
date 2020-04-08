@@ -9,7 +9,7 @@ Apps:
 - [Cezerin API](https://github.com/cezerin2/cezerin2)
 - [Cezerin Store](https://github.com/cezerin2/cezerin2-store)
 - [Cezerin Admin](https://github.com/cezerin2/cezerin2-admin)
-- [Cezerin API Client](https://github.com/cezerin2/cezerin2-admin)
+- [Cezerin API Client](https://github.com/cezerin2/cezerin2-client)
 - [Cezerin Docker](https://github.com/cezerin2/docker-cezerin2)
 - [Cezerin Community Site](https://github.com/cezerin2/cezerin2.github.io)
 
