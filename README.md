@@ -16,9 +16,10 @@ Built with:
 
 ## Links
 
-- [GitHub](https://github.com/cezerin2/cezerin2)
+- [GitHub](https://github.com/cezerin2)
 - [Community Site](https://cezerin.org)
 - [Demo Store](https://demo.cezerin.net)
+- [Demo Dashboard](https://admin.cezerin.net)
 - [Telegram Chat: Cezerin](https://t.me/cezerin)
 - [Docs](https://github.com/cezerin2/cezerin2/blob/master/docs)
 - [Facebook](https://facebook.com/cezerin)
