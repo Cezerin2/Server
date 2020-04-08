@@ -40,14 +40,16 @@
 		]
 	},
 	"dependencies": {
-		"aws-sdk": "^2.653.0",
 		"@babel/cli": "^7.8.4",
 		"@babel/core": "^7.9.0",
-		"babel-loader": "^8.1.0",
-		"babel-plugin-transform-class-properties": "^6.24.1",
 		"@babel/polyfill": "^7.8.7",
 		"@babel/preset-env": "^7.9.5",
 		"@babel/preset-react": "^7.9.4",
+		"@types/mongodb": "^3.5.5",
+		"@types/node": "^13.11.1",
+		"aws-sdk": "^2.653.0",
+		"babel-loader": "^8.1.0",
+		"babel-plugin-transform-class-properties": "^6.24.1",
 		"bcrypt": "^4.0.1",
 		"body-parser": "^1.19.0",
 		"cezerin2-client": "^0.36.0",
@@ -91,8 +93,6 @@
 		"ws": "^7.2.3"
 	},
 	"devDependencies": {
-		"prettier": "^2.0.2",
-		"lint-staged": "^10.1.1",
 		"babel-eslint": "^10.1.0",
 		"eslint": "^6.8.0",
 		"eslint-config-airbnb": "^18.1.0",
@@ -100,7 +100,9 @@
 		"eslint-plugin-import": "^2.20.2",
 		"eslint-plugin-jsx-a11y": "^6.2.3",
 		"eslint-plugin-prettier": "^3.1.2",
-		"eslint-plugin-react": "^7.19.0"
+		"eslint-plugin-react": "^7.19.0",
+		"lint-staged": "^10.1.1",
+		"prettier": "^2.0.2"
 	},
 	"engines": {
 		"node": ">= 8.0.0",
