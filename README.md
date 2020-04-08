@@ -1,8 +1,8 @@
-# Cezerin - Ecommerce Progressive Web Apps
+# Cezerin API - Backend for Cezerin - React and Node.js based eCommerce platform.
 
 [![CircleCI](https://circleci.com/gh/Cezerin2/cezerin2/tree/master.svg?style=svg)](https://circleci.com/gh/Cezerin2/cezerin2/tree/master)
 
-Cezerin2 is React and Node.js based eCommerce platform. Allows creating a Progressive Web Apps. This is based from original cezerin after project abandoned by original author.
+Cezerin - Ecommerce Progressive Progressive Web Apps. This is based from original cezerin after project abandoned by original author.
 
 Built with:
 
