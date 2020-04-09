@@ -6,7 +6,7 @@ import settings from '../../lib/settings';
 import dashboardWebSocket from '../../lib/dashboardWebSocket';
 
 class ThemesService {
-	exportTheme(req, res) {
+	exportTheme(res) {
 		const randomFileName = Math.floor(Math.random() * 10000);
 		exec(
 			`npm --silent run theme:export -- ${randomFileName}.zip`,

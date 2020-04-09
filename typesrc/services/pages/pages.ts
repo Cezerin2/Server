@@ -8,8 +8,8 @@ import SettingsService from '../settings/settings';
 const DEFAULT_SORT = { is_system: -1, date_created: 1 };
 
 class PagesService {
-	getFilter(params = {}) {
-		const filter = {};
+	getFilter(params = { id: String, tags: String }) {
+		const filter = { _id: {}, tags: String };
 		const id = parse.getObjectIDIfValid(params.id);
 		const tags = parse.getString(params.tags);
 		if (id) {
@@ -25,19 +25,20 @@ class PagesService {
 		if (sort && sort.length > 0) {
 			const fields = sort.split(',');
 			return Object.assign(
-				...fields.map(field => ({
+				...fields.map((field) => ({
 					[field.startsWith('-') ? field.slice(1) : field]: field.startsWith(
 						'-'
 					)
 						? -1
-						: 1
-				}))
+						: 1,
+				})),
+				null
 			);
 		}
 		return DEFAULT_SORT;
 	}
 
-	async getPages(params = {}) {
+	async getPages(params = { fields: String }) {
 		const filter = this.getFilter(params);
 		const sortQuery = this.getSortQuery(params);
 		const projection = utils.getProjectionFromFields(params.fields);
@@ -48,7 +49,7 @@ class PagesService {
 			.find(filter, { projection })
 			.sort(sortQuery)
 			.toArray();
-		const result = items.map(page => this.changeProperties(page, domain));
+		const result = items.map((page) => this.changeProperties(page, domain));
 		return result;
 	}
 
@@ -56,17 +57,17 @@ class PagesService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getPages({ id }).then(pages =>
+		return this.getPages({ id }).then((pages) =>
 			pages.length > 0 ? pages[0] : null
 		);
 	}
 
 	addPage(data) {
-		return this.getValidDocumentForInsert(data).then(page =>
+		return this.getValidDocumentForInsert(data).then((page) =>
 			db
 				.collection('pages')
 				.insertMany([page])
-				.then(res => this.getSinglePage(res.ops[0]._id.toString()))
+				.then((res) => this.getSinglePage(res.ops[0]._id.toString()))
 		);
 	}
 
@@ -76,11 +77,11 @@ class PagesService {
 		}
 		const pageObjectID = new ObjectID(id);
 
-		return this.getValidDocumentForUpdate(id, data).then(page =>
+		return this.getValidDocumentForUpdate(id, data).then((page) =>
 			db
 				.collection('pages')
 				.updateOne({ _id: pageObjectID }, { $set: page })
-				.then(res => this.getSinglePage(id))
+				.then((res) => this.getSinglePage(id))
 		);
 	}
 
@@ -92,13 +93,19 @@ class PagesService {
 		return db
 			.collection('pages')
 			.deleteOne({ _id: pageObjectID, is_system: false })
-			.then(deleteResponse => deleteResponse.deletedCount > 0);
+			.then((deleteResponse) => deleteResponse.deletedCount > 0);
 	}
 
 	getValidDocumentForInsert(data) {
 		const page = {
 			is_system: false,
-			date_created: new Date()
+			slug: String,
+			date_created: new Date(),
+			content: String,
+			meta_description: String,
+			meta_title: String,
+			enabled: Boolean,
+			tags: {},
 		};
 
 		page.content = parse.getString(data.content);
@@ -112,7 +119,7 @@ class PagesService {
 		if (!slug || slug.length === 0) {
 			return Promise.resolve(page);
 		}
-		return utils.getAvailableSlug(slug, null, false).then(newSlug => {
+		return utils.getAvailableSlug(slug, null, false).then((newSlug) => {
 			page.slug = newSlug;
 			return page;
 		});
@@ -122,9 +129,15 @@ class PagesService {
 		if (Object.keys(data).length === 0) {
 			return Promise.reject('Required fields are missing');
 		}
-		return this.getSinglePage(id).then(prevPageData => {
+		return this.getSinglePage(id).then((prevPageData) => {
 			const page = {
-				date_updated: new Date()
+				date_updated: new Date(),
+				content: String,
+				meta_description: String,
+				meta_title: String,
+				enabled: Boolean,
+				tags: {},
+				slug: String,
 			};
 
 			if (data.content !== undefined) {
@@ -153,7 +166,7 @@ class PagesService {
 					slug = data.meta_title;
 				}
 
-				return utils.getAvailableSlug(slug, id, false).then(newSlug => {
+				return utils.getAvailableSlug(slug, id, false).then((newSlug) => {
 					page.slug = newSlug;
 					return page;
 				});

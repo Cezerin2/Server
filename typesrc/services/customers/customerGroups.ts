@@ -8,7 +8,7 @@ class CustomerGroupsService {
 			.collection('customerGroups')
 			.find()
 			.toArray()
-			.then(items => items.map(item => this.changeProperties(item)));
+			.then((items) => items.map((item) => this.changeProperties(item)));
 	}
 
 	getSingleGroup(id) {
@@ -20,7 +20,7 @@ class CustomerGroupsService {
 		return db
 			.collection('customerGroups')
 			.findOne({ _id: groupObjectID })
-			.then(item => this.changeProperties(item));
+			.then((item) => this.changeProperties(item));
 	}
 
 	addGroup(data) {
@@ -28,7 +28,7 @@ class CustomerGroupsService {
 		return db
 			.collection('customerGroups')
 			.insertMany([group])
-			.then(res => this.getSingleGroup(res.ops[0]._id.toString()));
+			.then((res) => this.getSingleGroup(res.ops[0]._id.toString()));
 	}
 
 	updateGroup(id, data) {
@@ -42,11 +42,11 @@ class CustomerGroupsService {
 			.collection('customerGroups')
 			.updateOne(
 				{
-					_id: groupObjectID
+					_id: groupObjectID,
 				},
 				{ $set: group }
 			)
-			.then(res => this.getSingleGroup(id));
+			.then(this.getSingleGroup(id));
 	}
 
 	deleteGroup(id) {
@@ -57,12 +57,14 @@ class CustomerGroupsService {
 		return db
 			.collection('customerGroups')
 			.deleteOne({ _id: groupObjectID })
-			.then(deleteResponse => deleteResponse.deletedCount > 0);
+			.then((deleteResponse) => deleteResponse.deletedCount > 0);
 	}
 
 	getValidDocumentForInsert(data) {
 		const group = {
-			date_created: new Date()
+			date_created: new Date(),
+			name: String,
+			description: String,
 		};
 
 		group.name = parse.getString(data.name);
@@ -77,7 +79,9 @@ class CustomerGroupsService {
 		}
 
 		const group = {
-			date_updated: new Date()
+			date_updated: new Date(),
+			name: String,
+			description: String,
 		};
 
 		if (data.name !== undefined) {

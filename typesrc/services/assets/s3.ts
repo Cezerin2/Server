@@ -12,7 +12,7 @@ const upload = (file_name, file) => {
 	const s3Config = {
 		Bucket: BUCKET,
 		Key: file_name,
-		Body: file
+		Body: file,
 	};
 	return new Promise((resolve, reject) => {
 		s3.putObject(s3Config, (err, resp) => {
@@ -37,15 +37,15 @@ class S3Service {
 			return {
 				file: fileName,
 				size: data.ContentLength,
-				modified: data.LastModified
+				modified: data.LastModified,
 			};
 		});
 	}
 
 	getFilesData(path, files) {
 		return files
-			.map(fileName => this.getFileData(fileName))
-			.filter(fileData => fileData !== null)
+			.map((fileName) => this.getFileData(null, fileName))
+			.filter((fileData) => fileData !== null)
 			.sort((a, b) => a.modified - b.modified);
 	}
 
@@ -55,10 +55,10 @@ class S3Service {
 				if (err) {
 					return reject(err);
 				}
-				const filesData = data.Contents.map(ObjectData => ({
+				const filesData = data.Contents.map((ObjectData) => ({
 					file: ObjectData.Key,
 					size: data.Size,
-					modified: ObjectData.LastModified
+					modified: ObjectData.LastModified,
 				}));
 				resolve(filesData);
 			});
@@ -72,10 +72,10 @@ class S3Service {
 				Delete: {
 					Objects: [
 						{
-							Key: `${path}/${fileName}`
-						}
-					]
-				}
+							Key: `${path}/${fileName}`,
+						},
+					],
+				},
 			};
 
 			s3.deleteObject(params, (err, data) => {
@@ -94,7 +94,8 @@ class S3Service {
 	emptyDir(path) {
 		let params = {
 			Bucket: BUCKET,
-			Prefix: path
+			Prefix: path,
+			Delete: undefined,
 		};
 
 		s3.listObjects(params, (err, data) => {
@@ -105,7 +106,7 @@ class S3Service {
 			params = { Bucket: BUCKET };
 			params.Delete = { Objects: [] };
 
-			data.Contents.forEach(content => {
+			data.Contents.forEach((content) => {
 				params.Delete.Objects.push({ Key: content.Key });
 			});
 
@@ -129,19 +130,19 @@ class S3Service {
 				file_name = file.name;
 				buffer = fs.readFileSync(path.resolve(file.path));
 			})
-			.on('error', err => {
+			.on('error', (err) => {
 				res.status(500).send(this.getErrorMessage(err));
 			})
 			.on('end', () => {
 				upload(`${path}/${file_name}`, buffer)
-					.then(async fileData => {
+					.then(async (fileData) => {
 						await onUploadEnd(`${path}/${file_name}`);
 						res.json({
 							successful: true,
-							fileData
+							fileData,
 						});
 					})
-					.catch(err => {
+					.catch((err) => {
 						console.log(err);
 						res.sendStatus(500);
 					});
@@ -165,16 +166,16 @@ class S3Service {
 				if (file.name) {
 					const buffer = fs.readFileSync(file.path);
 					await upload(`${path}/${file.name}`, buffer)
-						.then(async fileData => {
+						.then(async (fileData) => {
 							uploadedFiles.push(file.name);
 							await onFileUpload(file.name);
 						})
-						.catch(err => {
+						.catch((err) => {
 							console.log(err);
 						});
 				}
 			})
-			.on('error', err => {
+			.on('error', (err) => {
 				res.status(500).send(this.getErrorMessage(err));
 			})
 			.on('end', async () => {

@@ -14,7 +14,7 @@ class ThemePlaceholdersService {
 
 	addPlaceholder(data) {
 		const field = this.getValidDocumentForInsert(data);
-		const placeholderKey = field.key;
+		const placeholderKey = field;
 
 		return this.getSinglePlaceholder(placeholderKey).then((placeholder) => {
 			if (placeholder) {
@@ -54,7 +54,7 @@ class ThemePlaceholdersService {
 			return new Error('Required fields are missing');
 		}
 
-		const field = {};
+		const field = { place: String, value: String };
 
 		if (data.place !== undefined) {
 			field.place = parse.getString(data.place);
@@ -72,7 +72,7 @@ class ThemePlaceholdersService {
 			return new Error('Required fields are missing');
 		}
 
-		const field = {};
+		const field = { key: String, place: String, value: String };
 
 		if (data.key !== undefined) {
 			field.key = parse.getString(data.key);
