@@ -23,7 +23,6 @@
 		"url": "https://github.com/cezerin2/cezerin2"
 	},
 	"scripts": {
-		"compile": "tsc",
 		"setup": "node -r esm src/setup.js",
 		"theme:install": "./scripts/theme-install.sh",
 		"theme:export": "./scripts/theme-export.sh",
@@ -34,7 +33,7 @@
 		"start": "node -r esm src/index.js"
 	},
 	"lint-staged": {
-		"*.ts": [
+		"*.js": [
 			"prettier --write",
 			"git add"
 		]
