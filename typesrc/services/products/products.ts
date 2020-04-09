@@ -16,6 +16,8 @@ class ProductsService {
 			offset: Number,
 			sort: String,
 			search: String,
+			ids: {},
+			sku: {},
 		}
 	) {
 		const categories = await CategoriesService.getCategories({
@@ -304,7 +306,7 @@ class ProductsService {
 			return { score: { $meta: 'textScore' } };
 		}
 		if (sort && sort.length > 0) {
-			const fields = sort.split(',');
+			/*const fields = sort.split(',');
 			return Object.assign(
 				...fields.map((field) => ({
 					[field.startsWith('-') ? field.slice(1) : field]: field.startsWith(
@@ -314,7 +316,7 @@ class ProductsService {
 						: 1,
 				})),
 				null
-			);
+			);*/
 		}
 		return null;
 	}
@@ -435,16 +437,16 @@ class ProductsService {
 			category_slug: { $literal: '' },
 		};
 
-		if (fieldsArray && fieldsArray.length > 0) {
+		/*	if (fieldsArray && fieldsArray.length > 0) {
 			project = this.getProjectFilteredByFields(project, fieldsArray);
-		}
-
+		}*/
+		/*
 		// required fields
 		project._id = 0;
 		project.id = '$_id';
 		project.category_id = 1;
 		project.slug = 1;
-
+*/
 		return project;
 	}
 
@@ -452,11 +454,11 @@ class ProductsService {
 		return fields && fields.length > 0 ? fields.split(',') : [];
 	}
 
-	getProjectFilteredByFields(project, fieldsArray) {
+	/*getProjectFilteredByFields(project, fieldsArray) {
 		return Object.assign(
 			...fieldsArray.map((key) => ({ [key]: project[key] }))
 		);
-	}
+	}*/
 
 	getMatchTextQuery({ search }) {
 		if (

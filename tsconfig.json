@@ -19,7 +19,8 @@
 		"noImplicitAny": false,
 		"strictNullChecks": false,
 		"removeComments": true,
-		"noUnusedParameters": false
+		"noUnusedParameters": false,
+		"downlevelIteration": true
 	},
 	"include": ["./typesrc/**/*"]
 }
