@@ -338,13 +338,14 @@ class OrderItemsService {
 	}
 
 	getValidDocumentForInsert(data) {
-		const productImage = parse.getObjectIDIfValid(data.product_id);
 		const item = {
 			product_image: [],
 			id: new ObjectID(),
 			product_id: parse.getObjectIDIfValid(data.product_id),
 			variant_id: parse.getObjectIDIfValid(data.variant_id),
 			quantity: parse.getNumberIfPositive(data.quantity) || 1,
+			custom_price: {},
+			custom_note: String,
 		};
 
 		if (data.custom_price) {
