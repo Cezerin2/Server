@@ -19,9 +19,48 @@ import PaymentGateways from '../../paymentGateways';
 const { saltRounds } = settings;
 
 class OrdersService {
-	getFilter(params = {}) {
+	getFilter(
+		params = {
+			id: String,
+			status_id: String,
+			customer_id: String,
+			payment_method_id: String,
+			shipping_method_id: String,
+			closed: Boolean,
+			cancelled: Boolean,
+			delivered: Boolean,
+			paid: Boolean,
+			draft: Boolean,
+			hold: Boolean,
+			grand_total_min: Number,
+			grand_total_max: Number,
+			date_placed_min: Number,
+			date_placed_max: Number,
+			date_closed_min: Number,
+			date_closed_max: Number,
+			number: Number,
+			search: undefined,
+		}
+	) {
 		// TODO: sort, coupon, tag, channel
-		const filter = {};
+		const filter = {
+			_id: new ObjectID(),
+			status_id: new ObjectID(),
+			customer_id: new ObjectID(),
+			payment_method_id: new ObjectID(),
+			shipping_method_id: new ObjectID(),
+			number: Number,
+			closed: Boolean,
+			cancelled: Boolean,
+			delivered: Boolean,
+			paid: Boolean,
+			draft: Boolean,
+			hold: Boolean,
+			grand_total: { $gte: {}, $lte: {} },
+			date_placed: { $gte: {}, $lte: {} },
+			date_closed: { $gte: {}, $lte: {} },
+			$or: {},
+		};
 		const id = parse.getObjectIDIfValid(params.id);
 		const status_id = parse.getObjectIDIfValid(params.status_id);
 		const customer_id = parse.getObjectIDIfValid(params.customer_id);
@@ -93,7 +132,6 @@ class OrdersService {
 		}
 
 		if (grand_total_min || grand_total_max) {
-			filter.grand_total = {};
 			if (grand_total_min) {
 				filter.grand_total.$gte = grand_total_min;
 			}
@@ -103,7 +141,6 @@ class OrdersService {
 		}
 
 		if (date_placed_min || date_placed_max) {
-			filter.date_placed = {};
 			if (date_placed_min) {
 				filter.date_placed.$gte = date_placed_min;
 			}
@@ -113,7 +150,6 @@ class OrdersService {
 		}
 
 		if (date_closed_min || date_closed_max) {
-			filter.date_closed = {};
 			if (date_closed_min) {
 				filter.date_closed.$gte = date_closed_min;
 			}
@@ -159,16 +195,16 @@ class OrdersService {
 			db.collection('orders').countDocuments(filter),
 			OrderStatusesService.getStatuses(),
 			ShippingMethodsLightService.getMethods(),
-			PaymentMethodsLightService.getMethods()
+			PaymentMethodsLightService.getMethods(),
 		]).then(
 			([
 				orders,
 				ordersCount,
 				orderStatuses,
 				shippingMethods,
-				paymentMethods
+				paymentMethods,
 			]) => {
-				const items = orders.map(order =>
+				const items = orders.map((order) =>
 					this.changeProperties(
 						order,
 						orderStatuses,
@@ -179,7 +215,7 @@ class OrdersService {
 				const result = {
 					total_count: ordersCount,
 					has_more: offset + items.length < ordersCount,
-					data: items
+					data: items,
 				};
 				return result;
 			}
@@ -190,17 +226,17 @@ class OrdersService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getOrders({ id }).then(items =>
+		return this.getOrders({ id }).then((items) =>
 			items.data.length > 0 ? items.data[0] : {}
 		);
 	}
 
 	getOrCreateCustomer(orderId) {
-		return this.getSingleOrder(orderId).then(order => {
+		return this.getSingleOrder(orderId).then((order) => {
 			if (!order.customer_id && order.email) {
 				// find customer by email
-				return CustomersService.getCustomers({ email: order.email }).then(
-					customers => {
+				return CustomersService.getCustomers(/*{ email: order.email }*/).then(
+					(customers) => {
 						const customerExists =
 							customers && customers.data && customers.data.length > 0;
 
@@ -232,8 +268,8 @@ class OrdersService {
 							mobile: order.mobile,
 							browser: order.browser,
 							// addresses: customer.addresses
-							addresses: order.shipping_address
-						}).then(customer => customer.id);
+							addresses: order.shipping_address,
+						}).then((customer) => customer.id);
 					}
 				);
 			}
@@ -262,7 +298,7 @@ class OrdersService {
 		if (updatedOrder.draft === false) {
 			await webhooks.trigger({
 				event: webhooks.events.ORDER_UPDATED,
-				payload: updatedOrder
+				payload: updatedOrder,
 			});
 		}
 		await this.updateCustomerStatistics(updatedOrder.customer_id);
@@ -277,7 +313,7 @@ class OrdersService {
 		const order = await this.getSingleOrder(orderId);
 		await webhooks.trigger({
 			event: webhooks.events.ORDER_DELETED,
-			payload: order
+			payload: order,
 		});
 		const deleteResponse = await db
 			.collection('orders')
@@ -290,7 +326,7 @@ class OrdersService {
 			? {
 					id: new ObjectID(),
 					name: parse.getString(discount.name),
-					amount: parse.getNumberIfPositive(discount.amount)
+					amount: parse.getNumberIfPositive(discount.amount),
 			  }
 			: null;
 	}
@@ -301,7 +337,7 @@ class OrdersService {
 					id: new ObjectID(),
 					product_id: parse.getObjectIDIfValid(item.product_id),
 					variant_id: parse.getObjectIDIfValid(item.variant_id),
-					quantity: parse.getNumberIfPositive(item.quantity)
+					quantity: parse.getNumberIfPositive(item.quantity),
 					// "sku":"",
 					// "name":"",
 					// "variant_name":"",
@@ -326,7 +362,7 @@ class OrdersService {
 					details: transaction.details,
 					success: parse.getBooleanIfValid(transaction.success),
 					date_created: new Date(),
-					date_updated: null
+					date_updated: null,
 			  }
 			: null;
 	}
@@ -338,7 +374,7 @@ class OrdersService {
 			.sort({ number: -1 })
 			.limit(1)
 			.toArray()
-			.then(items => {
+			.then((items) => {
 				let orderNumber = settings.orderStartNumber;
 				if (items && items.length > 0) {
 					orderNumber = items[0].number + 1;
@@ -352,29 +388,64 @@ class OrdersService {
 					date_paid: null,
 					date_cancelled: null,
 					number: orderNumber,
-					shipping_status: ''
+					shipping_status: '',
 					// 'weight_total': 0,
 					// 'discount_total': 0, //sum(items.discount_total)+sum(discounts.amount)
 					// 'tax_included_total': 0, //if(item_tax_included, 0, item_tax) + if(shipment_tax_included, 0, shipping_tax)
 					// 'tax_total': 0, //item_tax + shipping_tax
 					// 'subtotal': 0, //sum(items.price_total)
 					// 'shipping_total': 0, //shipping_price-shipping_discount
-					// 'grand_total': 0 //subtotal + shipping_total + tax_included_total - (discount_total)
+					// 'grand_total': 0 //subtotal + shipping_total + tax_included_total - (discount_total),
+					items: {},
+					transactions: {},
+					discounts: {},
+					billing_address: String,
+					shipping_address: String,
+					tax_rate: {},
+					shipping_tax: {},
+					shipping_discount: {},
+					shipping_price: {},
+					item_tax_included: Boolean,
+					shipping_tax_included: Boolean,
+					closed: Boolean,
+					cancelled: Boolean,
+					delivered: Boolean,
+					paid: Boolean,
+					hold: Boolean,
+					draft: Boolean,
+					first_name: String,
+					last_name: String,
+					password: String,
+					email: String,
+					mobile: String,
+					referrer_url: String,
+					landing_url: String,
+					channel: String,
+					note: String,
+					comments: String,
+					coupon: String,
+					tracking_number: Number,
+					customer_id: undefined,
+					status_id: undefined,
+					payment_method_id: undefined,
+					shipping_method_id: {},
+					tags: {},
+					browser: {},
 				};
 
 				order.items =
 					data.items && data.items.length > 0
-						? data.items.map(item => this.parseProductItem(item))
+						? data.items.map((item) => this.parseProductItem(item))
 						: [];
 				order.transactions =
 					data.transactions && data.transactions.length > 0
-						? data.transactions.map(transaction =>
+						? data.transactions.map((transaction) =>
 								this.parseTransactionItem(transaction)
 						  )
 						: [];
 				order.discounts =
 					data.discounts && data.discounts.length > 0
-						? data.discounts.map(discount => this.parseDiscountItem(discount))
+						? data.discounts.map((discount) => this.parseDiscountItem(discount))
 						: [];
 
 				order.billing_address = parse.getOrderAddress(data.billing_address);
@@ -438,7 +509,41 @@ class OrdersService {
 			}
 
 			const order = {
-				date_updated: new Date()
+				date_updated: new Date(),
+				payment_token: String,
+				shipping_tax: {},
+				shipping_discount: {},
+				shipping_price: undefined,
+				tax_rate: undefined,
+				item_tax_included: undefined,
+				shipping_tax_included: undefined,
+				closed: Boolean,
+				cancelled: Boolean,
+				delivered: Boolean,
+				paid: Boolean,
+				hold: Boolean,
+				draft: Boolean,
+				first_name: String,
+				last_name: String,
+				password: String,
+				email: String,
+				mobile: Number,
+				referrer_url: String,
+				landing_url: String,
+				channel: String,
+				note: String,
+				comments: String,
+				coupon: String,
+				tracking_number: String,
+				shipping_status: String,
+				customer_id: undefined,
+				status_id: undefined,
+				payment_method_id: undefined,
+				shipping_method_id: undefined,
+				tags: undefined,
+				browser: undefined,
+				date_placed: undefined,
+				date_paid: undefined,
 			};
 
 			if (data.payment_token !== undefined) {
@@ -563,7 +668,7 @@ class OrdersService {
 			if (order.shipping_method_id && !order.shipping_price) {
 				ShippingMethodsLightService.getMethodPrice(
 					order.shipping_method_id
-				).then(shippingPrice => {
+				).then((shippingPrice) => {
 					order.shipping_price = shippingPrice;
 					resolve(order);
 				});
@@ -581,19 +686,19 @@ class OrdersService {
 			const orderStatus =
 				order.status_id && orderStatuses.length > 0
 					? orderStatuses.find(
-							i => i.id.toString() === order.status_id.toString()
+							(i) => i.id.toString() === order.status_id.toString()
 					  )
 					: null;
 			const orderShippingMethod =
 				order.shipping_method_id && shippingMethods.length > 0
 					? shippingMethods.find(
-							i => i.id.toString() === order.shipping_method_id.toString()
+							(i) => i.id.toString() === order.shipping_method_id.toString()
 					  )
 					: null;
 			const orderPaymentMethod =
 				order.payment_method_id && paymentMethods.length > 0
 					? paymentMethods.find(
-							i => i.id.toString() === order.payment_method_id.toString()
+							(i) => i.id.toString() === order.payment_method_id.toString()
 					  )
 					: null;
 
@@ -613,20 +718,20 @@ class OrdersService {
 			let sum_items_tax_total = 0;
 
 			if (order.items && order.items.length > 0) {
-				order.items.forEach(item => {
+				order.items.forEach((item) => {
 					const item_weight = item.weight * item.quantity;
 					if (item_weight > 0) {
 						sum_items_weight += item_weight;
 					}
 				});
 
-				order.items.forEach(item => {
+				order.items.forEach((item) => {
 					if (item.price_total > 0) {
 						sum_items_price_total += item.price_total;
 					}
 				});
 
-				order.items.forEach(item => {
+				order.items.forEach((item) => {
 					if (item.price_total > 0 && order.tax_rate > 0) {
 						if (order.item_tax_included) {
 							sum_items_tax_total +=
@@ -638,7 +743,7 @@ class OrdersService {
 					}
 				});
 
-				order.items.forEach(item => {
+				order.items.forEach((item) => {
 					if (item.discount_total > 0) {
 						sum_items_discount_total += item.discount_total;
 					}
@@ -650,7 +755,7 @@ class OrdersService {
 				(order.shipping_tax_included ? 0 : order.shipping_tax);
 
 			if (order.discounts && order.discounts.length > 0) {
-				order.items.forEach(item => {
+				order.items.forEach((item) => {
 					if (item.amount > 0) {
 						sum_discounts_amount += item.amount;
 					}
@@ -693,13 +798,13 @@ class OrdersService {
 			mailer.send({
 				to: toEmail,
 				subject,
-				html: body
+				html: body,
 			}),
 			mailer.send({
 				to: copyTo,
 				subject,
-				html: body
-			})
+				html: body,
+			}),
 		]);
 	}
 
@@ -711,15 +816,15 @@ class OrdersService {
     - fire Webhooks
     */
 		const [order, emailTemplate, dashboardSettings] = await Promise.all([
-			this.getOrCreateCustomer(orderId).then(customer_id =>
+			this.getOrCreateCustomer(orderId).then((customer_id) =>
 				this.updateOrder(orderId, {
 					customer_id,
 					date_placed: new Date(),
-					draft: false
+					draft: false,
 				})
 			),
 			EmailTemplatesService.getEmailTemplate('order_confirmation'),
-			SettingsService.getSettings()
+			SettingsService.getSettings(),
 		]);
 
 		const subject = this.getEmailSubject(emailTemplate, order);
@@ -728,16 +833,16 @@ class OrdersService {
 
 		dashboardWebSocket.send({
 			event: dashboardWebSocket.events.ORDER_CREATED,
-			payload: order
+			payload: order,
 		});
 
 		await Promise.all([
 			webhooks.trigger({
 				event: webhooks.events.ORDER_CREATED,
-				payload: order
+				payload: order,
 			}),
 			this.sendAllMails(order.email, copyTo, subject, body),
-			ProductStockService.handleOrderCheckout(orderId)
+			ProductStockService.handleOrderCheckout(orderId),
 		]);
 
 		return order;
@@ -746,7 +851,7 @@ class OrdersService {
 	cancelOrder(orderId) {
 		const orderData = {
 			cancelled: true,
-			date_cancelled: new Date()
+			date_cancelled: new Date(),
 		};
 
 		return ProductStockService.handleCancelOrder(orderId).then(() =>
@@ -757,7 +862,7 @@ class OrdersService {
 	closeOrder(orderId) {
 		const orderData = {
 			closed: true,
-			date_closed: new Date()
+			date_closed: new Date(),
 		};
 
 		return this.updateOrder(orderId, orderData);
@@ -765,7 +870,7 @@ class OrdersService {
 
 	updateCustomerStatistics(customerId) {
 		if (customerId) {
-			return this.getOrders({ customer_id: customerId }).then(orders => {
+			return this.getOrders({ customer_id: customerId }).then((orders) => {
 				let totalSpent = 0;
 				let ordersCount = 0;
 

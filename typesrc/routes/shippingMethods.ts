@@ -6,7 +6,7 @@ class ShippingMethodsRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-
+	router;
 	registerRoutes() {
 		this.router.get(
 			'/v1/shipping_methods',
@@ -37,13 +37,13 @@ class ShippingMethodsRoute {
 
 	getMethods(req, res, next) {
 		ShippingMethodsService.getMethods(req.query)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	getSingleMethod(req, res, next) {
 		ShippingMethodsService.getSingleMethod(req.params.id)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}
@@ -54,13 +54,13 @@ class ShippingMethodsRoute {
 
 	addMethod(req, res, next) {
 		ShippingMethodsService.addMethod(req.body)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	updateMethod(req, res, next) {
 		ShippingMethodsService.updateMethod(req.params.id, req.body)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}

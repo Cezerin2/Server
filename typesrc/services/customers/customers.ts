@@ -3,11 +3,17 @@ import { db } from '../../lib/mongo';
 import parse from '../../lib/parse';
 import webhooks from '../../lib/webhooks';
 import CustomerGroupsService from './customerGroups';
-import AuthHeader from '../../lib/auth-header';
 import security from '../../lib/security';
 
 class CustomersService {
-	getFilter(params = {}) {
+	getFilter(
+		params = {
+			id: String,
+			group_id: String,
+			email: undefined,
+			search: undefined,
+		}
+	) {
 		// tag
 		// gender
 		// date_created_to
@@ -17,7 +23,7 @@ class CustomersService {
 		// orders_count_to
 		// orders_count_from
 
-		const filter = {};
+		const filter = { _id: {}, group_id: {}, email: String, $or: {} };
 		const id = parse.getObjectIDIfValid(params.id);
 		const group_id = parse.getObjectIDIfValid(params.group_id);
 
@@ -37,15 +43,15 @@ class CustomersService {
 			filter.$or = [
 				{ email: new RegExp(params.search, 'i') },
 				{ mobile: new RegExp(params.search, 'i') },
-				{ $text: { $search: params.search } }
+				{ $text: { $search: params.search } },
 			];
 		}
 
 		return filter;
 	}
 
-	getCustomers(params = {}) {
-		const filter = this.getFilter(params);
+	getCustomers(params = { limit: Number, offset: Number }) {
+		const filter = this.getFilter(/*params*/);
 		const limit = parse.getNumberIfPositive(params.limit) || 1000;
 		const offset = parse.getNumberIfPositive(params.offset) || 0;
 
@@ -58,15 +64,15 @@ class CustomersService {
 				.skip(offset)
 				.limit(limit)
 				.toArray(),
-			db.collection('customers').countDocuments(filter)
+			db.collection('customers').countDocuments(filter),
 		]).then(([customerGroups, customers, customersCount]) => {
-			const items = customers.map(customer =>
+			const items = customers.map((customer) =>
 				this.changeProperties(customer, customerGroups)
 			);
 			const result = {
 				total_count: customersCount,
 				has_more: offset + items.length < customersCount,
-				data: items
+				data: items,
 			};
 			return result;
 		});
@@ -76,7 +82,7 @@ class CustomersService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getCustomers({ id }).then(items =>
+		return this.getCustomers(id).then((items) =>
 			items.data.length > 0 ? items.data[0] : {}
 		);
 	}
@@ -101,7 +107,7 @@ class CustomersService {
 		const newCustomer = await this.getSingleCustomer(newCustomerId);
 		await webhooks.trigger({
 			event: webhooks.events.CUSTOMER_CREATED,
-			payload: newCustomer
+			payload: newCustomer,
 		});
 		return newCustomer;
 	}
@@ -111,35 +117,35 @@ class CustomersService {
 			return Promise.reject('Invalid identifier');
 		}
 		const customerObjectID = new ObjectID(id);
-		const customer = this.getValidDocumentForUpdate(id, data);
+		const customer = this.getValidDocumentForUpdate(data);
 
 		// is email unique
-		if (customer.email && customer.email.length > 0) {
+		/*if (customer.email && customer.email.length > 0) {
 			const customerCount = await db.collection('customers').count({
 				_id: {
-					$ne: customerObjectID
+					$ne: customerObjectID,
 				},
-				email: customer.email
+				email: customer.email,
 			});
 
 			if (customerCount > 0) {
 				return Promise.reject('Customer email must be unique');
 			}
-		}
+		}*/
 
 		await db.collection('customers').updateOne(
 			{
-				_id: customerObjectID
+				_id: customerObjectID,
 			},
 			{
-				$set: customer
+				$set: customer,
 			}
 		);
 
 		const updatedCustomer = await this.getSingleCustomer(id);
 		await webhooks.trigger({
 			event: webhooks.events.CUSTOMER_UPDATED,
-			payload: updatedCustomer
+			payload: updatedCustomer,
 		});
 		return updatedCustomer;
 	}
@@ -151,7 +157,7 @@ class CustomersService {
 		const customerObjectID = new ObjectID(customerId);
 		const customerData = {
 			total_spent: totalSpent,
-			orders_count: ordersCount
+			orders_count: ordersCount,
 		};
 
 		return db
@@ -170,7 +176,7 @@ class CustomersService {
 			.deleteOne({ _id: customerObjectID });
 		await webhooks.trigger({
 			event: webhooks.events.CUSTOMER_DELETED,
-			payload: customer
+			payload: customer,
 		});
 		return deleteResponse.deletedCount > 0;
 	}
@@ -180,7 +186,21 @@ class CustomersService {
 			date_created: new Date(),
 			date_updated: null,
 			total_spent: 0,
-			orders_count: 0
+			orders_count: 0,
+			note: String,
+			email: String,
+			mobile: String,
+			full_name: String,
+			first_name: String,
+			last_name: String,
+			password: String,
+			gender: String,
+			group_id: {},
+			tags: {},
+			social_accounts: {},
+			birthdate: undefined,
+			addresses: String,
+			browser: {},
 		};
 
 		customer.note = parse.getString(data.note);
@@ -204,7 +224,7 @@ class CustomersService {
 
 	validateAddresses(addresses) {
 		if (addresses && addresses.length > 0) {
-			const validAddresses = addresses.map(addressItem =>
+			const validAddresses = addresses.map((addressItem) =>
 				parse.getCustomerAddress(addressItem)
 			);
 			return validAddresses;
@@ -212,13 +232,27 @@ class CustomersService {
 		return [];
 	}
 
-	getValidDocumentForUpdate(id, data) {
+	getValidDocumentForUpdate(data) {
 		if (Object.keys(data).length === 0) {
 			return new Error('Required fields are missing');
 		}
 
 		const customer = {
-			date_updated: new Date()
+			date_updated: new Date(),
+			note: String,
+			email: String,
+			mobile: String,
+			full_name: String,
+			first_name: String,
+			last_name: String,
+			password: String,
+			gender: String,
+			group_id: {},
+			tags: {},
+			social_accounts: {},
+			birthdate: undefined,
+			addresses: {},
+			browser: {},
 		};
 
 		if (data.note !== undefined) {
@@ -288,7 +322,7 @@ class CustomersService {
 
 			const customerGroup = customer.group_id
 				? customerGroups.find(
-						group => group.id === customer.group_id.toString()
+						(group) => group.id === customer.group_id.toString()
 				  )
 				: null;
 
@@ -299,10 +333,10 @@ class CustomersService {
 				customer.billing = customer.shipping = customer.addresses[0];
 			} else if (customer.addresses && customer.addresses.length > 1) {
 				const default_billing = customer.addresses.find(
-					address => address.default_billing
+					(address) => address.default_billing
 				);
 				const default_shipping = customer.addresses.find(
-					address => address.default_shipping
+					(address) => address.default_shipping
 				);
 				customer.billing = default_billing || customer.addresses[0];
 				customer.shipping = default_shipping || customer.addresses[0];
@@ -324,12 +358,12 @@ class CustomersService {
 
 		return db.collection('customers').updateOne(
 			{
-				_id: customerObjectID
+				_id: customerObjectID,
 			},
 			{
 				$push: {
-					addresses: validAddress
-				}
+					addresses: validAddress,
+				},
 			}
 		);
 	}
@@ -415,7 +449,7 @@ class CustomersService {
 		return db.collection('customers').updateOne(
 			{
 				_id: customerObjectID,
-				'addresses.id': addressObjectID
+				'addresses.id': addressObjectID,
 			},
 			{ $set: addressFields }
 		);
@@ -430,14 +464,14 @@ class CustomersService {
 
 		return db.collection('customers').updateOne(
 			{
-				_id: customerObjectID
+				_id: customerObjectID,
 			},
 			{
 				$pull: {
 					addresses: {
-						id: addressObjectID
-					}
-				}
+						id: addressObjectID,
+					},
+				},
 			}
 		);
 	}
@@ -454,24 +488,24 @@ class CustomersService {
 			.updateOne(
 				{
 					_id: customerObjectID,
-					'addresses.default_billing': true
+					'addresses.default_billing': true,
 				},
 				{
 					$set: {
-						'addresses.$.default_billing': false
-					}
+						'addresses.$.default_billing': false,
+					},
 				}
 			)
-			.then(res =>
+			.then((res) =>
 				db.collection('customers').updateOne(
 					{
 						_id: customerObjectID,
-						'addresses.id': addressObjectID
+						'addresses.id': addressObjectID,
 					},
 					{
 						$set: {
-							'addresses.$.default_billing': true
-						}
+							'addresses.$.default_billing': true,
+						},
 					}
 				)
 			);
@@ -489,24 +523,24 @@ class CustomersService {
 			.updateOne(
 				{
 					_id: customerObjectID,
-					'addresses.default_shipping': true
+					'addresses.default_shipping': true,
 				},
 				{
 					$set: {
-						'addresses.$.default_shipping': false
-					}
+						'addresses.$.default_shipping': false,
+					},
 				}
 			)
-			.then(res =>
+			.then(
 				db.collection('customers').updateOne(
 					{
 						_id: customerObjectID,
-						'addresses.id': addressObjectID
+						'addresses.id': addressObjectID,
 					},
 					{
 						$set: {
-							'addresses.$.default_shipping': true
-						}
+							'addresses.$.default_shipping': true,
+						},
 					}
 				)
 			);
@@ -519,22 +553,22 @@ class CustomersService {
 
 	getAll() {
 		const requestOptions = {
-			method: 'GET'
+			method: 'GET',
 			// headers: authHeader()
 		};
 
-		return fetch(`${security.storeBaseUrl}/users`, requestOptions).then(
-			handleResponse
+		return fetch(`${security /*.storeBaseUrl*/}/users`, requestOptions).then(
+			this.handleResponse
 		);
 	}
 
 	handleResponse(response) {
-		return response.text().then(text => {
+		return response.text().then((text) => {
 			const data = text && JSON.parse(text);
 			if (!response.ok) {
 				if (response.status === 401) {
 					// auto logout if 401 response returned from api
-					logout();
+					this.logout();
 					location.reload(true);
 				}
 

@@ -4,8 +4,8 @@ import utils from '../../lib/utils';
 import parse from '../../lib/parse';
 
 class OrderStatusesService {
-	getStatuses(params = {}) {
-		const filter = {};
+	getStatuses(params = { id: String }) {
+		const filter = { _id: {} };
 		const id = parse.getObjectIDIfValid(params.id);
 		if (id) {
 			filter._id = new ObjectID(id);
@@ -15,14 +15,14 @@ class OrderStatusesService {
 			.collection('orderStatuses')
 			.find(filter)
 			.toArray()
-			.then(items => items.map(item => this.changeProperties(item)));
+			.then((items) => items.map((item) => this.changeProperties(item)));
 	}
 
 	getSingleStatus(id) {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getStatuses({ id }).then(statuses =>
+		return this.getStatuses({ id }).then((statuses) =>
 			statuses.length > 0 ? statuses[0] : null
 		);
 	}
@@ -32,7 +32,7 @@ class OrderStatusesService {
 		return db
 			.collection('orderStatuses')
 			.insertMany([status])
-			.then(res => this.getSingleStatus(res.ops[0]._id.toString()));
+			.then((res) => this.getSingleStatus(res.ops[0]._id.toString()));
 	}
 
 	updateStatus(id, data) {
@@ -46,11 +46,11 @@ class OrderStatusesService {
 			.collection('orderStatuses')
 			.updateOne(
 				{
-					_id: statusObjectID
+					_id: statusObjectID,
 				},
 				{ $set: status }
 			)
-			.then(res => this.getSingleStatus(id));
+			.then((res) => this.getSingleStatus(id));
 	}
 
 	deleteStatus(id) {
@@ -61,11 +61,17 @@ class OrderStatusesService {
 		return db
 			.collection('orderStatuses')
 			.deleteOne({ _id: statusObjectID })
-			.then(deleteResponse => deleteResponse.deletedCount > 0);
+			.then((deleteResponse) => deleteResponse.deletedCount > 0);
 	}
 
 	getValidDocumentForInsert(data) {
-		const status = {};
+		const status = {
+			name: String,
+			description: String,
+			color: String,
+			bgcolor: String,
+			is_public: Boolean,
+		};
 
 		status.name = parse.getString(data.name);
 		status.description = parse.getString(data.description);
@@ -81,7 +87,13 @@ class OrderStatusesService {
 			return new Error('Required fields are missing');
 		}
 
-		const status = {};
+		const status = {
+			name: String,
+			description: String,
+			color: String,
+			bgcolor: String,
+			is_public: Boolean,
+		};
 
 		if (data.name !== undefined) {
 			status.name = parse.getString(data.name);

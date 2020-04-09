@@ -6,7 +6,7 @@ import utils from '../../lib/utils';
 
 const cache = new lruCache({
 	max: 10000,
-	maxAge: 1000 * 60 * 60 * 24 // 24h
+	maxAge: 1000 * 60 * 60 * 24, // 24h
 });
 
 const THEME_SETTINGS_CACHE_KEY = 'themesettings';
@@ -15,8 +15,7 @@ const SETTINGS_SCHEMA_FILE = path.resolve(
 	`theme/settings/${serverSettings.language}.json`
 );
 const SETTINGS_SCHEMA_FILE_EN = path.resolve('theme/settings/en.json');
-const THEME_IMAGE_ASSET_BASE = 
-	`${serverSettings.assetServer.domain}/${serverSettings.assetServer.themeImageUploadPath}/`;
+const THEME_IMAGE_ASSET_BASE = `${serverSettings.assetServer.domain}/${serverSettings.assetServer.themeImageUploadPath}/`;
 
 class ThemeSettingsService {
 	readFile(file) {
@@ -40,7 +39,7 @@ class ThemeSettingsService {
 	writeFile(file, jsonData) {
 		return new Promise((resolve, reject) => {
 			const stringData = JSON.stringify(jsonData);
-			fs.writeFile(file, stringData, err => {
+			fs.writeFile(file, stringData, (err) => {
 				if (err) {
 					reject(err);
 				} else {
@@ -66,7 +65,7 @@ class ThemeSettingsService {
 			return Promise.resolve(settingsFromCache);
 		}
 
-		return this.readFile(SETTINGS_FILE).then(settings => {
+		return this.readFile(SETTINGS_FILE).then((settings) => {
 			const updatedSettings = this.changeProperties(settings, true);
 			cache.set(THEME_SETTINGS_CACHE_KEY, updatedSettings);
 			return updatedSettings;
@@ -76,35 +75,34 @@ class ThemeSettingsService {
 	updateSettings(settings) {
 		cache.set(THEME_SETTINGS_CACHE_KEY, settings);
 		return this.writeFile(
-			SETTINGS_FILE, 
-			this.changeProperties(
-				utils.deepCopy(settings), 
-				false));
+			SETTINGS_FILE,
+			this.changeProperties(utils.deepCopy(settings), false)
+		);
 	}
 
 	changeProperties(settings, addAssetPath) {
-		Object.keys(settings).forEach(placeholder => {
+		Object.keys(settings).forEach((placeholder) => {
 			if (settings[placeholder] instanceof Array) {
 				// iterate over properties in placeholder
 				settings[placeholder].forEach((_, index) => {
 					// look for image in placeholder property objects
 					if (settings[placeholder][index].hasOwnProperty('image')) {
 						const file = settings[placeholder][index].image;
-						settings[placeholder][index].image = addAssetPath ? 
-							THEME_IMAGE_ASSET_BASE + file :
-							file.replace(THEME_IMAGE_ASSET_BASE, '');
+						settings[placeholder][index].image = addAssetPath
+							? THEME_IMAGE_ASSET_BASE + file
+							: file.replace(THEME_IMAGE_ASSET_BASE, '');
 					}
-				})
+				});
 			} else if (settings[placeholder] instanceof Object) {
 				// look for image in placeholder object
 				if (settings[placeholder].hasOwnProperty('image')) {
 					const file = settings[placeholder].image;
-					settings[placeholder].image = addAssetPath ? 
-						THEME_IMAGE_ASSET_BASE + file :
-						file.replace(THEME_IMAGE_ASSET_BASE, '');
+					settings[placeholder].image = addAssetPath
+						? THEME_IMAGE_ASSET_BASE + file
+						: file.replace(THEME_IMAGE_ASSET_BASE, '');
 				}
 			}
-		})
+		});
 
 		return settings;
 	}

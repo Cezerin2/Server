@@ -10,21 +10,21 @@ const SMTP_FROM_CONFIG_FILE = {
 	secure: settings.smtpServer.secure,
 	auth: {
 		user: settings.smtpServer.user,
-		pass: settings.smtpServer.pass
-	}
+		pass: settings.smtpServer.pass,
+	},
 };
 
-const getSmtpFromEmailSettings = emailSettings => ({
+const getSmtpFromEmailSettings = (emailSettings) => ({
 	host: emailSettings.host,
 	port: emailSettings.port,
 	secure: emailSettings.port === 465,
 	auth: {
 		user: emailSettings.user,
-		pass: emailSettings.pass
-	}
+		pass: emailSettings.pass,
+	},
 });
 
-const getSmtp = emailSettings => {
+const getSmtp = (emailSettings) => {
 	const useSmtpServerFromConfigFile = emailSettings.host === '';
 	const smtp = useSmtpServerFromConfigFile
 		? SMTP_FROM_CONFIG_FILE
@@ -50,14 +50,14 @@ const sendMail = (smtp, message) =>
 		});
 	});
 
-const getFrom = emailSettings => {
+const getFrom = (emailSettings) => {
 	const useSmtpServerFromConfigFile = emailSettings.host === '';
 	return useSmtpServerFromConfigFile
 		? `"${settings.smtpServer.fromName}" <${settings.smtpServer.fromAddress}>`
 		: `"${emailSettings.from_name}" <${emailSettings.from_address}>`;
 };
 
-const send = async message => {
+const send = async (message) => {
 	const emailSettings = await EmailSettingsService.getEmailSettings();
 	const smtp = getSmtp(emailSettings);
 	message.from = getFrom(emailSettings);
@@ -73,5 +73,5 @@ const send = async message => {
 };
 
 export default {
-	send
+	send,
 };

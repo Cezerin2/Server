@@ -12,7 +12,7 @@ class ProductVariantsService {
 		return db
 			.collection('products')
 			.findOne({ _id: productObjectID }, { fields: { variants: 1 } })
-			.then(product => product.variants || []);
+			.then((product) => product.variants || []);
 	}
 
 	deleteVariant(productId, variantId) {
@@ -26,17 +26,17 @@ class ProductVariantsService {
 			.collection('products')
 			.updateOne(
 				{
-					_id: productObjectID
+					_id: productObjectID,
 				},
 				{
 					$pull: {
 						variants: {
-							id: variantObjectID
-						}
-					}
+							id: variantObjectID,
+						},
+					},
 				}
 			)
-			.then(res => this.getVariants(productId));
+			.then((res) => this.getVariants(productId));
 	}
 
 	addVariant(productId, data) {
@@ -50,7 +50,7 @@ class ProductVariantsService {
 		return db
 			.collection('products')
 			.updateOne({ _id: productObjectID }, { $push: { variants: variantData } })
-			.then(res => this.getVariants(productId));
+			.then((res) => this.getVariants(productId));
 	}
 
 	updateVariant(productId, variantId, data) {
@@ -67,11 +67,11 @@ class ProductVariantsService {
 			.updateOne(
 				{
 					_id: productObjectID,
-					'variants.id': variantObjectID
+					'variants.id': variantObjectID,
 				},
 				{ $set: variantData }
 			)
-			.then(res => this.getVariants(productId));
+			.then((res) => this.getVariants(productId));
 	}
 
 	getValidDocumentForInsert(data) {
@@ -81,7 +81,7 @@ class ProductVariantsService {
 			price: parse.getNumberIfPositive(data.price) || 0,
 			stock_quantity: parse.getNumberIfPositive(data.stock_quantity) || 0,
 			weight: parse.getNumberIfPositive(data.weight) || 0,
-			options: []
+			options: [],
 		};
 
 		return variant;
@@ -121,39 +121,41 @@ class ProductVariantsService {
 		return db
 			.collection('products')
 			.findOne({ _id: productObjectID }, { fields: { variants: 1 } })
-			.then(product => (product && product.variants ? product.variants : null))
-			.then(variants =>
+			.then((product) =>
+				product && product.variants ? product.variants : null
+			)
+			.then((variants) =>
 				variants && variants.length > 0
-					? variants.find(variant => variant.id.toString() === variantId)
+					? variants.find((variant) => variant.id.toString() === variantId)
 					: null
 			)
-			.then(variant =>
+			.then((variant) =>
 				variant && variant.options.length > 0 ? variant.options : []
 			);
 	}
 
 	getModifiedVariantOptions(productId, variantId, optionId, valueId) {
-		return this.getVariantOptions(productId, variantId).then(options => {
+		return this.getVariantOptions(productId, variantId).then((options) => {
 			if (options && options.length > 0) {
 				const optionToChange = options.find(
-					option => option.option_id.toString() === optionId
+					(option) => option.option_id.toString() === optionId
 				);
 
 				if (optionToChange === undefined) {
 					// if option not exists => add new option
 					options.push({
 						option_id: new ObjectID(optionId),
-						value_id: new ObjectID(valueId)
+						value_id: new ObjectID(valueId),
 					});
 				} else {
 					// if option exists => set new valueId
 
 					if (optionToChange.value_id.toString() === valueId) {
 						// don't save same value
-						return option;
+						return options;
 					}
 
-					options = options.map(option => {
+					options = options.map((option) => {
 						if (option.option_id.toString() === optionId) {
 							option.value_id = new ObjectID(valueId);
 							return option;
@@ -165,7 +167,7 @@ class ProductVariantsService {
 				options = [];
 				options.push({
 					option_id: new ObjectID(optionId),
-					value_id: new ObjectID(valueId)
+					value_id: new ObjectID(valueId),
 				});
 			}
 
@@ -191,7 +193,7 @@ class ProductVariantsService {
 			data.option_id,
 			data.value_id
 		)
-			.then(options =>
+			.then((options) =>
 				db
 					.collection('products')
 					.updateOne(
@@ -199,7 +201,7 @@ class ProductVariantsService {
 						{ $set: { 'variants.$.options': options } }
 					)
 			)
-			.then(res => this.getVariants(productId));
+			.then((res) => this.getVariants(productId));
 	}
 }
 

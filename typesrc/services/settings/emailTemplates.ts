@@ -6,7 +6,7 @@ class EmailTemplatesService {
 		return db
 			.collection('emailTemplates')
 			.findOne({ name })
-			.then(template => this.changeProperties(template));
+			.then((template) => this.changeProperties(template));
 	}
 
 	updateEmailTemplate(name, data) {
@@ -16,11 +16,11 @@ class EmailTemplatesService {
 			.updateOne(
 				{ name },
 				{
-					$set: template
+					$set: template,
 				},
 				{ upsert: true }
 			)
-			.then(res => this.getEmailTemplate(name));
+			.then(this.getEmailTemplate(name));
 	}
 
 	getValidDocumentForUpdate(data) {
@@ -28,7 +28,7 @@ class EmailTemplatesService {
 			return new Error('Required fields are missing');
 		}
 
-		const template = {};
+		const template = { subject: String, body: String };
 
 		if (data.subject !== undefined) {
 			template.subject = parse.getString(data.subject);
@@ -48,7 +48,7 @@ class EmailTemplatesService {
 		} else {
 			return {
 				subject: '',
-				body: ''
+				body: '',
 			};
 		}
 

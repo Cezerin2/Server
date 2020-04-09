@@ -11,7 +11,7 @@ const RECONNECT_INTERVAL = 1000;
 const CONNECT_OPTIONS = {
 	reconnectTries: 3600,
 	reconnectInterval: RECONNECT_INTERVAL,
-	useNewUrlParser: true
+	useNewUrlParser: true,
 };
 
 const onClose = () => {

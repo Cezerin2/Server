@@ -6,7 +6,7 @@ class ProductCategoriesRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-
+	router;
 	registerRoutes() {
 		this.router.get(
 			'/v1/product_categories',
@@ -68,13 +68,13 @@ class ProductCategoriesRoute {
 
 	getCategories(req, res, next) {
 		CategoriesService.getCategories(req.query)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	getSingleCategory(req, res, next) {
 		CategoriesService.getSingleCategory(req.params.id)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}
@@ -85,13 +85,13 @@ class ProductCategoriesRoute {
 
 	addCategory(req, res, next) {
 		CategoriesService.addCategory(req.body)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	updateCategory(req, res, next) {
 		CategoriesService.updateCategory(req.params.id, req.body)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}
@@ -102,15 +102,15 @@ class ProductCategoriesRoute {
 
 	deleteCategory(req, res, next) {
 		CategoriesService.deleteCategory(req.params.id)
-			.then(data => res.status(data ? 200 : 404).end())
+			.then((data) => res.status(data ? 200 : 404).end())
 			.catch(next);
 	}
 
-	uploadCategoryImage(req, res, next) {
-		CategoriesService.uploadCategoryImage(req, res, next);
+	uploadCategoryImage(req, res) {
+		CategoriesService.uploadCategoryImage(req, res);
 	}
 
-	deleteCategoryImage(req, res, next) {
+	deleteCategoryImage(req, res) {
 		CategoriesService.deleteCategoryImage(req.params.id);
 		return res.end();
 	}

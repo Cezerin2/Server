@@ -6,15 +6,15 @@ class ImportSettingsService {
 		this.defaultSettings = {
 			apikey: '',
 			sheetid: '',
-			range: ''
+			range: '',
 		};
 	}
-
+	defaultSettings = {};
 	getImportSettings() {
 		return db
 			.collection('importSettings')
 			.findOne()
-			.then(settings => {
+			.then((settings) => {
 				return this.changeProperties(settings);
 			});
 	}
@@ -27,11 +27,11 @@ class ImportSettingsService {
 				.updateOne(
 					{},
 					{
-						$set: settings
+						$set: settings,
 					},
 					{ upsert: true }
 				)
-				.then(res => this.getImportSettings())
+				.then((res) => this.getImportSettings())
 		);
 	}
 
@@ -39,7 +39,7 @@ class ImportSettingsService {
 		return db
 			.collection('importSettings')
 			.countDocuments({})
-			.then(count => {
+			.then((count) => {
 				if (count === 0) {
 					return db
 						.collection('importSettings')
@@ -55,7 +55,7 @@ class ImportSettingsService {
 			return new Error('Required fields are missing');
 		}
 
-		let settings = {};
+		let settings = { apikey: String, sheetid: String, range: String };
 
 		if (data.apikey !== undefined) {
 			settings.apikey = parse.getString(data.apikey);

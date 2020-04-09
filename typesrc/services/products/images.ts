@@ -24,9 +24,9 @@ class ProductImagesService {
 		return db
 			.collection('products')
 			.findOne({ _id: productObjectID }, { fields: { images: 1 } })
-			.then(product => {
+			.then((product) => {
 				if (product && product.images && product.images.length > 0) {
-					let images = product.images.map(image => {
+					let images = product.images.map((image) => {
 						image.url = url.resolve(
 							domain,
 							`${settings.assetServer.productsUploadPath}/${product._id}/${image.filename}`
@@ -49,10 +49,10 @@ class ProductImagesService {
 		const imageObjectID = new ObjectID(imageId);
 
 		return this.getImages(productId)
-			.then(images => {
+			.then((images) => {
 				if (images && images.length > 0) {
 					const imageData = images.find(
-						i => i.id.toString() === imageId.toString()
+						(i) => i.id.toString() === imageId.toString()
 					);
 					if (imageData) {
 						const { filename } = imageData;
@@ -92,20 +92,20 @@ class ProductImagesService {
 			req,
 			res,
 			uploadDir,
-			async filename => {
+			async (filename) => {
 				const imageData = {
 					id: new ObjectID(),
 					alt: '',
 					position: 99,
-					filename
+					filename,
 				};
 
 				await db.collection('products').updateOne(
 					{
-						_id: productObjectID
+						_id: productObjectID,
 					},
 					{
-						$push: { images: imageData }
+						$push: { images: imageData },
 					}
 				);
 			},
@@ -125,7 +125,7 @@ class ProductImagesService {
 		return db.collection('products').updateOne(
 			{
 				_id: productObjectID,
-				'images.id': imageObjectID
+				'images.id': imageObjectID,
 			},
 			{ $set: imageData }
 		);

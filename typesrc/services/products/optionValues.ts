@@ -9,20 +9,20 @@ class ProductOptionValuesService {
 		return db
 			.collection('products')
 			.findOne({ _id: productObjectID }, { fields: { options: 1 } })
-			.then(product => (product && product.options ? product.options : null))
-			.then(options =>
+			.then((product) => (product && product.options ? product.options : null))
+			.then((options) =>
 				options && options.length > 0
-					? options.find(option => option.id.toString() === optionId)
+					? options.find((option) => option.id.toString() === optionId)
 					: null
 			)
-			.then(option =>
+			.then((option) =>
 				option && option.values.length > 0 ? option.values : []
 			);
 	}
 
 	getSingleOptionValue(productId, optionId, valueId) {
-		return this.getOptionValues(productId, optionId).then(optionValues =>
-			optionValues.find(optionValue => optionValue.id.toString() === valueId)
+		return this.getOptionValues(productId, optionId).then((optionValues) =>
+			optionValues.find((optionValue) => optionValue.id.toString() === valueId)
 		);
 	}
 
@@ -40,11 +40,11 @@ class ProductOptionValuesService {
 			.updateOne(
 				{
 					_id: productObjectID,
-					'options.id': optionObjectID
+					'options.id': optionObjectID,
 				},
 				{ $push: { 'options.$.values': optionValueData } }
 			)
-			.then(res => this.getOptionValues(productId, optionId));
+			.then((res) => this.getOptionValues(productId, optionId));
 	}
 
 	updateOptionValue(productId, optionId, valueId, data) {
@@ -63,10 +63,10 @@ class ProductOptionValuesService {
 				valueId,
 				data.name
 			)
-				.then(values =>
+				.then((values) =>
 					this.overwriteAllValuesForOption(productId, optionId, values)
 				)
-				.then(updateResult => this.getOptionValues(productId, optionId));
+				.then((updateResult) => this.getOptionValues(productId, optionId));
 		}
 		return Promise.reject('Please, specify value name');
 	}
@@ -81,16 +81,16 @@ class ProductOptionValuesService {
 		}
 
 		return this.getOptionValuesWithDeletedOne(productId, optionId, valueId)
-			.then(values =>
+			.then((values) =>
 				this.overwriteAllValuesForOption(productId, optionId, values)
 			)
-			.then(updateResult => this.getOptionValues(productId, optionId));
+			.then((updateResult) => this.getOptionValues(productId, optionId));
 	}
 
 	getModifiedOptionValues(productId, optionId, valueId, name) {
-		return this.getOptionValues(productId, optionId).then(values => {
+		return this.getOptionValues(productId, optionId).then((values) => {
 			if (values && values.length > 0) {
-				values = values.map(value => {
+				values = values.map((value) => {
 					if (value.id.toString() === valueId) {
 						value.name = name;
 						return value;
@@ -104,9 +104,11 @@ class ProductOptionValuesService {
 	}
 
 	getOptionValuesWithDeletedOne(productId, optionId, deleteValueId) {
-		return this.getOptionValues(productId, optionId).then(values => {
+		return this.getOptionValues(productId, optionId).then((values) => {
 			if (values && values.length > 0) {
-				values = values.filter(value => value.id.toString() !== deleteValueId);
+				values = values.filter(
+					(value) => value.id.toString() !== deleteValueId
+				);
 			}
 
 			return values;
@@ -132,7 +134,7 @@ class ProductOptionValuesService {
 	getValidDocumentForInsert(data) {
 		const optionValue = {
 			id: new ObjectID(),
-			name: parse.getString(data.name)
+			name: parse.getString(data.name),
 		};
 
 		return optionValue;

@@ -6,7 +6,7 @@ import settings from '../../lib/settings';
 import dashboardWebSocket from '../../lib/dashboardWebSocket';
 
 class ThemesService {
-	exportTheme(req, res) {
+	exportTheme(res) {
 		const randomFileName = Math.floor(Math.random() * 10000);
 		exec(
 			`npm --silent run theme:export -- ${randomFileName}.zip`,
@@ -38,7 +38,7 @@ class ThemesService {
 				exec(`npm run theme:install ${fileName}`, (error, stdout, stderr) => {
 					dashboardWebSocket.send({
 						event: dashboardWebSocket.events.THEME_INSTALLED,
-						payload: fileName
+						payload: fileName,
 					});
 
 					if (error) {
@@ -77,7 +77,7 @@ class ThemesService {
 					file_size = file.size;
 				}
 			})
-			.on('error', err => {
+			.on('error', (err) => {
 				callback(err);
 			})
 			.on('end', () => {

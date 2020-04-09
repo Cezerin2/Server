@@ -7,8 +7,8 @@ class CheckoutFieldsService {
 			.collection('checkoutFields')
 			.find()
 			.toArray()
-			.then(fields =>
-				fields.map(field => {
+			.then((fields) =>
+				fields.map((field) => {
 					delete field._id;
 					return field;
 				})
@@ -19,7 +19,7 @@ class CheckoutFieldsService {
 		return db
 			.collection('checkoutFields')
 			.findOne({ name })
-			.then(field => this.changeProperties(field));
+			.then((field) => this.changeProperties(field));
 	}
 
 	updateCheckoutField(name, data) {
@@ -29,11 +29,11 @@ class CheckoutFieldsService {
 			.updateOne(
 				{ name },
 				{
-					$set: field
+					$set: field,
 				},
 				{ upsert: true }
 			)
-			.then(res => this.getCheckoutField(name));
+			.then((res) => this.getCheckoutField(name));
 	}
 
 	getValidDocumentForUpdate(data) {
@@ -41,7 +41,7 @@ class CheckoutFieldsService {
 			return new Error('Required fields are missing');
 		}
 
-		const field = {};
+		const field = { status: String, label: String, placeholder: String };
 
 		if (data.status !== undefined) {
 			field.status = parse.getString(data.status);
@@ -66,7 +66,7 @@ class CheckoutFieldsService {
 			return {
 				status: 'required',
 				label: '',
-				placeholder: ''
+				placeholder: '',
 			};
 		}
 

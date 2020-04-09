@@ -6,7 +6,7 @@ class PagesRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-
+	router;
 	registerRoutes() {
 		this.router.get(
 			'/v1/pages',
@@ -37,13 +37,13 @@ class PagesRoute {
 
 	getPages(req, res, next) {
 		PagesService.getPages(req.query)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	getSinglePage(req, res, next) {
 		PagesService.getSinglePage(req.params.id)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}
@@ -54,13 +54,13 @@ class PagesRoute {
 
 	addPage(req, res, next) {
 		PagesService.addPage(req.body)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	updatePage(req, res, next) {
 		PagesService.updatePage(req.params.id, req.body)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}
@@ -71,7 +71,7 @@ class PagesRoute {
 
 	deletePage(req, res, next) {
 		PagesService.deletePage(req.params.id)
-			.then(data => res.status(data ? 200 : 404).end())
+			.then((data) => res.status(data ? 200 : 404).end())
 			.catch(next);
 	}
 }

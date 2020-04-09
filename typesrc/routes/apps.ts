@@ -6,7 +6,7 @@ class AppsRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-
+	router;
 	registerRoutes() {
 		this.router.get(
 			'/v1/apps/:key/settings',
@@ -22,13 +22,13 @@ class AppsRoute {
 
 	getSettings(req, res, next) {
 		AppSettingsService.getSettings(req.params.key)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	updateSettings(req, res, next) {
 		AppSettingsService.updateSettings(req.params.key, req.body)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}

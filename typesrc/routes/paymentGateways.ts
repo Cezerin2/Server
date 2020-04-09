@@ -6,7 +6,7 @@ class PaymentGatewaysRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-
+	router;
 	registerRoutes() {
 		this.router.get(
 			'/v1/payment_gateways/:name',
@@ -22,13 +22,13 @@ class PaymentGatewaysRoute {
 
 	getGateway(req, res, next) {
 		PaymentGatewaysService.getGateway(req.params.name)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	updateGateway(req, res, next) {
 		PaymentGatewaysService.updateGateway(req.params.name, req.body)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 }

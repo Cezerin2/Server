@@ -3,10 +3,7 @@ import parse from '../../lib/parse';
 
 class ThemePlaceholdersService {
 	getPlaceholders() {
-		return db
-			.collection('themePlaceholders')
-			.find({}, { _id: 0 })
-			.toArray();
+		return db.collection('themePlaceholders').find({}, { _id: 0 }).toArray();
 	}
 
 	getSinglePlaceholder(placeholderKey) {
@@ -17,9 +14,9 @@ class ThemePlaceholdersService {
 
 	addPlaceholder(data) {
 		const field = this.getValidDocumentForInsert(data);
-		const placeholderKey = field.key;
+		const placeholderKey = field;
 
-		return this.getSinglePlaceholder(placeholderKey).then(placeholder => {
+		return this.getSinglePlaceholder(placeholderKey).then((placeholder) => {
 			if (placeholder) {
 				// placeholder exists
 				return new Error('Placeholder exists');
@@ -28,7 +25,7 @@ class ThemePlaceholdersService {
 			return db
 				.collection('themePlaceholders')
 				.insertOne(field)
-				.then(res => this.getSinglePlaceholder(placeholderKey));
+				.then(this.getSinglePlaceholder(placeholderKey));
 		});
 	}
 
@@ -39,11 +36,11 @@ class ThemePlaceholdersService {
 			.updateOne(
 				{ key: placeholderKey },
 				{
-					$set: field
+					$set: field,
 				},
 				{ upsert: true }
 			)
-			.then(res => this.getSinglePlaceholder(placeholderKey));
+			.then((res) => this.getSinglePlaceholder(placeholderKey));
 	}
 
 	deletePlaceholder(placeholderKey) {
@@ -57,7 +54,7 @@ class ThemePlaceholdersService {
 			return new Error('Required fields are missing');
 		}
 
-		const field = {};
+		const field = { place: String, value: String };
 
 		if (data.place !== undefined) {
 			field.place = parse.getString(data.place);
@@ -75,7 +72,7 @@ class ThemePlaceholdersService {
 			return new Error('Required fields are missing');
 		}
 
-		const field = {};
+		const field = { key: String, place: String, value: String };
 
 		if (data.key !== undefined) {
 			field.key = parse.getString(data.key);

@@ -10,8 +10,8 @@ import utils from '../../lib/utils';
 import parse from '../../lib/parse';
 
 class ProductCategoriesService {
-	getFilter(params = {}) {
-		const filter = {};
+	getFilter(params = { enabled: Boolean, id: String }) {
+		const filter = { enabled: Boolean, _id: {} };
 		const enabled = parse.getBooleanIfValid(params.enabled);
 		if (enabled !== null) {
 			filter.enabled = enabled;
@@ -23,8 +23,8 @@ class ProductCategoriesService {
 		return filter;
 	}
 
-	async getCategories(params = {}) {
-		const filter = this.getFilter(params);
+	async getCategories(params = { fields: String }) {
+		const filter = this.getFilter();
 		const projection = utils.getProjectionFromFields(params.fields);
 		const generalSettings = await SettingsService.getSettings();
 		const { domain } = generalSettings;
@@ -34,7 +34,7 @@ class ProductCategoriesService {
 			.find(filter, { projection })
 			.sort({ position: 1 })
 			.toArray();
-		const result = items.map(category =>
+		const result = items.map((category) =>
 			this.changeProperties(category, domain, assetsDomain)
 		);
 		return result;
@@ -44,7 +44,7 @@ class ProductCategoriesService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getCategories({ id }).then(categories =>
+		return this.getCategories(id).then((categories) =>
 			categories.length > 0 ? categories[0] : null
 		);
 	}
@@ -72,19 +72,21 @@ class ProductCategoriesService {
 		const categoryObjectID = new ObjectID(id);
 
 		return this.getValidDocumentForUpdate(id, data)
-			.then(dataToSet =>
+			.then((dataToSet) =>
 				db
 					.collection('productCategories')
 					.updateOne({ _id: categoryObjectID }, { $set: dataToSet })
 			)
-			.then(res => (res.modifiedCount > 0 ? this.getSingleCategory(id) : null));
+			.then((res) =>
+				res.modifiedCount > 0 ? this.getSingleCategory(id) : null
+			);
 	}
 
 	findAllChildren(items, id, result) {
 		if (id && ObjectID.isValid(id)) {
 			result.push(new ObjectID(id));
 			const finded = items.filter(
-				item => (item.parent_id || '').toString() === id.toString()
+				(item) => (item.parent_id || '').toString() === id.toString()
 			);
 			if (finded.length > 0) {
 				for (const item of finded) {
@@ -103,24 +105,24 @@ class ProductCategoriesService {
 
 		// 1. get all categories
 		return this.getCategories()
-			.then(items => {
+			.then((items) => {
 				// 2. find category and children
 				const idsToDelete = [];
 				this.findAllChildren(items, id, idsToDelete);
 				return idsToDelete;
 			})
-			.then(idsToDelete => {
+			.then((idsToDelete) => {
 				// 3. delete categories
-				const objectsToDelete = idsToDelete.map(id => new ObjectID(id));
+				const objectsToDelete = idsToDelete.map((id) => new ObjectID(id));
 				// return db.collection('productCategories').deleteMany({_id: { $in: objectsToDelete}}).then(() => idsToDelete);
 				return db
 					.collection('productCategories')
 					.deleteMany({ _id: { $in: objectsToDelete } })
-					.then(deleteResponse =>
+					.then((deleteResponse) =>
 						deleteResponse.deletedCount > 0 ? idsToDelete : null
 					);
 			})
-			.then(idsToDelete =>
+			.then((idsToDelete) =>
 				// 4. update category_id for products
 				idsToDelete
 					? db
@@ -132,7 +134,7 @@ class ProductCategoriesService {
 							.then(() => idsToDelete)
 					: null
 			)
-			.then(idsToDelete =>
+			.then((idsToDelete) =>
 				// 5. update additional category_ids for products
 				idsToDelete
 					? db
@@ -144,7 +146,7 @@ class ProductCategoriesService {
 							.then(() => idsToDelete)
 					: null
 			)
-			.then(idsToDelete => {
+			.then((idsToDelete) => {
 				// 6. delete directories with images
 				if (idsToDelete) {
 					for (const categoryId of idsToDelete) {
@@ -167,7 +169,16 @@ class ProductCategoriesService {
 		const category = {
 			date_created: new Date(),
 			date_updated: null,
-			image: ''
+			slug: String,
+			image: '',
+			name: String,
+			description: String,
+			meta_description: String,
+			meta_title: String,
+			enabled: Boolean,
+			sort: String,
+			parent_id: {},
+			position: String,
 		};
 
 		category.name = parse.getString(data.name);
@@ -183,7 +194,7 @@ class ProductCategoriesService {
 		if (!slug || slug.length === 0) {
 			return Promise.resolve(category);
 		}
-		return utils.getAvailableSlug(slug).then(newSlug => {
+		return utils.getAvailableSlug(slug, undefined).then((newSlug) => {
 			category.slug = newSlug;
 			return category;
 		});
@@ -199,7 +210,17 @@ class ProductCategoriesService {
 			}
 
 			const category = {
-				date_updated: new Date()
+				date_updated: new Date(),
+				slug: String,
+				name: String,
+				description: String,
+				meta_description: String,
+				meta_title: String,
+				enabled: Boolean,
+				image: String,
+				position: String,
+				sort: String,
+				parent_id: {},
 			};
 
 			if (data.name !== undefined) {
@@ -246,11 +267,11 @@ class ProductCategoriesService {
 
 				utils
 					.getAvailableSlug(slug, id)
-					.then(newSlug => {
+					.then((newSlug) => {
 						category.slug = newSlug;
 						resolve(category);
 					})
-					.catch(err => {
+					.catch((err) => {
 						reject(err);
 					});
 			} else {
@@ -295,7 +316,7 @@ class ProductCategoriesService {
 		const categoryId = req.params.id;
 		const dir = `${settings.assetServer.categoriesUploadPath}/${categoryId}`;
 
-		AssetService.uploadFile(req, res, dir, file_name => {
+		AssetService.uploadFile(req, res, dir, (file_name) => {
 			this.updateCategory(categoryId, { image: file_name });
 		});
 	}

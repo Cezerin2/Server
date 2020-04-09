@@ -10,7 +10,7 @@ class SitemapService {
 			this.getSlugArrayFromReserved(),
 			this.getSlugArrayFromProductCategories(slug, onlyEnabled),
 			this.getSlugArrayFromProducts(slug, onlyEnabled),
-			this.getSlugArrayFromPages(slug, onlyEnabled)
+			this.getSlugArrayFromPages(slug, onlyEnabled),
 		]).then(([reserved, productCategories, products, pages]) => {
 			const paths = [...reserved, ...productCategories, ...products, ...pages];
 			return paths;
@@ -21,7 +21,7 @@ class SitemapService {
 		return Promise.all([
 			this.getSlugArrayFromReserved(),
 			this.getSlugArrayFromProductCategories(slug, onlyEnabled),
-			this.getSlugArrayFromPages(slug, onlyEnabled)
+			this.getSlugArrayFromPages(slug, onlyEnabled),
 		]).then(([reserved, productCategories, pages]) => {
 			const paths = [...reserved, ...productCategories, ...pages];
 			return paths;
@@ -31,7 +31,7 @@ class SitemapService {
 	getPathsWithSlash(slug, onlyEnabled) {
 		return Promise.all([
 			this.getSlugArrayFromProducts(slug, onlyEnabled),
-			this.getSlugArrayFromPages(slug, onlyEnabled)
+			this.getSlugArrayFromPages(slug, onlyEnabled),
 		]).then(([products, pages]) => {
 			const paths = [...products, ...pages];
 			return paths;
@@ -71,8 +71,8 @@ class SitemapService {
 	}
 
 	getSlugArrayFromProducts(slug, onlyEnabled) {
-		const categoriesFilter = {};
-		const productFilter = {};
+		const categoriesFilter = { slug: [] };
+		const productFilter = { slug: [], enabled: undefined };
 
 		if (slug) {
 			const slugParts = slug.split('/');
@@ -94,17 +94,17 @@ class SitemapService {
 				.collection('products')
 				.find(productFilter)
 				.project({ slug: 1, category_id: 1 })
-				.toArray()
+				.toArray(),
 		]).then(([categories, products]) =>
-			products.map(product => {
+			products.map((product) => {
 				const category = categories.find(
-					c => c._id.toString() === (product.category_id || '').toString()
+					(c) => c._id.toString() === (product.category_id || '').toString()
 				);
 				const categorySlug = category ? category.slug : '-';
 				return {
 					path: `/${categorySlug}/${product.slug}`,
 					type: 'product',
-					resource: product._id
+					resource: product._id,
 				};
 			})
 		);
@@ -113,7 +113,7 @@ class SitemapService {
 	getSlugArrayFromPages(slug, onlyEnabled) {
 		const filter = this.getFilterWithoutSlashes(slug);
 		if (onlyEnabled === true) {
-			filter.enabled = true;
+			filter.slug = true;
 		}
 
 		return db
@@ -121,11 +121,11 @@ class SitemapService {
 			.find(filter)
 			.project({ slug: 1 })
 			.toArray()
-			.then(items =>
-				items.map(item => ({
+			.then((items) =>
+				items.map((item) => ({
 					path: `/${item.slug}`,
 					type: 'page',
-					resource: item._id
+					resource: item._id,
 				}))
 			);
 	}
@@ -133,7 +133,7 @@ class SitemapService {
 	getSlugArrayFromProductCategories(slug, onlyEnabled) {
 		const filter = this.getFilterWithoutSlashes(slug);
 		if (onlyEnabled === true) {
-			filter.enabled = true;
+			filter.slug = true;
 		}
 
 		return db
@@ -141,11 +141,11 @@ class SitemapService {
 			.find(filter)
 			.project({ slug: 1 })
 			.toArray()
-			.then(items =>
-				items.map(item => ({
+			.then((items) =>
+				items.map((item) => ({
 					path: `/${item.slug}`,
 					type: 'product-category',
-					resource: item._id
+					resource: item._id,
 				}))
 			);
 	}
@@ -163,13 +163,13 @@ class SitemapService {
 		const slug = path.substr(1);
 		if (slug.includes('/')) {
 			// slug = category-slug/product-slug
-			return this.getPathsWithSlash(slug, onlyEnabled).then(paths =>
-				paths.find(e => e.path === path)
+			return this.getPathsWithSlash(slug, onlyEnabled).then((paths) =>
+				paths.find((e) => e.path === path)
 			);
 		}
 		// slug = slug
-		return this.getPathsWithoutSlashes(slug, onlyEnabled).then(paths =>
-			paths.find(e => e.path === path)
+		return this.getPathsWithoutSlashes(slug, onlyEnabled).then((paths) =>
+			paths.find((e) => e.path === path)
 		);
 	}
 }

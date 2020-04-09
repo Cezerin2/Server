@@ -8,7 +8,7 @@ const ResolveSystemPath = (dir, file = '') => {
 	const BaseAssetPath = `${settings.assetServer.localBasePath}`;
 
 	const paths = [BaseAssetPath, dir, file].filter(
-		x => typeof x === 'string' && x.length > 0
+		(x) => typeof x === 'string' && x.length > 0
 	);
 
 	return path.resolve(paths.join('/'));
@@ -18,7 +18,7 @@ const ResolveUrlPath = (dir, file) => {
 	const BaseAssetPath = `${settings.assetServer.domain}`;
 
 	const paths = [BaseAssetPath, dir, file].filter(
-		x => typeof x === 'string' && x.length > 0
+		(x) => typeof x === 'string' && x.length > 0
 	);
 
 	return paths.join('/');
@@ -35,7 +35,7 @@ class LocalService {
 				url: fileUrlPath,
 				file: fileName,
 				size: stats.size,
-				modified: stats.mtime
+				modified: stats.mtime,
 			};
 		}
 		return null;
@@ -43,8 +43,8 @@ class LocalService {
 
 	getFilesData(dir, files) {
 		return files
-			.map(fileName => this.getFileData(dir, fileName))
-			.filter(fileData => fileData !== null)
+			.map((fileName) => this.getFileData(dir, fileName))
+			.filter((fileData) => fileData !== null)
 			.sort((a, b) => a.modified - b.modified);
 	}
 
@@ -70,7 +70,7 @@ class LocalService {
 		return new Promise((resolve, reject) => {
 			const filePath = ResolveSystemPath(dir, fileName);
 			if (fse.existsSync(filePath)) {
-				fse.unlink(filePath, err => {
+				fse.unlink(filePath, (err) => {
 					resolve();
 				});
 			} else {
@@ -81,7 +81,7 @@ class LocalService {
 
 	deleteDir(dir) {
 		const dirPath = ResolveSystemPath(dir);
-		fse.remove(dirPath, err => {});
+		fse.remove(dirPath, (err) => {});
 	}
 
 	emptyDir(dir) {
@@ -110,7 +110,7 @@ class LocalService {
 				file_name = file.name;
 				file_size = file.size;
 			})
-			.on('error', err => {
+			.on('error', (err) => {
 				res.status(500).send(this.getErrorMessage(err));
 			})
 			.on('end', async () => {
@@ -120,7 +120,7 @@ class LocalService {
 					res.send({
 						file: file_name,
 						size: file_size,
-						url: `${settings.assetServer.domain}/${settings.assetServer.themeImageUploadPath}/${file_name}`
+						url: `${settings.assetServer.domain}/${settings.assetServer.themeImageUploadPath}/${file_name}`,
 					});
 				} else {
 					res
@@ -155,7 +155,7 @@ class LocalService {
 					uploadedFiles.push(file.name);
 				}
 			})
-			.on('error', err => {
+			.on('error', (err) => {
 				res.status(500).send(this.getErrorMessage(err));
 			})
 			.on('end', async () => {

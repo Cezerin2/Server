@@ -6,7 +6,7 @@ class SitemapRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-
+	router;
 	registerRoutes() {
 		this.router.get(
 			'/v1/sitemap',
@@ -18,7 +18,7 @@ class SitemapRoute {
 	getPaths(req, res, next) {
 		if (req.query.path) {
 			SitemapService.getSinglePath(req.query.path, req.query.enabled)
-				.then(data => {
+				.then((data) => {
 					if (data) {
 						return res.send(data);
 					}
@@ -27,7 +27,7 @@ class SitemapRoute {
 				.catch(next);
 		} else {
 			SitemapService.getPaths(req.query.enabled)
-				.then(data => res.send(data))
+				.then((data) => res.send(data))
 				.catch(next);
 		}
 	}

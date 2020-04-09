@@ -9,7 +9,7 @@ class ThemeRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-
+	router;
 	registerRoutes() {
 		this.router.get(
 			'/v1/theme/export',
@@ -77,7 +77,7 @@ class ThemeRoute {
 	}
 
 	exportTheme(req, res, next) {
-		ThemeService.exportTheme(req, res);
+		ThemeService.exportTheme(req);
 	}
 
 	installTheme(req, res, next) {
@@ -111,8 +111,8 @@ class ThemeRoute {
 		}
 	}
 
-	uploadFile(req, res, next) {
-		ThemeAssetsService.uploadFile(req, res, next);
+	uploadFile(req, res) {
+		ThemeAssetsService.uploadFile(req, res);
 	}
 
 	async deleteFile(req, res, next) {
