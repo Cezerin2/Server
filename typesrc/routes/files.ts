@@ -9,7 +9,7 @@ class FilesRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-
+	router;
 	registerRoutes() {
 		this.router.get(
 			'/v1/files',
@@ -30,7 +30,7 @@ class FilesRoute {
 
 	getFiles(req, res, next) {
 		AssetsService.getFiles(filesPath)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 

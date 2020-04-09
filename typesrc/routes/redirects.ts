@@ -6,7 +6,7 @@ class RedirectsRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-
+	router;
 	registerRoutes() {
 		this.router.get(
 			'/v1/redirects',
@@ -35,15 +35,15 @@ class RedirectsRoute {
 		);
 	}
 
-	getRedirects(req, res, next) {
-		RedirectsService.getRedirects(req.query)
-			.then(data => res.send(data))
+	getRedirects(res, next) {
+		RedirectsService.getRedirects()
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	getSingleRedirect(req, res, next) {
 		RedirectsService.getSingleRedirect(req.params.id)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}
@@ -54,13 +54,13 @@ class RedirectsRoute {
 
 	addRedirect(req, res, next) {
 		RedirectsService.addRedirect(req.body)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	updateRedirect(req, res, next) {
 		RedirectsService.updateRedirect(req.params.id, req.body)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}
@@ -71,7 +71,7 @@ class RedirectsRoute {
 
 	deleteRedirect(req, res, next) {
 		RedirectsService.deleteRedirect(req.params.id)
-			.then(data => res.status(data ? 200 : 404).end())
+			.then((data) => res.status(data ? 200 : 404).end())
 			.catch(next);
 	}
 }

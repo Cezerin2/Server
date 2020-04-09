@@ -6,7 +6,7 @@ class PaymentMethodsRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-
+	router;
 	registerRoutes() {
 		this.router.get(
 			'/v1/payment_methods',
@@ -37,13 +37,13 @@ class PaymentMethodsRoute {
 
 	getMethods(req, res, next) {
 		PaymentMethodsService.getMethods(req.query)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	getSingleMethod(req, res, next) {
 		PaymentMethodsService.getSingleMethod(req.params.id)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}
@@ -54,13 +54,13 @@ class PaymentMethodsRoute {
 
 	addMethod(req, res, next) {
 		PaymentMethodsService.addMethod(req.body)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	updateMethod(req, res, next) {
 		PaymentMethodsService.updateMethod(req.params.id, req.body)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}
@@ -71,7 +71,7 @@ class PaymentMethodsRoute {
 
 	deleteMethod(req, res, next) {
 		PaymentMethodsService.deleteMethod(req.params.id)
-			.then(data => res.status(data ? 200 : 404).end())
+			.then((data) => res.status(data ? 200 : 404).end())
 			.catch(next);
 	}
 }

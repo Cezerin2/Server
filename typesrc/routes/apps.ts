@@ -6,7 +6,7 @@ class AppsRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-	router = { get: undefined, put: undefined };
+	router;
 	registerRoutes() {
 		this.router.get(
 			'/v1/apps/:key/settings',

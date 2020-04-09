@@ -6,7 +6,7 @@ class OrderStatusesRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-
+	router;
 	registerRoutes() {
 		this.router.get(
 			'/v1/order_statuses',

@@ -6,7 +6,7 @@ class WebhooksRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-
+	router;
 	registerRoutes() {
 		this.router.get(
 			'/v1/webhooks',
@@ -35,9 +35,9 @@ class WebhooksRoute {
 		);
 	}
 
-	async getWebhooks(req, res, next) {
+	async getWebhooks(res, next) {
 		try {
-			const data = await WebhooksService.getWebhooks(req.query);
+			const data = await WebhooksService.getWebhooks();
 			return res.send(data);
 		} catch (err) {
 			return next(err);

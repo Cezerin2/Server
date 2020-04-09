@@ -5,7 +5,7 @@ class NotificationsRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-
+	router;
 	registerRoutes() {
 		this.router.post(
 			'/v1/notifications/:gateway',
@@ -13,7 +13,7 @@ class NotificationsRoute {
 		);
 	}
 
-	paymentNotification(req, res, next) {
+	paymentNotification(req, res) {
 		PaymentGateways.paymentNotification(req, res, req.params.gateway);
 	}
 }

@@ -10,7 +10,7 @@ class SettingsRoute {
 		this.router = router;
 		this.registerRoutes();
 	}
-
+	router;
 	registerRoutes() {
 		this.router.get(
 			'/v1/settings',
@@ -81,13 +81,13 @@ class SettingsRoute {
 
 	getSettings(req, res, next) {
 		SettingsService.getSettings()
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	updateSettings(req, res, next) {
 		SettingsService.updateSettings(req.body)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}
@@ -98,7 +98,7 @@ class SettingsRoute {
 
 	getImportSettings(req, res, next) {
 		ImportSettingsService.getImportSettings()
-			.then(data => {
+			.then((data) => {
 				res.send(data);
 			})
 			.catch(next);
@@ -106,7 +106,7 @@ class SettingsRoute {
 
 	updateImportSettings(req, res, next) {
 		ImportSettingsService.updateImportSettings(req.body)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					res.send(data);
 				} else {
@@ -118,13 +118,13 @@ class SettingsRoute {
 
 	getEmailSettings(req, res, next) {
 		EmailSettingsService.getEmailSettings()
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	updateEmailSettings(req, res, next) {
 		EmailSettingsService.updateEmailSettings(req.body)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}
@@ -135,13 +135,13 @@ class SettingsRoute {
 
 	getEmailTemplate(req, res, next) {
 		EmailTemplatesService.getEmailTemplate(req.params.name)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	updateEmailTemplate(req, res, next) {
 		EmailTemplatesService.updateEmailTemplate(req.params.name, req.body)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}
@@ -152,19 +152,19 @@ class SettingsRoute {
 
 	getCheckoutFields(req, res, next) {
 		CheckoutFieldsService.getCheckoutFields()
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	getCheckoutField(req, res, next) {
 		CheckoutFieldsService.getCheckoutField(req.params.name)
-			.then(data => res.send(data))
+			.then((data) => res.send(data))
 			.catch(next);
 	}
 
 	updateCheckoutField(req, res, next) {
 		CheckoutFieldsService.updateCheckoutField(req.params.name, req.body)
-			.then(data => {
+			.then((data) => {
 				if (data) {
 					return res.send(data);
 				}
