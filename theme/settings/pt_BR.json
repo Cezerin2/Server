@@ -393,6 +393,12 @@
     "label": "Mostrar setas de navegação na galeria"
   },
   {
+    "section": "Home",
+    "key": "home_slider_show",
+    "type": "boolean",
+    "label": "Mostrar a Galeria do slider inicial?"
+  },
+  {
     "section": "Detalhes do Produto",
     "key": "show_viewed_products",
     "type": "boolean",
