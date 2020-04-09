@@ -636,7 +636,6 @@ class ProductsService {
 
 		return matchQuery;
 	}
-	/*
 	getSingleProduct(id) {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
@@ -670,7 +669,7 @@ class ProductsService {
 				res.modifiedCount > 0 ? this.getSingleProduct(id) : null
 			);
 	}
-*/
+
 	deleteProduct(productId) {
 		if (!ObjectID.isValid(productId)) {
 			return Promise.reject('Invalid identifier');
