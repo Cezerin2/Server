@@ -12,10 +12,10 @@ class ProductOptionsService {
 		return db
 			.collection('products')
 			.findOne({ _id: productObjectID }, { fields: { options: 1 } })
-			.then(product => {
+			.then((product) => {
 				if (product && product.options && product.options.length > 0) {
 					return product.options
-						.map(option => this.changeProperties(option))
+						.map((option) => this.changeProperties(option))
 						.sort((a, b) => a.position - b.position);
 				}
 				return [];
@@ -23,8 +23,8 @@ class ProductOptionsService {
 	}
 
 	getSingleOption(productId, optionId) {
-		return this.getOptions(productId).then(options =>
-			options.find(option => option.id === optionId)
+		return this.getOptions(productId).then((options) =>
+			options.find((option) => option.id === optionId)
 		);
 	}
 
@@ -39,17 +39,17 @@ class ProductOptionsService {
 			.collection('products')
 			.updateOne(
 				{
-					_id: productObjectID
+					_id: productObjectID,
 				},
 				{
 					$pull: {
 						options: {
-							id: optionObjectID
-						}
-					}
+							id: optionObjectID,
+						},
+					},
 				}
 			)
-			.then(res => this.getOptions(productId));
+			.then((res) => this.getOptions(productId));
 	}
 
 	addOption(productId, data) {
@@ -63,7 +63,7 @@ class ProductOptionsService {
 		return db
 			.collection('products')
 			.updateOne({ _id: productObjectID }, { $push: { options: optionData } })
-			.then(res => this.getOptions(productId));
+			.then((res) => this.getOptions(productId));
 	}
 
 	updateOption(productId, optionId, data) {
@@ -80,11 +80,11 @@ class ProductOptionsService {
 			.updateOne(
 				{
 					_id: productObjectID,
-					'options.id': optionObjectID
+					'options.id': optionObjectID,
 				},
 				{ $set: optionData }
 			)
-			.then(res => this.getOptions(productId));
+			.then((res) => this.getOptions(productId));
 	}
 
 	getValidDocumentForInsert(data) {
@@ -94,7 +94,7 @@ class ProductOptionsService {
 			control: parse.getString(data.control),
 			required: parse.getBooleanIfValid(data.required, true),
 			position: parse.getNumberIfPositive(data.position) || 0,
-			values: []
+			values: [],
 		};
 
 		if (option.control === '') {
@@ -141,7 +141,7 @@ class ProductOptionsService {
 			}
 
 			if (item.values && item.values.length > 0) {
-				item.values = item.values.map(value => {
+				item.values = item.values.map((value) => {
 					value.id = value.id.toString();
 					return value;
 				});
