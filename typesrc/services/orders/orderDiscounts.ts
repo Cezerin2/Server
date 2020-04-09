@@ -13,12 +13,12 @@ class OrdertDiscountsService {
 
 		return db.collection('orders').updateOne(
 			{
-				_id: orderObjectID
+				_id: orderObjectID,
 			},
 			{
 				$push: {
-					discounts: discount
-				}
+					discounts: discount,
+				},
 			}
 		);
 	}
@@ -36,11 +36,11 @@ class OrdertDiscountsService {
 			.updateOne(
 				{
 					_id: orderObjectID,
-					'discounts.id': discountObjectID
+					'discounts.id': discountObjectID,
 				},
 				{ $set: discount }
 			)
-			.then(res => OrdersService.getSingleOrder(order_id));
+			.then((res) => OrdersService.getSingleOrder(order_id));
 	}
 
 	deleteDiscount(order_id, discount_id) {
@@ -54,24 +54,24 @@ class OrdertDiscountsService {
 			.collection('orders')
 			.updateOne(
 				{
-					_id: orderObjectID
+					_id: orderObjectID,
 				},
 				{
 					$pull: {
 						discounts: {
-							id: discountObjectID
-						}
-					}
+							id: discountObjectID,
+						},
+					},
 				}
 			)
-			.then(res => OrdersService.getSingleOrder(order_id));
+			.then((res) => OrdersService.getSingleOrder(order_id));
 	}
 
 	getValidDocumentForInsert(data) {
 		return {
 			id: new ObjectID(),
 			name: parse.getString(data.name),
-			amount: parse.getNumberIfPositive(data.amount)
+			amount: parse.getNumberIfPositive(data.amount),
 		};
 	}
 

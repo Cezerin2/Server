@@ -5,9 +5,9 @@ import PaymentMethodsLightService from './paymentMethodsLight';
 import OrdersService from './orders';
 
 class PaymentMethodsService {
-	getFilter(params = {}) {
-		return new Promise((resolve, reject) => {
-			const filter = {};
+	getFilter(params = { id: String, enabled: Boolean, order_id: String }) {
+		return new Promise((resolve) => {
+			const filter = { _id: {}, enabled: Boolean, $and: undefined };
 			const id = parse.getObjectIDIfValid(params.id);
 			const enabled = parse.getBooleanIfValid(params.enabled);
 
@@ -22,7 +22,7 @@ class PaymentMethodsService {
 			const order_id = parse.getObjectIDIfValid(params.order_id);
 
 			if (order_id) {
-				return OrdersService.getSingleOrder(order_id).then(order => {
+				return OrdersService.getSingleOrder(order_id).then((order) => {
 					if (order) {
 						const shippingMethodObjectID = parse.getObjectIDIfValid(
 							order.shipping_method_id
@@ -32,26 +32,26 @@ class PaymentMethodsService {
 						filter.$and.push({
 							$or: [
 								{
-									'conditions.subtotal_min': 0
+									'conditions.subtotal_min': 0,
 								},
 								{
 									'conditions.subtotal_min': {
-										$lte: order.subtotal
-									}
-								}
-							]
+										$lte: order.subtotal,
+									},
+								},
+							],
 						});
 						filter.$and.push({
 							$or: [
 								{
-									'conditions.subtotal_max': 0
+									'conditions.subtotal_max': 0,
 								},
 								{
 									'conditions.subtotal_max': {
-										$gte: order.subtotal
-									}
-								}
-							]
+										$gte: order.subtotal,
+									},
+								},
+							],
 						});
 
 						if (
@@ -62,13 +62,13 @@ class PaymentMethodsService {
 								$or: [
 									{
 										'conditions.countries': {
-											$size: 0
-										}
+											$size: 0,
+										},
 									},
 									{
-										'conditions.countries': order.shipping_address.country
-									}
-								]
+										'conditions.countries': order.shipping_address.country,
+									},
+								],
 							});
 						}
 
@@ -77,13 +77,13 @@ class PaymentMethodsService {
 								$or: [
 									{
 										'conditions.shipping_method_ids': {
-											$size: 0
-										}
+											$size: 0,
+										},
 									},
 									{
-										'conditions.shipping_method_ids': shippingMethodObjectID
-									}
-								]
+										'conditions.shipping_method_ids': shippingMethodObjectID,
+									},
+								],
 							});
 						}
 					}
@@ -95,7 +95,7 @@ class PaymentMethodsService {
 	}
 
 	getMethods(params = {}) {
-		return this.getFilter(params).then(filter =>
+		return this.getFilter().then((filter) =>
 			PaymentMethodsLightService.getMethods(filter)
 		);
 	}
@@ -104,7 +104,7 @@ class PaymentMethodsService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getMethods({ id }).then(methods =>
+		return this.getMethods({ id }).then((methods) =>
 			methods.length > 0 ? methods[0] : null
 		);
 	}
@@ -114,7 +114,7 @@ class PaymentMethodsService {
 		return db
 			.collection('paymentMethods')
 			.insertMany([method])
-			.then(res => this.getSingleMethod(res.ops[0]._id.toString()));
+			.then((res) => this.getSingleMethod(res.ops[0]._id.toString()));
 	}
 
 	updateMethod(id, data) {
@@ -128,11 +128,11 @@ class PaymentMethodsService {
 			.collection('paymentMethods')
 			.updateOne(
 				{
-					_id: methodObjectID
+					_id: methodObjectID,
 				},
 				{ $set: method }
 			)
-			.then(res => this.getSingleMethod(id));
+			.then((res) => this.getSingleMethod(id));
 	}
 
 	deleteMethod(id) {
@@ -143,7 +143,7 @@ class PaymentMethodsService {
 		return db
 			.collection('paymentMethods')
 			.deleteOne({ _id: methodObjectID })
-			.then(deleteResponse => deleteResponse.deletedCount > 0);
+			.then((deleteResponse) => deleteResponse.deletedCount > 0);
 	}
 
 	async pullShippingMethod(id) {
@@ -166,7 +166,7 @@ class PaymentMethodsService {
 			: [];
 		let methodObjects = [];
 		if (methodIds.length > 0) {
-			methodObjects = methodIds.map(id => new ObjectID(id));
+			methodObjects = methodIds.map((id) => new ObjectID(id));
 		}
 
 		return conditions
@@ -174,18 +174,25 @@ class PaymentMethodsService {
 					countries: parse.getArrayIfValid(conditions.countries) || [],
 					shipping_method_ids: methodObjects,
 					subtotal_min: parse.getNumberIfPositive(conditions.subtotal_min) || 0,
-					subtotal_max: parse.getNumberIfPositive(conditions.subtotal_max) || 0
+					subtotal_max: parse.getNumberIfPositive(conditions.subtotal_max) || 0,
 			  }
 			: {
 					countries: [],
 					shipping_method_ids: [],
 					subtotal_min: 0,
-					subtotal_max: 0
+					subtotal_max: 0,
 			  };
 	}
 
 	getValidDocumentForInsert(data) {
-		const method = {};
+		const method = {
+			name: String,
+			description: String,
+			position: {},
+			enabled: Boolean,
+			conditions: {},
+			gateway: String,
+		};
 
 		method.name = parse.getString(data.name);
 		method.description = parse.getString(data.description);
@@ -202,7 +209,14 @@ class PaymentMethodsService {
 			return new Error('Required fields are missing');
 		}
 
-		const method = {};
+		const method = {
+			name: String,
+			description: String,
+			position: {},
+			enabled: Boolean,
+			conditions: {},
+			gateway: String,
+		};
 
 		if (data.name !== undefined) {
 			method.name = parse.getString(data.name);

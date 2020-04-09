@@ -7,9 +7,9 @@ import PaymentMethodsService from './paymentMethods';
 import OrdersService from './orders';
 
 class ShippingMethodsService {
-	getFilter(params = {}) {
-		return new Promise((resolve, reject) => {
-			const filter = {};
+	getFilter(params = { id: String, enabled: Boolean, order_id: String }) {
+		return new Promise((resolve) => {
+			const filter = { _id: {}, enabled: Boolean, $and: undefined };
 			const id = parse.getObjectIDIfValid(params.id);
 			const enabled = parse.getBooleanIfValid(params.enabled);
 
@@ -23,57 +23,57 @@ class ShippingMethodsService {
 
 			const order_id = parse.getObjectIDIfValid(params.order_id);
 			if (order_id) {
-				return OrdersService.getSingleOrder(order_id).then(order => {
+				return OrdersService.getSingleOrder(order_id).then((order) => {
 					if (order) {
 						filter.$and = [];
 						filter.$and.push({
 							$or: [
 								{
-									'conditions.weight_total_min': 0
+									'conditions.weight_total_min': 0,
 								},
 								{
 									'conditions.weight_total_min': {
-										$lte: order.weight_total
-									}
-								}
-							]
+										$lte: order.weight_total,
+									},
+								},
+							],
 						});
 						filter.$and.push({
 							$or: [
 								{
-									'conditions.weight_total_max': 0
+									'conditions.weight_total_max': 0,
 								},
 								{
 									'conditions.weight_total_max': {
-										$gte: order.weight_total
-									}
-								}
-							]
+										$gte: order.weight_total,
+									},
+								},
+							],
 						});
 
 						filter.$and.push({
 							$or: [
 								{
-									'conditions.subtotal_min': 0
+									'conditions.subtotal_min': 0,
 								},
 								{
 									'conditions.subtotal_min': {
-										$lte: order.subtotal
-									}
-								}
-							]
+										$lte: order.subtotal,
+									},
+								},
+							],
 						});
 						filter.$and.push({
 							$or: [
 								{
-									'conditions.subtotal_max': 0
+									'conditions.subtotal_max': 0,
 								},
 								{
 									'conditions.subtotal_max': {
-										$gte: order.subtotal
-									}
-								}
-							]
+										$gte: order.subtotal,
+									},
+								},
+							],
 						});
 
 						if (
@@ -84,13 +84,13 @@ class ShippingMethodsService {
 								$or: [
 									{
 										'conditions.countries': {
-											$size: 0
-										}
+											$size: 0,
+										},
 									},
 									{
-										'conditions.countries': order.shipping_address.country
-									}
-								]
+										'conditions.countries': order.shipping_address.country,
+									},
+								],
 							});
 						}
 
@@ -102,13 +102,13 @@ class ShippingMethodsService {
 								$or: [
 									{
 										'conditions.states': {
-											$size: 0
-										}
+											$size: 0,
+										},
 									},
 									{
-										'conditions.states': order.shipping_address.state
-									}
-								]
+										'conditions.states': order.shipping_address.state,
+									},
+								],
 							});
 						}
 
@@ -120,13 +120,13 @@ class ShippingMethodsService {
 								$or: [
 									{
 										'conditions.cities': {
-											$size: 0
-										}
+											$size: 0,
+										},
 									},
 									{
-										'conditions.cities': order.shipping_address.city
-									}
-								]
+										'conditions.cities': order.shipping_address.city,
+									},
+								],
 							});
 						}
 					}
@@ -138,7 +138,7 @@ class ShippingMethodsService {
 	}
 
 	getMethods(params = {}) {
-		return this.getFilter(params).then(filter =>
+		return this.getFilter(/*params*/).then((filter) =>
 			ShippingMethodsLightService.getMethods(filter)
 		);
 	}
@@ -147,7 +147,7 @@ class ShippingMethodsService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getMethods({ id }).then(methods =>
+		return this.getMethods({ id }).then((methods) =>
 			methods.length > 0 ? methods[0] : null
 		);
 	}
@@ -157,7 +157,7 @@ class ShippingMethodsService {
 		return db
 			.collection('shippingMethods')
 			.insertMany([method])
-			.then(res => this.getSingleMethod(res.ops[0]._id.toString()));
+			.then((res) => this.getSingleMethod(res.ops[0]._id.toString()));
 	}
 
 	updateMethod(id, data) {
@@ -171,11 +171,11 @@ class ShippingMethodsService {
 			.collection('shippingMethods')
 			.updateOne(
 				{
-					_id: methodObjectID
+					_id: methodObjectID,
 				},
 				{ $set: method }
 			)
-			.then(res => this.getSingleMethod(id));
+			.then((res) => this.getSingleMethod(id));
 	}
 
 	async deleteMethod(id) {
@@ -202,7 +202,7 @@ class ShippingMethodsService {
 					weight_total_min:
 						parse.getNumberIfPositive(conditions.weight_total_min) || 0,
 					weight_total_max:
-						parse.getNumberIfPositive(conditions.weight_total_max) || 0
+						parse.getNumberIfPositive(conditions.weight_total_max) || 0,
 			  }
 			: {
 					countries: [],
@@ -211,16 +211,16 @@ class ShippingMethodsService {
 					subtotal_min: 0,
 					subtotal_max: 0,
 					weight_total_min: 0,
-					weight_total_max: 0
+					weight_total_max: 0,
 			  };
 	}
 
 	getFields(fields) {
 		if (fields && Array.isArray(fields) && fields.length > 0) {
-			return fields.map(field => ({
+			return fields.map((field) => ({
 				key: parse.getString(field.key),
 				label: parse.getString(field.label),
-				required: parse.getBooleanIfValid(field.required, false)
+				required: parse.getBooleanIfValid(field.required, false),
 			}));
 		}
 		return [];
@@ -231,6 +231,13 @@ class ShippingMethodsService {
 			// 'logo': '',
 			// 'app_id': null,
 			// 'app_settings': {}
+			name: String,
+			description: String,
+			position: {},
+			enabled: Boolean,
+			price: {},
+			conditions: {},
+			fields: {},
 		};
 
 		method.name = parse.getString(data.name);
@@ -249,7 +256,15 @@ class ShippingMethodsService {
 			return new Error('Required fields are missing');
 		}
 
-		const method = {};
+		const method = {
+			name: String,
+			description: String,
+			position: {},
+			enabled: Boolean,
+			price: {},
+			conditions: {},
+			fields: {},
+		};
 
 		if (data.name !== undefined) {
 			method.name = parse.getString(data.name);

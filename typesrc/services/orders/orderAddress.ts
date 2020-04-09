@@ -19,11 +19,11 @@ class OrderAddressService {
 			.collection('orders')
 			.updateOne(
 				{
-					_id: orderObjectID
+					_id: orderObjectID,
 				},
 				{ $set: billing_address }
 			)
-			.then(res => OrdersService.getSingleOrder(id));
+			.then((res) => OrdersService.getSingleOrder(id));
 	}
 
 	updateShippingAddress(id, data) {
@@ -41,11 +41,11 @@ class OrderAddressService {
 			.collection('orders')
 			.updateOne(
 				{
-					_id: orderObjectID
+					_id: orderObjectID,
 				},
 				{ $set: shipping_address }
 			)
-			.then(res => OrdersService.getSingleOrder(id));
+			.then((res) => OrdersService.getSingleOrder(id));
 	}
 
 	getValidDocumentForUpdate(id, data, addressTypeName) {
@@ -56,7 +56,7 @@ class OrderAddressService {
 
 		const address = {};
 
-		keys.forEach(key => {
+		keys.forEach((key) => {
 			const value = data[key];
 			if (key === 'coordinates' || key === 'details') {
 				address[`${addressTypeName}.${key}`] = value;

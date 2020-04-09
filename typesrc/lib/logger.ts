@@ -9,23 +9,23 @@ winston.configure({
 			format: winston.format.combine(
 				winston.format.colorize(),
 				winston.format.simple()
-			)
+			),
 		}),
 		new winston.transports.File({
 			level: 'info',
 			handleExceptions: true,
 			format: winston.format.json(),
-			filename: LOGS_FILE
-		})
-	]
+			filename: LOGS_FILE,
+		}),
+	],
 });
 
-const getResponse = message => ({
+const getResponse = (message) => ({
 	error: true,
-	message
+	message,
 });
 
-const logUnauthorizedRequests = req => {
+const logUnauthorizedRequests = (req) => {
 	// todo
 };
 
@@ -42,5 +42,5 @@ const sendResponse = (err, req, res, next) => {
 };
 
 export default {
-	sendResponse
+	sendResponse,
 };

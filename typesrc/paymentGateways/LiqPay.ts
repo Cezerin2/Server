@@ -2,8 +2,8 @@ import crypto from 'crypto';
 import OrdersService from '../services/orders/orders';
 import OrdertTansactionsService from '../services/orders/orderTransactions';
 
-const getPaymentFormSettings = options => {
-	const { gateway, gatewaySettings, order, amount, currency } = options;
+const getPaymentFormSettings = (options) => {
+	const { gatewaySettings, order, amount, currency } = options;
 	const params = {
 		sandbox: '0',
 		action: 'pay',
@@ -14,7 +14,7 @@ const getPaymentFormSettings = options => {
 		order_id: order.id,
 		public_key: gatewaySettings.public_key,
 		language: gatewaySettings.language,
-		server_url: gatewaySettings.server_url
+		server_url: gatewaySettings.server_url,
 	};
 
 	const form = getForm(params, gatewaySettings.private_key);
@@ -22,13 +22,13 @@ const getPaymentFormSettings = options => {
 	const formSettings = {
 		data: form.data,
 		signature: form.signature,
-		language: gatewaySettings.language
+		language: gatewaySettings.language,
 	};
 
 	return Promise.resolve(formSettings);
 };
 
-const paymentNotification = options => {
+const paymentNotification = (options) => {
 	const { gateway, gatewaySettings, req, res } = options;
 	const params = req.body;
 	const dataStr = Buffer.from(params.data, 'base64').toString();
@@ -46,7 +46,7 @@ const paymentNotification = options => {
 	if (signatureValid && paymentSuccess) {
 		OrdersService.updateOrder(orderId, {
 			paid: true,
-			date_paid: new Date()
+			date_paid: new Date(),
 		}).then(() => {
 			OrdertTansactionsService.addTransaction(orderId, {
 				transaction_id: data.transaction_id,
@@ -54,7 +54,7 @@ const paymentNotification = options => {
 				currency: data.currency,
 				status: data.status,
 				details: `${data.paytype}, ${data.sender_card_mask2}`,
-				success: true
+				success: true,
 			});
 		});
 	} else {
@@ -69,11 +69,11 @@ const getForm = (params, private_key) => {
 
 	return {
 		data,
-		signature
+		signature,
 	};
 };
 
-const getFormParams = params => {
+const getFormParams = (params) => {
 	if (!params.version) throw new Error('version is null');
 	if (!params.amount) throw new Error('amount is null');
 	if (!params.currency) throw new Error('currency is null');
@@ -82,7 +82,7 @@ const getFormParams = params => {
 	return params;
 };
 
-const getHashFromString = str => {
+const getHashFromString = (str) => {
 	const sha1 = crypto.createHash('sha1');
 	sha1.update(str);
 	return sha1.digest('base64');
@@ -90,5 +90,5 @@ const getHashFromString = str => {
 
 export default {
 	getPaymentFormSettings,
-	paymentNotification
+	paymentNotification,
 };
