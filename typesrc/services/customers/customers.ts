@@ -51,7 +51,7 @@ class CustomersService {
 	}
 
 	getCustomers(params = { limit: Number, offset: Number }) {
-		const filter = this.getFilter(params);
+		const filter = this.getFilter(/*params*/);
 		const limit = parse.getNumberIfPositive(params.limit) || 1000;
 		const offset = parse.getNumberIfPositive(params.offset) || 0;
 
