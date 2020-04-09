@@ -19,7 +19,7 @@ class ProductsService {
 		const limit = parse.getNumberIfPositive(params.limit) || 1000;
 		const offset = parse.getNumberIfPositive(params.offset) || 0;
 		const projectQuery = this.getProjectQuery(fieldsArray);
-		const sortQuery = this.getSortQuery(params); // todo: validate every sort field
+		const sortQuery = this.getSortQuery(params); // TODO: validate every sort field
 		const matchQuery = this.getMatchQuery(params, categories);
 		const matchTextQuery = this.getMatchTextQuery(params);
 		const itemsAggregation = [];
@@ -719,8 +719,11 @@ class ProductsService {
 			date_stock_expected: undefined,
 			date_sale_from: undefined,
 			date_sale_to: undefined,
-			stock_tracking: undefined,
-			stock_preorder: undefined,
+			stock_tracking: {},
+			stock_preorder: {},
+			stock_backorder: Boolean,
+			category_id: {},
+			category_ids: {},
 		};
 
 		product.name = parse.getString(data.name);
@@ -788,6 +791,36 @@ class ProductsService {
 
 		const product = {
 			date_updated: new Date(),
+			name: String,
+			description: String,
+			meta_description: String,
+			meta_title: String,
+			tags: {},
+			attributes: {},
+			dimensions: {},
+			enabled: Boolean,
+			$discontinued: Boolean,
+			discontinued: Boolean,
+			slug: String,
+			sku: String,
+			code: String,
+			tax_class: String,
+			related_product_ids: {},
+			prices: {},
+			cost_price: {},
+			regular_price: {},
+			sale_price: {},
+			quantity_inc: {},
+			quantity_min: {},
+			weight: {},
+			stock_quantity: {},
+			position: {},
+			date_stock_expected: undefined,
+			date_sale_from: {},
+			date_sale_to: {},
+			stock_backorder: {},
+			category_id: {},
+			category_ids: {},
 		};
 
 		if (data.name !== undefined) {
@@ -1027,6 +1060,7 @@ class ProductsService {
 	isSkuExists(sku, productId) {
 		const filter = {
 			sku,
+			_id: {},
 		};
 
 		if (productId && ObjectID.isValid(productId)) {
@@ -1043,7 +1077,7 @@ class ProductsService {
 		// SKU can be empty
 		if (product.sku && product.sku.length > 0) {
 			let newSku = product.sku;
-			const filter = {};
+			const filter = { _id: {} };
 			if (productId && ObjectID.isValid(productId)) {
 				filter._id = { $ne: new ObjectID(productId) };
 			}
@@ -1067,6 +1101,7 @@ class ProductsService {
 	isSlugExists(slug, productId) {
 		const filter = {
 			slug: utils.cleanSlug(slug),
+			_id: {},
 		};
 
 		if (productId && ObjectID.isValid(productId)) {
@@ -1082,7 +1117,7 @@ class ProductsService {
 	setAvailableSlug(product, productId) {
 		if (product.slug && product.slug.length > 0) {
 			let newSlug = utils.cleanSlug(product.slug);
-			const filter = {};
+			const filter = { _id: {} };
 			if (productId && ObjectID.isValid(productId)) {
 				filter._id = { $ne: new ObjectID(productId) };
 			}
