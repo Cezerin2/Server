@@ -6,7 +6,14 @@ import CustomerGroupsService from './customerGroups';
 import security from '../../lib/security';
 
 class CustomersService {
-	getFilter(params = { id: String, group_id: String, email: undefined }) {
+	getFilter(
+		params = {
+			id: String,
+			group_id: String,
+			email: undefined,
+			search: undefined,
+		}
+	) {
 		// tag
 		// gender
 		// date_created_to
@@ -43,7 +50,7 @@ class CustomersService {
 		return filter;
 	}
 
-	getCustomers(params = {}) {
+	getCustomers(params = { limit: Number, offset: Number }) {
 		const filter = this.getFilter(params);
 		const limit = parse.getNumberIfPositive(params.limit) || 1000;
 		const offset = parse.getNumberIfPositive(params.offset) || 0;
@@ -75,7 +82,7 @@ class CustomersService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getCustomers({ id }).then((items) =>
+		return this.getCustomers(id).then((items) =>
 			items.data.length > 0 ? items.data[0] : {}
 		);
 	}
@@ -110,7 +117,7 @@ class CustomersService {
 			return Promise.reject('Invalid identifier');
 		}
 		const customerObjectID = new ObjectID(id);
-		const customer = this.getValidDocumentForUpdate(id, data);
+		const customer = this.getValidDocumentForUpdate(data);
 
 		// is email unique
 		if (customer.email && customer.email.length > 0) {
@@ -225,7 +232,7 @@ class CustomersService {
 		return [];
 	}
 
-	getValidDocumentForUpdate(id, data) {
+	getValidDocumentForUpdate(data) {
 		if (Object.keys(data).length === 0) {
 			return new Error('Required fields are missing');
 		}
