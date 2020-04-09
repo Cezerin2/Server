@@ -120,7 +120,7 @@ class CustomersService {
 		const customer = this.getValidDocumentForUpdate(data);
 
 		// is email unique
-		if (customer.email && customer.email.length > 0) {
+		/*if (customer.email && customer.email.length > 0) {
 			const customerCount = await db.collection('customers').count({
 				_id: {
 					$ne: customerObjectID,
@@ -131,7 +131,7 @@ class CustomersService {
 			if (customerCount > 0) {
 				return Promise.reject('Customer email must be unique');
 			}
-		}
+		}*/
 
 		await db.collection('customers').updateOne(
 			{

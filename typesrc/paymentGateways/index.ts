@@ -5,21 +5,21 @@ import PayPalCheckout from './PayPalCheckout';
 import LiqPay from './LiqPay';
 import StripeElements from './StripeElements';
 
-const getOptions = orderId =>
+const getOptions = (orderId) =>
 	Promise.all([
 		OrdersService.getSingleOrder(orderId),
-		SettingsService.getSettings()
+		SettingsService.getSettings(),
 	]).then(([order, settings]) => {
 		if (order && order.payment_method_id) {
 			return PaymentGatewaysService.getGateway(
 				order.payment_method_gateway
-			).then(gatewaySettings => {
+			).then((gatewaySettings) => {
 				const options = {
 					gateway: order.payment_method_gateway,
 					gatewaySettings,
 					order,
 					amount: order.grand_total,
-					currency: settings.currency_code
+					currency: settings.currency_code,
 				};
 
 				return options;
@@ -27,8 +27,10 @@ const getOptions = orderId =>
 		}
 	});
 
-const getPaymentFormSettings = orderId =>
-	getOptions(orderId).then(options => {
+const getPaymentFormSettings = (orderId) =>
+	getOptions(
+		orderId
+	); /*.then(options => {
 		switch (options.gateway) {
 			case 'paypal-checkout':
 				return PayPalCheckout.getPaymentFormSettings(options);
@@ -39,15 +41,15 @@ const getPaymentFormSettings = orderId =>
 			default:
 				return Promise.reject('Invalid gateway');
 		}
-	});
+	});*/
 
 const paymentNotification = (req, res, gateway) =>
-	PaymentGatewaysService.getGateway(gateway).then(gatewaySettings => {
+	PaymentGatewaysService.getGateway(gateway).then((gatewaySettings) => {
 		const options = {
 			gateway,
 			gatewaySettings,
 			req,
-			res
+			res,
 		};
 
 		switch (gateway) {
@@ -60,7 +62,7 @@ const paymentNotification = (req, res, gateway) =>
 		}
 	});
 
-const processOrderPayment = async order => {
+const processOrderPayment = async (order) => {
 	const orderAlreadyCharged = order.paid === true;
 	if (orderAlreadyCharged) {
 		return true;
@@ -75,7 +77,7 @@ const processOrderPayment = async order => {
 			return StripeElements.processOrderPayment({
 				order,
 				gatewaySettings,
-				settings
+				settings,
 			});
 		default:
 			return Promise.reject('Invalid gateway');
@@ -85,5 +87,5 @@ const processOrderPayment = async order => {
 export default {
 	getPaymentFormSettings,
 	paymentNotification,
-	processOrderPayment
+	processOrderPayment,
 };

@@ -51,13 +51,13 @@ class S3Service {
 
 	getFiles(path) {
 		return new Promise((resolve, reject) => {
-			s3.ListObjects({ Key: path, Bucket: BUCKET }, (err, data) => {
+			s3.listObjects({ Bucket: BUCKET }, (err, data) => {
 				if (err) {
 					return reject(err);
 				}
 				const filesData = data.Contents.map((ObjectData) => ({
 					file: ObjectData.Key,
-					size: data.Size,
+					size: data,
 					modified: ObjectData.LastModified,
 				}));
 				resolve(filesData);
@@ -78,8 +78,8 @@ class S3Service {
 				},
 			};
 
-			s3.deleteObject(params, (err, data) => {
-				if (err) {
+			s3.deleteObject((error) => {
+				if (error) {
 					return reject('File not found');
 				}
 				resolve();
@@ -103,7 +103,7 @@ class S3Service {
 
 			if (data.Contents.length == 0) return;
 
-			params = { Bucket: BUCKET };
+			/*params = { Bucket: BUCKET };*/
 			params.Delete = { Objects: [] };
 
 			data.Contents.forEach((content) => {
@@ -125,7 +125,7 @@ class S3Service {
 				// Emitted whenever a field / value pair has been received.
 				file.name = utils.getCorrectFileName(file.name);
 			})
-			.on('file', (name, file) => {
+			.on('file', (file) => {
 				// every time a file has been uploaded successfully,
 				file_name = file.name;
 				buffer = fs.readFileSync(path.resolve(file.path));

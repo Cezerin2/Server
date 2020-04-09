@@ -10,10 +10,16 @@ import SettingsService from '../settings/settings';
 
 class ProductsService {
 	async getProducts(
-		params = { fields: String, limit: Number, offset: Number }
+		params = {
+			fields: String,
+			limit: undefined,
+			offset: Number,
+			sort: String,
+			search: String,
+		}
 	) {
 		const categories = await CategoriesService.getCategories({
-			fields: 'parent_id',
+			fields: undefined /*'parent_id'*/,
 		});
 		const fieldsArray = this.getArrayFromCSV(params.fields);
 		const limit = parse.getNumberIfPositive(params.limit) || 1000;
@@ -779,9 +785,9 @@ class ProductsService {
 			product.slug = product.name;
 		}
 
-		return this.setAvailableSlug(product).then((product) =>
+		/*return this.setAvailableSlug(product).then((product) =>
 			this.setAvailableSku(product)
-		);
+		);*/
 	}
 
 	getValidDocumentForUpdate(id, data) {
@@ -821,6 +827,8 @@ class ProductsService {
 			stock_backorder: {},
 			category_id: {},
 			category_ids: {},
+			stock_tracking: Boolean,
+			stock_preorder: Boolean,
 		};
 
 		if (data.name !== undefined) {

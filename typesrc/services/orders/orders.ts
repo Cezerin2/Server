@@ -235,7 +235,7 @@ class OrdersService {
 		return this.getSingleOrder(orderId).then((order) => {
 			if (!order.customer_id && order.email) {
 				// find customer by email
-				return CustomersService.getCustomers({ email: order.email }).then(
+				return CustomersService.getCustomers(/*{ email: order.email }*/).then(
 					(customers) => {
 						const customerExists =
 							customers && customers.data && customers.data.length > 0;

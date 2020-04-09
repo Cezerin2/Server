@@ -23,7 +23,7 @@ class PagesService {
 
 	getSortQuery({ sort }) {
 		if (sort && sort.length > 0) {
-			const fields = sort.split(',');
+			/*const fields = sort.split(',');
 			return Object.assign(
 				...fields.map((field) => ({
 					[field.startsWith('-') ? field.slice(1) : field]: field.startsWith(
@@ -33,12 +33,14 @@ class PagesService {
 						: 1,
 				})),
 				null
-			);
+			);*/
 		}
 		return DEFAULT_SORT;
 	}
 
-	async getPages(params = { fields: String }) {
+	async getPages(
+		params = { fields: String, id: String, tags: String, sort: String }
+	) {
 		const filter = this.getFilter(params);
 		const sortQuery = this.getSortQuery(params);
 		const projection = utils.getProjectionFromFields(params.fields);
@@ -57,7 +59,7 @@ class PagesService {
 		if (!ObjectID.isValid(id)) {
 			return Promise.reject('Invalid identifier');
 		}
-		return this.getPages({ id }).then((pages) =>
+		return this.getPages(id).then((pages) =>
 			pages.length > 0 ? pages[0] : null
 		);
 	}
