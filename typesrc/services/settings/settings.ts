@@ -37,15 +37,15 @@ class SettingsService {
 			weight_unit: 'kg',
 			length_unit: 'cm',
 			hide_billing_address: false,
-			order_confirmation_copy_to: ''
+			order_confirmation_copy_to: '',
 		};
 	}
-
+	defaultSettings = {};
 	getSettings() {
 		return db
 			.collection('settings')
 			.findOne()
-			.then(settings => this.changeProperties(settings));
+			.then((settings) => this.changeProperties(settings));
 	}
 
 	updateSettings(data) {
@@ -56,11 +56,11 @@ class SettingsService {
 				.updateOne(
 					{},
 					{
-						$set: settings
+						$set: settings,
 					},
 					{ upsert: true }
 				)
-				.then(res => this.getSettings())
+				.then((res) => this.getSettings())
 		);
 	}
 
@@ -68,7 +68,7 @@ class SettingsService {
 		return db
 			.collection('settings')
 			.countDocuments({})
-			.then(count => {
+			.then((count) => {
 				if (count === 0) {
 					return db.collection('settings').insertOne(this.defaultSettings);
 				}
@@ -80,7 +80,33 @@ class SettingsService {
 			return new Error('Required fields are missing');
 		}
 
-		const settings = {};
+		const settings = {
+			store_name: String,
+			language: String,
+			currency_code: String,
+			domain: String,
+			currency_symbol: String,
+			currency_format: String,
+			thousand_separator: String,
+			decimal_separator: String,
+			decimal_number: {},
+			tax_rate: {},
+			tax_included: Boolean,
+			timezone: String,
+			date_format: String,
+			time_format: String,
+			default_shipping_country: String,
+			default_shipping_city: String,
+			default_shipping_state: String,
+			default_product_sorting: String,
+			product_fields: String,
+			products_limit: {},
+			weight_unit: String,
+			length_unit: String,
+			logo_file: String,
+			hide_billing_address: Boolean,
+			order_confirmation_copy_to: String,
+		};
 
 		if (data.store_name) {
 			settings.store_name = parse.getString(data.store_name);
@@ -201,7 +227,7 @@ class SettingsService {
 
 	changeProperties(settingsFromDB) {
 		const data = Object.assign(this.defaultSettings, settingsFromDB, {
-			_id: undefined
+			_id: undefined,
 		});
 		if (data.domain === null || data.domain === undefined) {
 			data.domain = '';
@@ -219,7 +245,7 @@ class SettingsService {
 	}
 
 	deleteLogo() {
-		return this.getSettings().then(data => {
+		return this.getSettings().then((data) => {
 			if (data.logo_file && data.logo_file.length > 0) {
 				AssetService.deleteFile(ThemeAssetsPath, data.logo_file).then(() => {
 					this.updateSettings({ logo_file: null });
@@ -229,7 +255,7 @@ class SettingsService {
 	}
 
 	uploadLogo(req, res, next) {
-		AssetService.uploadFile(req, res, ThemeAssetsPath, file_name => {
+		AssetService.uploadFile(req, res, ThemeAssetsPath, (file_name) => {
 			this.updateSettings({ logo_file: file_name });
 		});
 	}

@@ -9,15 +9,16 @@ class EmailSettingsService {
 			user: '',
 			pass: 0,
 			from_name: '',
-			from_address: ''
+			from_address: '',
 		};
 	}
+	defaultSettings = {};
 
 	getEmailSettings() {
 		return db
 			.collection('emailSettings')
 			.findOne()
-			.then(settings => this.changeProperties(settings));
+			.then((settings) => this.changeProperties(settings));
 	}
 
 	updateEmailSettings(data) {
@@ -28,11 +29,11 @@ class EmailSettingsService {
 				.updateOne(
 					{},
 					{
-						$set: settings
+						$set: settings,
 					},
 					{ upsert: true }
 				)
-				.then(res => this.getEmailSettings())
+				.then((res) => this.getEmailSettings())
 		);
 	}
 
@@ -40,7 +41,7 @@ class EmailSettingsService {
 		return db
 			.collection('emailSettings')
 			.countDocuments({})
-			.then(count => {
+			.then((count) => {
 				if (count === 0) {
 					return db.collection('emailSettings').insertOne(this.defaultSettings);
 				}
@@ -52,7 +53,14 @@ class EmailSettingsService {
 			return new Error('Required fields are missing');
 		}
 
-		const settings = {};
+		const settings = {
+			host: String,
+			port: {},
+			user: String,
+			pass: String,
+			from_name: String,
+			from_address: String,
+		};
 
 		if (data.host !== undefined) {
 			settings.host = parse.getString(data.host).toLowerCase();

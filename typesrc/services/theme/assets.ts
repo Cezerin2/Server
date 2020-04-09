@@ -1,5 +1,3 @@
-import path from 'path';
-import formidable from 'formidable';
 import AssetService from '../assets/assets';
 import settings from '../../lib/settings';
 
@@ -10,7 +8,7 @@ class ThemeAssetsService {
 		return AssetService.deleteFile(ThemeAssetPath, fileName);
 	}
 
-	uploadFile(req, res, next) {
+	uploadFile(req, res) {
 		AssetService.uploadFile(req, res, ThemeAssetPath, () => {});
 	}
 

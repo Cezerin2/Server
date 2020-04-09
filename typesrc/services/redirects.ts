@@ -5,7 +5,7 @@ import parse from '../lib/parse';
 
 const cache = new lruCache({
 	max: 10000,
-	maxAge: 1000 * 60 * 60 * 24 // 24h
+	maxAge: 1000 * 60 * 60 * 24, // 24h
 });
 
 const REDIRECTS_CACHE_KEY = 'redirects';
@@ -21,8 +21,8 @@ class RedirectsService {
 			.collection('redirects')
 			.find()
 			.toArray()
-			.then(items => items.map(item => this.changeProperties(item)))
-			.then(items => {
+			.then((items) => items.map((item) => this.changeProperties(item)))
+			.then((items) => {
 				cache.set(REDIRECTS_CACHE_KEY, items);
 				return items;
 			});
@@ -37,7 +37,7 @@ class RedirectsService {
 		return db
 			.collection('redirects')
 			.findOne({ _id: redirectObjectID })
-			.then(item => this.changeProperties(item));
+			.then((item) => this.changeProperties(item));
 	}
 
 	addRedirect(data) {
@@ -45,7 +45,7 @@ class RedirectsService {
 		return db
 			.collection('redirects')
 			.insertMany([redirect])
-			.then(res => {
+			.then((res) => {
 				cache.del(REDIRECTS_CACHE_KEY);
 				return this.getSingleRedirect(res.ops[0]._id.toString());
 			});
@@ -62,11 +62,11 @@ class RedirectsService {
 			.collection('redirects')
 			.updateOne(
 				{
-					_id: redirectObjectID
+					_id: redirectObjectID,
 				},
 				{ $set: redirect }
 			)
-			.then(res => {
+			.then((res) => {
 				cache.del(REDIRECTS_CACHE_KEY);
 				return this.getSingleRedirect(id);
 			});
@@ -80,7 +80,7 @@ class RedirectsService {
 		return db
 			.collection('redirects')
 			.deleteOne({ _id: redirectObjectID })
-			.then(deleteResponse => {
+			.then((deleteResponse) => {
 				cache.del(REDIRECTS_CACHE_KEY);
 				return deleteResponse.deletedCount > 0;
 			});
@@ -90,7 +90,7 @@ class RedirectsService {
 		const redirect = {
 			from: parse.getString(data.from),
 			to: parse.getString(data.to),
-			status: 301
+			status: 301,
 		};
 
 		return redirect;
@@ -101,7 +101,7 @@ class RedirectsService {
 			return new Error('Required fields are missing');
 		}
 
-		const redirect = {};
+		const redirect = { from: String, to: String };
 
 		if (data.from !== undefined) {
 			redirect.from = parse.getString(data.from);

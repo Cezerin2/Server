@@ -5,7 +5,7 @@ class PaymentGatewaysService {
 		return db
 			.collection('paymentGateways')
 			.findOne({ name: gatewayName })
-			.then(data => this.changeProperties(data));
+			.then((data) => this.changeProperties(data));
 	}
 
 	updateGateway(gatewayName, data) {
@@ -15,7 +15,7 @@ class PaymentGatewaysService {
 		return db
 			.collection('paymentGateways')
 			.updateOne({ name: gatewayName }, { $set: data }, { upsert: true })
-			.then(res => this.getGateway(gatewayName));
+			.then((res) => this.getGateway(gatewayName));
 	}
 
 	changeProperties(data) {

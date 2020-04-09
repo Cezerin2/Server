@@ -38,7 +38,7 @@ class ThemesService {
 				exec(`npm run theme:install ${fileName}`, (error, stdout, stderr) => {
 					dashboardWebSocket.send({
 						event: dashboardWebSocket.events.THEME_INSTALLED,
-						payload: fileName
+						payload: fileName,
 					});
 
 					if (error) {
@@ -77,7 +77,7 @@ class ThemesService {
 					file_size = file.size;
 				}
 			})
-			.on('error', err => {
+			.on('error', (err) => {
 				callback(err);
 			})
 			.on('end', () => {
