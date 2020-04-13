@@ -401,6 +401,12 @@
     "label": "Mostra Freccie di Navigazione in Galleria"
   },
   {
+    "section": "Home",
+    "key": "home_slider_show",
+    "type": "boolean",
+    "label": "Mostra il dispositivo di scorrimento Home Galleria?"
+  },
+  {
     "section": "Dettagli Prodotto",
     "key": "show_viewed_products",
     "type": "boolean",
