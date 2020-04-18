@@ -401,12 +401,6 @@
     "label": "在图库中显示导航箭头"
   },
   {
-    "section": "主页",
-    "key": "home_slider_show",
-    "type": "boolean",
-    "label": "显示主页滑块图库？"
-  },
-  {
     "section": "产品详情",
     "key": "show_viewed_products",
     "type": "boolean",

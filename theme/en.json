@@ -1,168 +1,168 @@
 [
   {
-    "section": "Artikelliste",
+    "section": "Product List",
     "key": "list_image_max_height",
     "type": "number",
-    "label": "Maximale Bildhöhe"
+    "label": "Image max height"
   },
   {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "button_addtocart_bg",
     "type": "color",
-    "label": "In den Warenkorb Button. Hintergrundfarbe."
+    "label": "Button Add to Cart. Background color."
   },
   {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "button_addtocart_color",
     "type": "color",
-    "label": "In den Warenkorb Button. Textfarbe."
+    "label": "Button Add to Cart. Text color."
   },
   {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "button_addtocart_text",
     "type": "string",
-    "label": "In den Warenkorb Button. Text."
+    "label": "Button Add to Cart. Text."
   },
   {
-    "section": "Artikelliste",
+    "section": "Product List",
     "key": "button_loadmore_bg",
     "type": "color",
-    "label": "Weitere laden Button. Hintergrundfarbe."
+    "label": "Button Load more. Background color."
   },
   {
-    "section": "Artikelliste",
+    "section": "Product List",
     "key": "button_loadmore_color",
     "type": "color",
-    "label": "Weitere laden Button. Textfarbe."
+    "label": "Button Load more. Text color."
   },
   {
-    "section": "Artikelliste",
+    "section": "Product List",
     "key": "button_loadmore_text",
     "type": "string",
-    "label": "Weitere laden Button. Text."
+    "label": "Button Load more. Text."
   },
   {
-    "section": "Artikelliste",
+    "section": "Product List",
     "key": "list_price_color",
     "type": "color",
-    "label": "Farbe Preis"
+    "label": "Price color"
   },
   {
-    "section": "Artikelliste",
+    "section": "Product List",
     "key": "list_price_size",
     "type": "number",
-    "label": "Schriftgröße Preis (px)"
+    "label": "Price font size (px)"
   },
   {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "details_price_color",
     "type": "color",
-    "label": "Farbe Preis"
+    "label": "Price color"
   },
   {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "details_price_size",
     "type": "number",
-    "label": "Schriftgröße Preis (px)"
+    "label": "Price font size (px)"
   },
   {
     "section": "Header",
     "key": "search_placeholder",
     "type": "string",
-    "label": "Platzhalter Suche"
+    "label": "Search placeholder"
   },
   {
-    "section": "Artikelliste",
+    "section": "Product List",
     "key": "show_product_filter",
     "type": "boolean",
-    "label": "Artikelfilter anzeigen"
+    "label": "Show Product Filter"
   },
   {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "show_product_breadcrumbs",
     "type": "boolean",
-    "label": "Breadcrumbs anzeigen"
+    "label": "Show breadcrumbs"
   },
   {
-    "section": "Artikelliste",
+    "section": "Product List",
     "key": "show_category_breadcrumbs",
     "type": "boolean",
-    "label": "Breadcrumbs anzeigen"
+    "label": "Show breadcrumbs"
   },
   {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "show_discount_countdown",
     "type": "boolean",
-    "label": "Rabatt Countdown anzeigen"
+    "label": "Show discount countdown"
   },
   {
     "section": "Home",
     "key": "home_products_title",
     "type": "string",
-    "label": "Titel hervorgehobene Artikel"
+    "label": "Featured Products Title"
   },
   {
     "section": "Home",
     "key": "home_products_sort",
     "type": "string",
-    "label": "Hervorgehobene Artikel filtern nach"
+    "label": "Featured Products Sort By"
   },
   {
     "section": "Home",
     "key": "home_products_sku",
     "type": "string",
-    "label": "SKU hervorgehobene Artikel"
+    "label": "Featured Products SKUs"
   },
   {
     "section": "Home",
     "key": "home_products_limit",
     "type": "number",
-    "label": "Anzahl hervorgehobene Artikel"
+    "label": "Featured Products Items Count"
   },
   {
-    "section": "Warenkorb und Checkout",
+    "section": "Cart and Checkout",
     "key": "hide_footer_on_checkout",
     "type": "boolean",
-    "label": "Footer im Checkout verstecken"
+    "label": "Hide footer on checkout"
   },
   {
-    "section": "Warenkorb und Checkout",
+    "section": "Cart and Checkout",
     "key": "checkoutInputClass",
     "type": "string",
     "label": "Text input class"
   },
   {
-    "section": "Warenkorb und Checkout",
+    "section": "Cart and Checkout",
     "key": "checkoutButtonClass",
     "type": "string",
     "label": "Button class"
   },
   {
-    "section": "Warenkorb und Checkout",
+    "section": "Cart and Checkout",
     "key": "checkoutEditButtonClass",
     "type": "string",
     "label": "Edit button class"
   },
   {
-    "section": "Artikelliste",
+    "section": "Product List",
     "key": "sortNewest",
     "type": "string",
-    "label": "Nach Neuste sortieren (Mit Komma getrennte Felder)"
+    "label": "Sort by newest (comma separated fields)"
   },
   {
-    "section": "Artikelliste",
+    "section": "Product List",
     "key": "sortPriceLow",
     "type": "string",
-    "label": "Sortieren nach kleinstem Preis (Mit Komma getrennte Felder)"
+    "label": "Sort by low price (comma separated fields)"
   },
   {
-    "section": "Artikelliste",
+    "section": "Product List",
     "key": "sortPriceHigh",
     "type": "string",
-    "label": "Sortieren nach höchstem Preis (Mit Komma getrennte Felder)"
+    "label": "Sort by high price (comma separated fields)"
   },
   {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "product_thumbnail_position",
     "type": "string",
     "label": "Gallery thumbnail position",
@@ -186,70 +186,70 @@
     ]
   },
   {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "disqus_shortname",
     "type": "string",
-    "label": "DISQUS Abkürzung"
+    "label": "DISQUS shortname"
   },
   {
     "section": "Footer",
     "key": "footer_about",
     "type": "string",
-    "label": "Kurzbeschreibung"
+    "label": "Short description"
   },
   {
     "section": "Footer",
     "key": "footer_menu_1_title",
     "type": "string",
-    "label": "Menü 1 Titel"
+    "label": "Menu 1 title"
   },
   {
     "section": "Footer",
     "key": "footer_menu_2_title",
     "type": "string",
-    "label": "Menü 2 Titel"
+    "label": "Menu 2 title"
   },
   {
-    "section": "Warenkorb und Checkout",
+    "section": "Cart and Checkout",
     "key": "maxCartItemQty",
     "type": "number",
-    "label": "Maximale Menge"
+    "label": "Max Quantity"
   },
   {
-    "section": "Warenkorb und Checkout",
+    "section": "Cart and Checkout",
     "key": "cartThumbnailWidth",
     "type": "number",
-    "label": "Bildbreite (px)"
+    "label": "Image width (px)"
   },
   {
-    "section": "Artikelliste",
+    "section": "Product List",
     "key": "listThumbnailWidth",
     "type": "number",
-    "label": "Bildbreite (px)"
+    "label": "Image width (px)"
   },
   {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "previewThumbnailWidth",
     "type": "number",
-    "label": "Bildbreite Thumbnails (px)"
+    "label": "Thumbnail image width (px)"
   },
   {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "bigThumbnailWidth",
     "type": "number",
-    "label": "Bildbreite (px)"
+    "label": "Image width (px)"
   },
   {
     "section": "Home",
     "key": "category_list_thumbnail_width",
     "type": "number",
-    "label": "Kategorienliste. Bildbreite (px)"
+    "label": "Category list. Image width (px)"
   },
   {
     "section": "Footer",
     "key": "footer_menu_1_items",
     "type": "array",
-    "label": "Menü 1 (links)",
+    "label": "Menu 1 (links)",
     "properties": [
       {
         "key": "text",
@@ -267,7 +267,7 @@
     "section": "Footer",
     "key": "footer_menu_2_items",
     "type": "array",
-    "label": "Menü 2 (links)",
+    "label": "Menu 2 (links)",
     "properties": [
       {
         "key": "text",
@@ -326,17 +326,17 @@
       {
         "key": "image",
         "type": "image",
-        "label": "Bild"
+        "label": "Image"
       },
       {
         "key": "title",
         "type": "string",
-        "label": "Titel"
+        "label": "Title"
       },
       {
         "key": "description",
         "type": "string",
-        "label": "Beschreibung"
+        "label": "Description"
       },
       {
         "key": "path",
@@ -349,18 +349,18 @@
     "section": "Home",
     "key": "home_slider_color",
     "type": "color",
-    "label": "Textfarbe Slider"
+    "label": "Slider text color"
   },
   {
     "section": "Footer",
     "key": "footer_contacts",
     "type": "array",
-    "label": "Kontakte",
+    "label": "Contacts",
     "properties": [
       {
         "key": "text",
         "type": "string",
-        "label": "Textzeile"
+        "label": "Text line"
       }
     ]
   },
@@ -368,7 +368,7 @@
     "section": "Header",
     "key": "header_menu",
     "type": "array",
-    "label": "Menü",
+    "label": "Menu",
     "properties": [
       {
         "key": "text",
@@ -383,45 +383,39 @@
     ]
   },
   {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "related_products_title",
     "type": "string",
-    "label": "Titel Verwandte Artikel"
+    "label": "Related Products Title"
   },
   {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "product_gallery_shownav",
     "type": "boolean",
-    "label": "Navigationspfeile in der Galerie anzeigen"
+    "label": "Show Navigation Arrows in Gallery"
   },
   {
     "section": "Home",
     "key": "home_gallery_shownav",
     "type": "boolean",
-    "label": "Navigationspfeile in der Galerie anzeigen"
+    "label": "Show Navigation Arrows in Gallery"
   },
   {
-    "section": "Home",
-    "key": "home_slider_show",
-    "type": "boolean",
-    "label": "Home Slider Galerie anzeigen?"
-  },
-  {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "show_viewed_products",
     "type": "boolean",
-    "label": "Zuletzt besuchte Artikel anzeigen"
+    "label": "Show recently viewed products"
   },
   {
-    "section": "Artikeldetails",
+    "section": "Product Details",
     "key": "limit_viewed_products",
     "type": "number",
-    "label": "Zuletzt besuchte Artikel zählen"
+    "label": "Count of recently viewed products"
   },
   {
     "section": "Pages",
     "key": "page_list_tag",
     "type": "string",
-    "label": "Taggen um Seitenliste zu erstellen (blog, news, articles oder docs)"
+    "label": "Tag to create page list (blog, news, articles or docs)"
   }
 ]

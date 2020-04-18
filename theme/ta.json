@@ -401,12 +401,6 @@
     "label": "Show Navigation Arrows in Gallery"
   },
   {
-    "section": "Home",
-    "key": "home_slider_show",
-    "type": "boolean",
-    "label": "Show home slider Gallery"
-  },
-  {
     "section": "Product Details",
     "key": "show_viewed_products",
     "type": "boolean",

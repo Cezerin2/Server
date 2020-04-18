@@ -1,192 +1,192 @@
 [
   {
-    "section": "Product List",
+    "section": "Lista Prodotti",
     "key": "list_image_max_height",
     "type": "number",
-    "label": "Image max height"
+    "label": "Massima altezza pagina"
   },
   {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "button_addtocart_bg",
     "type": "color",
-    "label": "Button Add to Cart. Background color."
+    "label": "Bottone aggiungi al carrello. Colore Background."
   },
   {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "button_addtocart_color",
     "type": "color",
-    "label": "Button Add to Cart. Text color."
+    "label": "Bottone aggiungi al carrello. Colore Testo."
   },
   {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "button_addtocart_text",
     "type": "string",
     "label": "Button Add to Cart. Text."
   },
   {
-    "section": "Product List",
+    "section": "Lista Prodotti",
     "key": "button_loadmore_bg",
     "type": "color",
-    "label": "Button Load more. Background color."
+    "label": "Bottone Carica altro. Colore Background."
   },
   {
-    "section": "Product List",
+    "section": "Lista Prodotti",
     "key": "button_loadmore_color",
     "type": "color",
-    "label": "Button Load more. Text color."
+    "label": "Bottone carica altro. Colore Testo."
   },
   {
-    "section": "Product List",
+    "section": "Lista Prodotti",
     "key": "button_loadmore_text",
     "type": "string",
-    "label": "Button Load more. Text."
+    "label": "Bottone Carica altro. Testo."
   },
   {
-    "section": "Product List",
+    "section": "Lista Prodotti",
     "key": "list_price_color",
     "type": "color",
-    "label": "Price color"
+    "label": "Colore Prezzo"
   },
   {
-    "section": "Product List",
+    "section": "Lista Prodotti",
     "key": "list_price_size",
     "type": "number",
-    "label": "Price font size (px)"
+    "label": "Dimensione font Prezzo (px)"
   },
   {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "details_price_color",
     "type": "color",
-    "label": "Price color"
+    "label": "Colore Prezzo"
   },
   {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "details_price_size",
     "type": "number",
-    "label": "Price font size (px)"
+    "label": "Dimensione font Prezzo (px)"
   },
   {
     "section": "Header",
     "key": "search_placeholder",
     "type": "string",
-    "label": "Search placeholder"
+    "label": "Cerca placeholder"
   },
   {
-    "section": "Product List",
+    "section": "Lista Prodotti",
     "key": "show_product_filter",
     "type": "boolean",
-    "label": "Show Product Filter"
+    "label": "Mostra Filtri Prodotti"
   },
   {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "show_product_breadcrumbs",
     "type": "boolean",
-    "label": "Show breadcrumbs"
+    "label": "Mostra breadcrumb"
   },
   {
-    "section": "Product List",
+    "section": "Lista Prodotti",
     "key": "show_category_breadcrumbs",
     "type": "boolean",
-    "label": "Show breadcrumbs"
+    "label": "Mostra breadcrumbs"
   },
   {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "show_discount_countdown",
     "type": "boolean",
-    "label": "Show discount countdown"
+    "label": "Mostra conto 0"
   },
   {
     "section": "Home",
     "key": "home_products_title",
     "type": "string",
-    "label": "Featured Products Title"
+    "label": "Titoli Prodotti Consigliati"
   },
   {
     "section": "Home",
     "key": "home_products_sort",
     "type": "string",
-    "label": "Featured Products Sort By"
+    "label": "Prodotti Consigliati Ordina per"
   },
   {
     "section": "Home",
     "key": "home_products_sku",
     "type": "string",
-    "label": "Featured Products SKUs"
+    "label": "Prodotti Consigliati SKUs"
   },
   {
     "section": "Home",
     "key": "home_products_limit",
     "type": "number",
-    "label": "Featured Products Items Count"
+    "label": "Contatore Prodotti Consigliati"
   },
   {
     "section": "Cart and Checkout",
     "key": "hide_footer_on_checkout",
     "type": "boolean",
-    "label": "Hide footer on checkout"
+    "label": "Nascondi footer in checkout"
   },
   {
     "section": "Cart and Checkout",
     "key": "checkoutInputClass",
     "type": "string",
-    "label": "Text input class"
+    "label": "Classe Testo input"
   },
   {
     "section": "Cart and Checkout",
     "key": "checkoutButtonClass",
     "type": "string",
-    "label": "Button class"
+    "label": "Classe Bottone"
   },
   {
     "section": "Cart and Checkout",
     "key": "checkoutEditButtonClass",
     "type": "string",
-    "label": "Edit button class"
+    "label": "Modifica Classe Bottone"
   },
   {
-    "section": "Product List",
+    "section": "Lista Prodotti",
     "key": "sortNewest",
     "type": "string",
-    "label": "Sort by newest (comma separated fields)"
+    "label": "Ordina per i più recenti (campi separati da virgola)"
   },
   {
-    "section": "Product List",
+    "section": "Lista Prodotti",
     "key": "sortPriceLow",
     "type": "string",
-    "label": "Sort by low price (comma separated fields)"
+    "label": "Ordina per prezzo più basso (campi separati da virgola)"
   },
   {
-    "section": "Product List",
+    "section": "Lista Prodotti",
     "key": "sortPriceHigh",
     "type": "string",
-    "label": "Sort by high price (comma separated fields)"
+    "label": "Ordina per prezzo più alto (campi separati da virgola)"
   },
   {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "product_thumbnail_position",
     "type": "string",
-    "label": "Gallery thumbnail position",
+    "label": "Galleria posizione miniature",
     "options": [
       {
-        "label": "Top",
+        "label": "Sopra",
         "value": "top"
       },
       {
-        "label": "Right",
+        "label": "Destra",
         "value": "right"
       },
       {
-        "label": "Bottom",
+        "label": "Sotto",
         "value": "bottom"
       },
       {
-        "label": "Left",
+        "label": "Sinistra",
         "value": "left"
       }
     ]
   },
   {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "disqus_shortname",
     "type": "string",
     "label": "DISQUS shortname"
@@ -195,55 +195,55 @@
     "section": "Footer",
     "key": "footer_about",
     "type": "string",
-    "label": "Short description"
+    "label": "Breve descrizione"
   },
   {
     "section": "Footer",
     "key": "footer_menu_1_title",
     "type": "string",
-    "label": "Menu 1 title"
+    "label": "Menu 1 Titolo"
   },
   {
     "section": "Footer",
     "key": "footer_menu_2_title",
     "type": "string",
-    "label": "Menu 2 title"
+    "label": "Menu 2 Titolo"
   },
   {
     "section": "Cart and Checkout",
     "key": "maxCartItemQty",
     "type": "number",
-    "label": "Max Quantity"
+    "label": "Quatità massima"
   },
   {
     "section": "Cart and Checkout",
     "key": "cartThumbnailWidth",
     "type": "number",
-    "label": "Image width (px)"
+    "label": "Larghezza Imagine (px)"
   },
   {
-    "section": "Product List",
+    "section": "Lista Prodotti",
     "key": "listThumbnailWidth",
     "type": "number",
-    "label": "Image width (px)"
+    "label": "Larghezza Imagine (px)"
   },
   {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "previewThumbnailWidth",
     "type": "number",
-    "label": "Thumbnail image width (px)"
+    "label": "Larghezza Miniatura (px)"
   },
   {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "bigThumbnailWidth",
     "type": "number",
-    "label": "Image width (px)"
+    "label": "Larghezza Imagine (px)"
   },
   {
     "section": "Home",
     "key": "category_list_thumbnail_width",
     "type": "number",
-    "label": "Category list. Image width (px)"
+    "label": "Lista Categorie. Larghezza Imagine (px)"
   },
   {
     "section": "Footer",
@@ -254,7 +254,7 @@
       {
         "key": "text",
         "type": "string",
-        "label": "Link text"
+        "label": "Testo Link"
       },
       {
         "key": "url",
@@ -272,7 +272,7 @@
       {
         "key": "text",
         "type": "string",
-        "label": "Link text"
+        "label": "Testo Link"
       },
       {
         "key": "url",
@@ -285,7 +285,7 @@
     "section": "Footer",
     "key": "footer_social",
     "type": "array",
-    "label": "Social icons",
+    "label": "Icone Social",
     "properties": [
       {
         "key": "type",
@@ -326,22 +326,22 @@
       {
         "key": "image",
         "type": "image",
-        "label": "Image"
+        "label": "Immagine"
       },
       {
         "key": "title",
         "type": "string",
-        "label": "Title"
+        "label": "Titolo"
       },
       {
         "key": "description",
         "type": "string",
-        "label": "Description"
+        "label": "Descrizione"
       },
       {
         "key": "path",
         "type": "string",
-        "label": "Page path"
+        "label": "Percorso Pagina"
       }
     ]
   },
@@ -349,18 +349,18 @@
     "section": "Home",
     "key": "home_slider_color",
     "type": "color",
-    "label": "Slider text color"
+    "label": "Slider Colore Testo"
   },
   {
     "section": "Footer",
     "key": "footer_contacts",
     "type": "array",
-    "label": "Contacts",
+    "label": "Contatti",
     "properties": [
       {
         "key": "text",
         "type": "string",
-        "label": "Text line"
+        "label": "Linea Testo"
       }
     ]
   },
@@ -373,7 +373,7 @@
       {
         "key": "text",
         "type": "string",
-        "label": "Link text"
+        "label": "Testo Link"
       },
       {
         "key": "url",
@@ -383,45 +383,39 @@
     ]
   },
   {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "related_products_title",
     "type": "string",
-    "label": "Related Products Title"
+    "label": "Titoli Prodotti Correlati"
   },
   {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "product_gallery_shownav",
     "type": "boolean",
-    "label": "Show Navigation Arrows in Gallery"
+    "label": "Mostra Freccie di Navigazione in Galleria"
   },
   {
     "section": "Home",
     "key": "home_gallery_shownav",
     "type": "boolean",
-    "label": "Show Navigation Arrows in Gallery"
+    "label": "Mostra Freccie di Navigazione in Galleria"
   },
   {
-    "section": "Home",
-    "key": "home_slider_show",
-    "type": "boolean",
-    "label": "Show home slider Gallery"
-  },
-  {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "show_viewed_products",
     "type": "boolean",
-    "label": "Show recently viewed products"
+    "label": "Mostra Prodotti visti di recente"
   },
   {
-    "section": "Product Details",
+    "section": "Dettagli Prodotto",
     "key": "limit_viewed_products",
     "type": "number",
-    "label": "Count of recently viewed products"
+    "label": "Conto prodotti recentemente visti"
   },
   {
     "section": "Pages",
     "key": "page_list_tag",
     "type": "string",
-    "label": "Tag to create page list (blog, news, articles or docs)"
+    "label": "Tag per creare lista pagina (blog, news, articolo or documentazione)"
   }
 ]

@@ -1,291 +1,291 @@
 [
   {
-    "section": "Lista de Produtos",
+    "section": "Artikelliste",
     "key": "list_image_max_height",
     "type": "number",
-    "label": "Altura máxima da imagem"
+    "label": "Maximale Bildhöhe"
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "button_addtocart_bg",
     "type": "color",
-    "label": "Cor de fundo do botão Adicionar ao Carrinho."
+    "label": "In den Warenkorb Button. Hintergrundfarbe."
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "button_addtocart_color",
     "type": "color",
-    "label": " Cor do texto do botão Adicionar ao Carrinho."
+    "label": "In den Warenkorb Button. Textfarbe."
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "button_addtocart_text",
     "type": "string",
-    "label": "Texto do botão Adicionar ao Carrinho."
+    "label": "In den Warenkorb Button. Text."
   },
   {
-    "section": "Lista de Produtos",
+    "section": "Artikelliste",
     "key": "button_loadmore_bg",
     "type": "color",
-    "label": "Cor de fundo do botão Carregar Mais."
+    "label": "Weitere laden Button. Hintergrundfarbe."
   },
   {
-    "section": "Lista de Produtos",
+    "section": "Artikelliste",
     "key": "button_loadmore_color",
     "type": "color",
-    "label": "Cor do texto do botão Carregar Mais."
+    "label": "Weitere laden Button. Textfarbe."
   },
   {
-    "section": "Lista de Produtos",
+    "section": "Artikelliste",
     "key": "button_loadmore_text",
     "type": "string",
-    "label": "Texto do botão Carregar Mais."
+    "label": "Weitere laden Button. Text."
   },
   {
-    "section": "Lista de Produtos",
+    "section": "Artikelliste",
     "key": "list_price_color",
     "type": "color",
-    "label": "Cor do Preço"
+    "label": "Farbe Preis"
   },
   {
-    "section": "Lista de Produtos",
+    "section": "Artikelliste",
     "key": "list_price_size",
     "type": "number",
-    "label": "Tamanho da fonte do Preço (px)"
+    "label": "Schriftgröße Preis (px)"
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "details_price_color",
     "type": "color",
-    "label": "Cor do Preço"
+    "label": "Farbe Preis"
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "details_price_size",
     "type": "number",
-    "label": "Tamanho da fonte do Preço (px)"
+    "label": "Schriftgröße Preis (px)"
   },
   {
-    "section": "Cabeçalho",
+    "section": "Header",
     "key": "search_placeholder",
     "type": "string",
-    "label": "Placeholder da busca"
+    "label": "Platzhalter Suche"
   },
   {
-    "section": "Lista de Produtos",
+    "section": "Artikelliste",
     "key": "show_product_filter",
     "type": "boolean",
-    "label": "Mostrar filtro de Produtos"
+    "label": "Artikelfilter anzeigen"
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "show_product_breadcrumbs",
     "type": "boolean",
-    "label": "Mostrar Miniaturas"
+    "label": "Breadcrumbs anzeigen"
   },
   {
-    "section": "Lista de Produtos",
+    "section": "Artikelliste",
     "key": "show_category_breadcrumbs",
     "type": "boolean",
-    "label": "Mostrar Miniaturas"
+    "label": "Breadcrumbs anzeigen"
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "show_discount_countdown",
     "type": "boolean",
-    "label": "Mostrar desconto"
+    "label": "Rabatt Countdown anzeigen"
   },
   {
-    "section": "Início",
+    "section": "Home",
     "key": "home_products_title",
     "type": "string",
-    "label": "Título dos Produtos em Destaque"
+    "label": "Titel hervorgehobene Artikel"
   },
   {
-    "section": "Início",
+    "section": "Home",
     "key": "home_products_sort",
     "type": "string",
-    "label": "Ordenar Produtos em Destaque Por"
+    "label": "Hervorgehobene Artikel filtern nach"
   },
   {
-    "section": "Início",
+    "section": "Home",
     "key": "home_products_sku",
     "type": "string",
-    "label": "Produtos em Destaque SKUs"
+    "label": "SKU hervorgehobene Artikel"
   },
   {
-    "section": "Início",
+    "section": "Home",
     "key": "home_products_limit",
     "type": "number",
-    "label": "Contagem dos Produtos em Destaque"
+    "label": "Anzahl hervorgehobene Artikel"
   },
   {
-    "section": "Carrinho e Finalização de compra",
+    "section": "Warenkorb und Checkout",
     "key": "hide_footer_on_checkout",
     "type": "boolean",
-    "label": "Ocultar rodapé no checkout"
+    "label": "Footer im Checkout verstecken"
   },
   {
-    "section": "Carrinho e Finalização de compra",
+    "section": "Warenkorb und Checkout",
     "key": "checkoutInputClass",
     "type": "string",
-    "label": "Classe do campo de entrada de texto"
+    "label": "Text input class"
   },
   {
-    "section": "Carrinho e Finalização de compra",
+    "section": "Warenkorb und Checkout",
     "key": "checkoutButtonClass",
     "type": "string",
-    "label": "Classe do botão"
+    "label": "Button class"
   },
   {
-    "section": "Carrinho e Finalização de compra",
+    "section": "Warenkorb und Checkout",
     "key": "checkoutEditButtonClass",
     "type": "string",
-    "label": "Editar classe do botão"
+    "label": "Edit button class"
   },
   {
-    "section": "Lista de Produtos",
+    "section": "Artikelliste",
     "key": "sortNewest",
     "type": "string",
-    "label": "Ordenar pelo mais novo (campos separados por vírgula)"
+    "label": "Nach Neuste sortieren (Mit Komma getrennte Felder)"
   },
   {
-    "section": "Lista de Produtos",
+    "section": "Artikelliste",
     "key": "sortPriceLow",
     "type": "string",
-    "label": "Ordenar pelo menor Preço (campos separados por vírgula)"
+    "label": "Sortieren nach kleinstem Preis (Mit Komma getrennte Felder)"
   },
   {
-    "section": "Lista de Produtos",
+    "section": "Artikelliste",
     "key": "sortPriceHigh",
     "type": "string",
-    "label": "Ordenar pelo maior Preço (campos separados por vírgula)"
+    "label": "Sortieren nach höchstem Preis (Mit Komma getrennte Felder)"
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "product_thumbnail_position",
     "type": "string",
-    "label": "Posição da miniatura na Galeria",
+    "label": "Gallery thumbnail position",
     "options": [
       {
-        "label": "Topo",
+        "label": "Top",
         "value": "top"
       },
       {
-        "label": "Direita",
+        "label": "Right",
         "value": "right"
       },
       {
-        "label": "Embaixo",
+        "label": "Bottom",
         "value": "bottom"
       },
       {
-        "label": "Esquerda",
+        "label": "Left",
         "value": "left"
       }
     ]
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "disqus_shortname",
     "type": "string",
-    "label": "Abreviação DISQUS"
+    "label": "DISQUS Abkürzung"
   },
   {
-    "section": "Rodapé",
+    "section": "Footer",
     "key": "footer_about",
     "type": "string",
-    "label": "Pequena descrição"
+    "label": "Kurzbeschreibung"
   },
   {
-    "section": "Rodapé",
+    "section": "Footer",
     "key": "footer_menu_1_title",
     "type": "string",
-    "label": "Título do Menu 1"
+    "label": "Menü 1 Titel"
   },
   {
-    "section": "Rodapé",
+    "section": "Footer",
     "key": "footer_menu_2_title",
     "type": "string",
-    "label": "Título do Menu 2"
+    "label": "Menü 2 Titel"
   },
   {
-    "section": "Carrinho e Finalização de compra",
+    "section": "Warenkorb und Checkout",
     "key": "maxCartItemQty",
     "type": "number",
-    "label": "Quantidade Máxima"
+    "label": "Maximale Menge"
   },
   {
-    "section": "Carrinho e Finalização de compra",
+    "section": "Warenkorb und Checkout",
     "key": "cartThumbnailWidth",
     "type": "number",
-    "label": "Largura da imagem (px)"
+    "label": "Bildbreite (px)"
   },
   {
-    "section": "Lista de Produtos",
+    "section": "Artikelliste",
     "key": "listThumbnailWidth",
     "type": "number",
-    "label": "Largura da imagem (px)"
+    "label": "Bildbreite (px)"
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "previewThumbnailWidth",
     "type": "number",
-    "label": "Largura da imagem em miniatura (px)"
+    "label": "Bildbreite Thumbnails (px)"
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "bigThumbnailWidth",
     "type": "number",
-    "label": "Largura da imagem (px)"
+    "label": "Bildbreite (px)"
   },
   {
-    "section": "Início",
+    "section": "Home",
     "key": "category_list_thumbnail_width",
     "type": "number",
-    "label": "Largura da imagem na Lista de categorias (px)"
+    "label": "Kategorienliste. Bildbreite (px)"
   },
   {
-    "section": "Rodapé",
+    "section": "Footer",
     "key": "footer_menu_1_items",
     "type": "array",
-    "label": "Menu 1 (links)",
+    "label": "Menü 1 (links)",
     "properties": [
       {
         "key": "text",
         "type": "string",
-        "label": "Texto do link"
+        "label": "Link text"
       },
       {
         "key": "url",
         "type": "string",
-        "label": "URL"
+        "label": "Link url"
       }
     ]
   },
   {
-    "section": "Rodapé",
+    "section": "Footer",
     "key": "footer_menu_2_items",
     "type": "array",
-    "label": "Menu 2 (links)",
+    "label": "Menü 2 (links)",
     "properties": [
       {
         "key": "text",
         "type": "string",
-        "label": "Texto do link"
+        "label": "Link text"
       },
       {
         "key": "url",
         "type": "string",
-        "label": "URL"
+        "label": "Link url"
       }
     ]
   },
   {
-    "section": "Rodapé",
+    "section": "Footer",
     "key": "footer_social",
     "type": "array",
-    "label": "Ícones de Redes Sociais",
+    "label": "Social icons",
     "properties": [
       {
         "key": "type",
@@ -297,8 +297,16 @@
             "value": "facebook"
           },
           {
+            "label": "Twitter",
+            "value": "twitter"
+          },
+          {
             "label": "Instagram",
             "value": "instagram"
+          },
+          {
+            "label": "VK",
+            "value": "vk"
           }
         ]
       },
@@ -310,7 +318,7 @@
     ]
   },
   {
-    "section": "Ínicio",
+    "section": "Home",
     "key": "home_slider",
     "type": "array",
     "label": "Slider",
@@ -318,102 +326,96 @@
       {
         "key": "image",
         "type": "image",
-        "label": "Imagem"
+        "label": "Bild"
       },
       {
         "key": "title",
         "type": "string",
-        "label": "Título"
+        "label": "Titel"
       },
       {
         "key": "description",
         "type": "string",
-        "label": "Descrição"
+        "label": "Beschreibung"
       },
       {
         "key": "path",
         "type": "string",
-        "label": "Caminho da Página"
+        "label": "Page path"
       }
     ]
   },
   {
-    "section": "Início",
+    "section": "Home",
     "key": "home_slider_color",
     "type": "color",
-    "label": "Cor do texto no Slider"
+    "label": "Textfarbe Slider"
   },
   {
-    "section": "Rodapé",
+    "section": "Footer",
     "key": "footer_contacts",
     "type": "array",
-    "label": "Contatos",
+    "label": "Kontakte",
     "properties": [
       {
         "key": "text",
         "type": "string",
-        "label": "Texto da linha"
+        "label": "Textzeile"
       }
     ]
   },
   {
-    "section": "Cabeçalho",
+    "section": "Header",
     "key": "header_menu",
     "type": "array",
-    "label": "Menu",
+    "label": "Menü",
     "properties": [
       {
         "key": "text",
         "type": "string",
-        "label": "Texto do Link"
+        "label": "Link text"
       },
       {
         "key": "url",
         "type": "string",
-        "label": "URL"
+        "label": "Link url"
       }
     ]
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "related_products_title",
     "type": "string",
-    "label": "Título de produtos relacionados"
+    "label": "Titel Verwandte Artikel"
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "product_gallery_shownav",
     "type": "boolean",
-    "label": "Mostrar setas de navegação na galeria"
-  },
-  {
-    "section": "Início",
-    "key": "home_gallery_shownav",
-    "type": "boolean",
-    "label": "Mostrar setas de navegação na galeria"
+    "label": "Navigationspfeile in der Galerie anzeigen"
   },
   {
     "section": "Home",
-    "key": "home_slider_show",
+    "key": "home_gallery_shownav",
     "type": "boolean",
-    "label": "Mostrar a Galeria do slider inicial?"
+    "label": "Navigationspfeile in der Galerie anzeigen"
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "show_viewed_products",
     "type": "boolean",
-    "label": "Mostrar produtos visualizados recentemente"
+    "label": "Zuletzt besuchte Artikel anzeigen"
   },
   {
-    "section": "Detalhes do Produto",
+    "section": "Artikeldetails",
     "key": "limit_viewed_products",
     "type": "number",
-    "label": "Contagem de produtos visualizados recentemente"
+    "label": "Zuletzt besuchte Artikel zählen"
   },
   {
-    "section": "Páginas",
+    "section": "Pages",
     "key": "page_list_tag",
     "type": "string",
-    "label": "Tag para criar lista de páginas (blog, notícias, artigos ou documentos)"
+    "label": "Taggen um Seitenliste zu erstellen (blog, news, articles oder docs)"
   }
 ]
