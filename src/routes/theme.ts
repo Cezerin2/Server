@@ -1,6 +1,6 @@
 import security from '../lib/security'
 import ThemeService from '../services/theme/theme'
-import ThemeSettingsService from '../services/theme/settings'
+import ThemeSettingsService from '../services/theme'
 import ThemeAssetsService from '../services/theme/assets'
 import ThemePlaceholdersService from '../services/theme/placeholders'
 
@@ -23,17 +23,17 @@ class ThemeRoute {
         )
 
         this.router.get(
-            '/v1/theme/settings',
+            '/v1/theme',
             security.checkUserScope.bind(this, security.scope.READ_THEME),
             this.getSettings.bind(this)
         )
         this.router.put(
-            '/v1/theme/settings',
+            '/v1/theme',
             security.checkUserScope.bind(this, security.scope.WRITE_THEME),
             this.updateSettings.bind(this)
         )
         this.router.get(
-            '/v1/theme/settings_schema',
+            '/v1/theme_schema',
             security.checkUserScope.bind(this, security.scope.READ_THEME),
             this.getSettingsSchema.bind(this)
         )
