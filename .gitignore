@@ -1,4 +1,5 @@
-.vscode
+.vscode/*
+!.vscode/launch.json
 node_modules
 
 # Public Content
