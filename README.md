@@ -17,6 +17,7 @@ Built with:
 
 - Node.js
 - React v16
+- Typescript
 - Redux
 - Express
 - Babel
