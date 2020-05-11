@@ -6,9 +6,11 @@ All the same for web deploy.
 [Cezerin Installation Guide.](https://github.com/Cezerin2/cezerin2/blob/master/docs/using-source-code.md)
 
 Cezerin apps must be running, console command:
+
 ```
 pm2 list all
 ```
+
 ```
 root@ubuntu-s-1vcpu-1gb-nyc3-01:~# pm2 list all
 ┌───────┬────┬──────┬────────┬───┬──────┬────────────┐

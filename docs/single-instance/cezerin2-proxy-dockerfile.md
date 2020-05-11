@@ -1,9 +1,10 @@
 # Single Instance cezerin2-proxy dockerfile and docker-entrypoint.sh
 
-* [dockerfile](#dockerfile)
-* [docker-entrypoint.sh](#docker-entrypoint.sh)
+- [dockerfile](#dockerfile)
+- [docker-entrypoint.sh](#docker-entrypoint.sh)
 
 ## dockerfile
+
 ```dockerfile
 FROM node:8
 LABEL maintainer "Luke Busstra <luke.busstra@gmail.com>"
@@ -40,6 +41,7 @@ ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 ```
 
 ## docker-entrypoint.sh
+
 ```shell
 #!/bin/sh
 set -e

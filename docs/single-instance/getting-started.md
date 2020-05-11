@@ -1,11 +1,11 @@
 # Getting Started with Single Instance
 
-* [Setup](#setup)
-* [Run Cezerin2](#run-cezerin2)
-* [Run Cezerin2 Admin](#run-cezerin2-admin)
-* [Run Cezerin2 Store](#run-cezerin2-store)
-* [Run Cezerin2 Proxy](#run-cezerin2-proxy)
-* [Docker Compose](#docker-compose)
+- [Setup](#setup)
+- [Run Cezerin2](#run-cezerin2)
+- [Run Cezerin2 Admin](#run-cezerin2-admin)
+- [Run Cezerin2 Store](#run-cezerin2-store)
+- [Run Cezerin2 Proxy](#run-cezerin2-proxy)
+- [Docker Compose](#docker-compose)
 
 ## Setup
 
@@ -18,7 +18,6 @@ from the root directory execute
 ```shell
 docker run --name store-db -v /var/www/store-db:/data/db -d mongo:latest
 ```
-
 
 ## Run cezerin2
 
@@ -58,10 +57,10 @@ cezerin2
 ```
 
 For local use change
- - www.exampe.com to localhost:3000
- - api.example.com to localhost:3001
- - admin.example.com to localhost:3002
 
+- www.exampe.com to localhost:3000
+- api.example.com to localhost:3001
+- admin.example.com to localhost:3002
 
 ## Run cezerin2 Admin
 
@@ -75,7 +74,7 @@ git clone https://github.com/Cezerin2/cezerin2-admin.git
 
 ```shell
 docker build \
--t cezerin2-admin \ 
+-t cezerin2-admin \
 .
 ```
 
@@ -103,7 +102,7 @@ git clone https://github.com/Cezerin2/cezerin2-store.git
 
 ```shell
 docker build \
--t cezerin2-store \ 
+-t cezerin2-store \
 .
 ```
 
@@ -120,17 +119,18 @@ cezerin2-store
 ```
 
 For local use change
- - api.example.com to cezerin2
+
+- api.example.com to cezerin2
 
 ## Build Run Cezerin2 Proxy
 
 1. Create follow folder structure
 
-    cezerin2-admin                  # clone cezerin2-admin repo
-    ├── nginx                       # nginx cezerin2-admin config
-    |   ├── nginx.conf              # nginx cezerin2-admin config
-    │   └── default.conf            # cezerin2-admin dockerfile
-    └── dockerfile                  # cezerin2-admin dockerfile
+   cezerin2-admin # clone cezerin2-admin repo
+   ├── nginx # nginx cezerin2-admin config
+   | ├── nginx.conf # nginx cezerin2-admin config
+   │ └── default.conf # cezerin2-admin dockerfile
+   └── dockerfile # cezerin2-admin dockerfile
 
 [cezerin2-proxy dockerfile & docker-entrypoint](./cezerin2-proxy-dockerfile.md)
 
@@ -163,21 +163,20 @@ cezerin2-proxy
 ## Docker Compose
 
 setup project as:
-    .
-    ├── cezerin2                        # clone cererin2 repo
-    │   ├── dockerfile                  # cezerin2 dockerfile
-    │   └── docker-entrypoint.sh        # cezerin2 docker-entrypoint.sh
-    ├── cezerin2-admin                  # clone cezerin2-admin repo
-    │   ├── nginx                       # nginx cezerin2-admin config
-    │   |   ├── nginx.conf              # nginx cezerin2-admin config
-    │   │   └── default.conf            # cezerin2-admin dockerfile
-    │   └── dockerfile                  # cezerin2-admin dockerfile
-    ├── cezerin2-store                  # clone cezerin2-store repo
-    │   ├── dockerfile                  # cezerin2-store dockerfile
-    │   └── docker-entrypoint.sh        # cezerin2-store docker-entrypoint.sh
-    ├── proxy                           # New folder for proxy
-    │   └── dockerfile                  # proxy dockerfile
-    └── docker-compose.yml              # Tools and utilities
-
+.
+├── cezerin2 # clone cererin2 repo
+│ ├── dockerfile # cezerin2 dockerfile
+│ └── docker-entrypoint.sh # cezerin2 docker-entrypoint.sh
+├── cezerin2-admin # clone cezerin2-admin repo
+│ ├── nginx # nginx cezerin2-admin config
+│ | ├── nginx.conf # nginx cezerin2-admin config
+│ │ └── default.conf # cezerin2-admin dockerfile
+│ └── dockerfile # cezerin2-admin dockerfile
+├── cezerin2-store # clone cezerin2-store repo
+│ ├── dockerfile # cezerin2-store dockerfile
+│ └── docker-entrypoint.sh # cezerin2-store docker-entrypoint.sh
+├── proxy # New folder for proxy
+│ └── dockerfile # proxy dockerfile
+└── docker-compose.yml # Tools and utilities
 
 [cezerin2 docker-compose](./cezerin2-docker-compose.md)

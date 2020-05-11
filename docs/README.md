@@ -3,7 +3,7 @@
 - Getting Started
 
   - [Overview](overview.md)
-  
+
 - Installation Guides
 
   - [Prerequisites](prerequisites.md)
@@ -33,4 +33,3 @@
   - [FAQ](faq.md)
   - [HowTos](howtos.md)
   - [Help and Support](help-and-support.md)
-

@@ -23,7 +23,6 @@ dist/*
 logs/*.log
 npm-debug.log*
 *.zip
-*.lock
 *.log
 *lock.json
-*.lock
+build

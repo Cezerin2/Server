@@ -52,7 +52,7 @@ Client-side dashboard use JSON Web Token (JWT) to access REST API. [Demo dashboa
 - Getting Started
 
   - [Overview](./docs/overview.md)
-  
+
 - Installation Guides
 
   - [Prerequisites](./docs/prerequisites.md)

@@ -1,16 +1,16 @@
 {
-	"apps": [
-		{
-			"name": "api",
-			"script": "./src/index.js",
-			"node_args": "-r esm",
-			"watch": ["./config/server.js", "./src/"],
-			"instances": "1",
-			"exec_mode": "fork",
-			"watch_options": {
-				"persistent": true,
-				"ignoreInitial": false
-			}
-		}
-	]
+  "apps": [
+    {
+      "name": "api",
+      "script": "./src/index.js",
+      "node_args": "-r esm",
+      "watch": ["./config/server.js", "./src/"],
+      "instances": "1",
+      "exec_mode": "fork",
+      "watch_options": {
+        "persistent": true,
+        "ignoreInitial": false
+      }
+    }
+  ]
 }
