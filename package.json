@@ -13,10 +13,7 @@
   "homepage": "https://cezerin.org",
   "bugs": "https://github.com/Cezerin2/cezerin2/issues",
   "license": "MIT",
-  "author": {
-    "name": "Restmount <jsonmount@gmail.com>",
-    "url": "https://github.com/restmount"
-  },
+  "author": "Restmount <jsonmount@gmail.com>",
   "main": "src/index.js",
   "repository": {
     "type": "git",
