@@ -5,7 +5,6 @@ const dbName = process.env.DB_NAME || "shop"
 const dbUser = process.env.DB_USER || ""
 const dbPass = process.env.DB_PASS || ""
 const dbCred =
-<<<<<<< HEAD:src/config.ts
   dbUser.length > 0 || dbPass.length > 0 ? `${dbUser}:${dbPass}@` : ""
 
 const dbUrl =
@@ -14,16 +13,6 @@ const dbUrl =
 const Config = {
   // used by Store (server side)
   apiBaseUrl: process.env.API_BASE_URL || `http://localhost:3001/api/v1`,
-=======
-	dbUser.length > 0 || dbPass.length > 0 ? `${dbUser}:${dbPass}@` : ""
-
-const dbUrl =
-	process.env.DB_URL || `mongodb://${dbCred}${dbHost}:${dbPort}/${dbName}`
-
-module.exports = {
-	// used by Store (server side)
-	apiBaseUrl: process.env.API_BASE_URL || `http://localhost:3001/api/v1`,
->>>>>>> master:config/server.js
 
 	// Access-Control-Allow-Origin
 	storeBaseUrl: process.env.STORE_BASE_URL || `http://localhost:3000`,
