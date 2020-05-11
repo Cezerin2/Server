@@ -80,6 +80,7 @@
     "@types/express-jwt": "^0.0.42",
     "@types/jest": "^25.2.1",
     "@types/jsonwebtoken": "^8.3.9",
+    "@types/node-fetch": "^2.5.7",
     "@types/nodemailer": "^6.4.0",
     "@types/slug": "^0.9.1",
     "@types/ws": "^7.2.4",
