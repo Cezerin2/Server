@@ -13,7 +13,11 @@
   "homepage": "https://cezerin.org",
   "bugs": "https://github.com/Cezerin2/cezerin2/issues",
   "license": "Unlicense",
+<<<<<<< HEAD
   "author": "Restmount (https://github.com/restmount), Himadu and Community",
+=======
+  "author": "Restmount <jsonmount@gmail.com> (https://github.com/restmount)",
+>>>>>>> master
   "main": "src/index.js",
   "repository": {
     "type": "git",
