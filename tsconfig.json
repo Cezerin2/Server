@@ -10,7 +10,7 @@
     "esModuleInterop": true,
     "noEmitOnError": false,
     "removeComments": true
-    // Older
+    // // Older
     //  "lib": ["dom", "dom.iterable", "esnext"],
     // "allowJs": true,
     //   "skipLibCheck": true,
