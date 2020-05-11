@@ -8,8 +8,8 @@
     "strict": false,
     "target": "es2017",
     "esModuleInterop": true,
-    "removeComments": true,
-    "noEmitOnError": false
+    "noEmitOnError": false,
+    "removeComments": true
   },
   "compileOnSave": true,
   "include": ["src"]

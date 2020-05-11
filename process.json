@@ -2,9 +2,9 @@
   "apps": [
     {
       "name": "api",
-      "script": "./src/index.js",
+      "script": "./build/index.js",
       "node_args": "-r esm",
-      "watch": ["./config/server.js", "./src/"],
+      "watch": ["./build/"],
       "instances": "1",
       "exec_mode": "fork",
       "watch_options": {
