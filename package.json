@@ -11,7 +11,7 @@
     "cms"
   ],
   "homepage": "https://cezerin.org",
-  "bugs": "https://github.com/cezerin2/cezerin2/issues",
+  "bugs": "https://github.com/Cezerin2/cezerin2/issues",
   "license": "MIT",
   "author": {
     "name": "Restmount <jsonmount@gmail.com>",
@@ -20,7 +20,7 @@
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cezerin2/cezerin2"
+    "url": "https://github.com/Cezerin2/cezerin2"
   },
   "scripts": {
     "setup": "node -r esm src/setup.js",
