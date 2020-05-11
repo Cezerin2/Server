@@ -20,8 +20,6 @@ RUN echo "deb http://nginx.org/packages/debian/ ${NGINX_CODENAME} nginx" >> /etc
 # install PM2
 RUN npm i pm2 -g
 
-WORKDIR /var/www/cezerin2
-
 # download project
 ADD . /var/www/cezerin2
 
