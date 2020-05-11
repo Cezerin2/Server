@@ -13,29 +13,28 @@ Cezerin2 is React and Node.js based eCommerce platform. Allows creating a Progre
 
 ### Features
 
-  - **Products (options, variants, attributes)**
-  - **Product categories**
-  - **Product import**
-  - **Inventory and stock management**
-  - **Customers**
-  - **Customer groups**
-  - **Orders**
-  - **Order custom statuses**
-  - **Pages**
-  - **File manager**
-  - **Shipping and payment methods**
-  - **Custom shipping fields**
-  - **Payment Gateways**
-  - **Checkout options**
-  - **Access Tokens**
-  - **Export theme to zip archive**
-  - **Install theme from zip archive**
-  - **Theme Settings**
-  - **Apps Store**
-  - **Server-side rendering (SEO friendly)**
-  - **Passwordless**
+- **Products (options, variants, attributes)**
+- **Product categories**
+- **Product import**
+- **Inventory and stock management**
+- **Customers**
+- **Customer groups**
+- **Orders**
+- **Order custom statuses**
+- **Pages**
+- **File manager**
+- **Shipping and payment methods**
+- **Custom shipping fields**
+- **Payment Gateways**
+- **Checkout options**
+- **Access Tokens**
+- **Export theme to zip archive**
+- **Install theme from zip archive**
+- **Theme Settings**
+- **Apps Store**
+- **Server-side rendering (SEO friendly)**
+- **Passwordless**
 
 ### License
 
 MIT
-

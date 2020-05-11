@@ -1,59 +1,59 @@
-import { db } from '../../lib/mongo';
-import parse from '../../lib/parse';
+import { db } from "../../lib/mongo"
+import parse from "../../lib/parse"
 
 class EmailTemplatesService {
 	getEmailTemplate(name) {
 		return db
-			.collection('emailTemplates')
+			.collection("emailTemplates")
 			.findOne({ name })
-			.then(template => this.changeProperties(template));
+			.then(template => this.changeProperties(template))
 	}
 
 	updateEmailTemplate(name, data) {
-		const template = this.getValidDocumentForUpdate(data);
+		const template = this.getValidDocumentForUpdate(data)
 		return db
-			.collection('emailTemplates')
+			.collection("emailTemplates")
 			.updateOne(
 				{ name },
 				{
-					$set: template
+					$set: template,
 				},
 				{ upsert: true }
 			)
-			.then(res => this.getEmailTemplate(name));
+			.then(res => this.getEmailTemplate(name))
 	}
 
 	getValidDocumentForUpdate(data) {
 		if (Object.keys(data).length === 0) {
-			return new Error('Required fields are missing');
+			return new Error("Required fields are missing")
 		}
 
-		const template = {};
+		const template = {}
 
 		if (data.subject !== undefined) {
-			template.subject = parse.getString(data.subject);
+			template.subject = parse.getString(data.subject)
 		}
 
 		if (data.body !== undefined) {
-			template.body = parse.getString(data.body);
+			template.body = parse.getString(data.body)
 		}
 
-		return template;
+		return template
 	}
 
 	changeProperties(template) {
 		if (template) {
-			delete template._id;
-			delete template.name;
+			delete template._id
+			delete template.name
 		} else {
 			return {
-				subject: '',
-				body: ''
-			};
+				subject: "",
+				body: "",
+			}
 		}
 
-		return template;
+		return template
 	}
 }
 
-export default new EmailTemplatesService();
+export default new EmailTemplatesService()

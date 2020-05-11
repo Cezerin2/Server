@@ -1,67 +1,67 @@
-import https from 'https';
-import qs from 'query-string';
-import OrdersService from '../services/orders/orders';
-import OrdertTansactionsService from '../services/orders/orderTransactions';
+import https from "https"
+import qs from "query-string"
+import OrdersService from "../services/orders/orders"
+import OrdertTansactionsService from "../services/orders/orderTransactions"
 
-const SANDBOX_URL = 'www.sandbox.paypal.com';
-const REGULAR_URL = 'www.paypal.com';
+const SANDBOX_URL = "www.sandbox.paypal.com"
+const REGULAR_URL = "www.paypal.com"
 
 const verify = (params, settings) =>
 	new Promise((resolve, reject) => {
 		if (!settings) {
 			settings = {
-				allow_sandbox: false
-			};
+				allow_sandbox: false,
+			}
 		}
 
 		if (!params || Object.keys(params).length === 0) {
-			return reject('Params is empty');
+			return reject("Params is empty")
 		}
 
-		params.cmd = '_notify-validate';
-		const body = qs.stringify(params);
+		params.cmd = "_notify-validate"
+		const body = qs.stringify(params)
 
 		// Set up the request to paypal
 		const req_options = {
 			host: params.test_ipn ? SANDBOX_URL : REGULAR_URL,
-			method: 'POST',
-			path: '/cgi-bin/webscr',
-			headers: { 'Content-Length': body.length }
-		};
+			method: "POST",
+			path: "/cgi-bin/webscr",
+			headers: { "Content-Length": body.length },
+		}
 
 		if (params.test_ipn && !settings.allow_sandbox) {
 			return reject(
-				'Received request with test_ipn parameter while sandbox is disabled'
-			);
+				"Received request with test_ipn parameter while sandbox is disabled"
+			)
 		}
 
 		const req = https.request(req_options, res => {
-			const data = [];
+			const data = []
 
-			res.on('data', d => {
-				data.push(d);
-			});
+			res.on("data", d => {
+				data.push(d)
+			})
 
-			res.on('end', () => {
-				const response = data.join('');
+			res.on("end", () => {
+				const response = data.join("")
 
 				// Check if IPN is valid
-				if (response === 'VERIFIED') {
-					return resolve(response);
+				if (response === "VERIFIED") {
+					return resolve(response)
 				}
-				return reject(`IPN Verification status: ${response}`);
-			});
-		});
+				return reject(`IPN Verification status: ${response}`)
+			})
+		})
 
 		// Add the post parameters to the request body
-		req.write(body);
+		req.write(body)
 		// Request error
-		req.on('error', reject);
-		req.end();
-	});
+		req.on("error", reject)
+		req.end()
+	})
 
 const getPaymentFormSettings = options => {
-	const { gatewaySettings, order, amount, currency } = options;
+	const { gatewaySettings, order, amount, currency } = options
 
 	const formSettings = {
 		order_id: order.id,
@@ -72,20 +72,20 @@ const getPaymentFormSettings = options => {
 		size: gatewaySettings.size,
 		shape: gatewaySettings.shape,
 		color: gatewaySettings.color,
-		notify_url: gatewaySettings.notify_url
-	};
+		notify_url: gatewaySettings.notify_url,
+	}
 
-	return Promise.resolve(formSettings);
-};
+	return Promise.resolve(formSettings)
+}
 
 const paymentNotification = options => {
-	const { gatewaySettings, req, res } = options;
-	const settings = { allow_sandbox: true };
-	const params = req.body;
-	const orderId = params.custom;
-	const paymentCompleted = params.payment_status === 'Completed';
+	const { gatewaySettings, req, res } = options
+	const settings = { allow_sandbox: true }
+	const params = req.body
+	const orderId = params.custom
+	const paymentCompleted = params.payment_status === "Completed"
 
-	res.status(200).end();
+	res.status(200).end()
 
 	verify(params, settings)
 		.then(() => {
@@ -95,27 +95,25 @@ const paymentNotification = options => {
 			if (paymentCompleted) {
 				OrdersService.updateOrder(orderId, {
 					paid: true,
-					date_paid: new Date()
+					date_paid: new Date(),
 				}).then(() => {
 					OrdertTansactionsService.addTransaction(orderId, {
 						transaction_id: params.txn_id,
 						amount: params.mc_gross,
 						currency: params.mc_currency,
 						status: params.payment_status,
-						details: `${params.first_name} ${params.last_name}, ${
-							params.payer_email
-						}`,
-						success: true
-					});
-				});
+						details: `${params.first_name} ${params.last_name}, ${params.payer_email}`,
+						success: true,
+					})
+				})
 			}
 		})
 		.catch(e => {
-			console.error(e);
-		});
-};
+			console.error(e)
+		})
+}
 
 export default {
 	getPaymentFormSettings,
-	paymentNotification
-};
+	paymentNotification,
+}

@@ -1,9 +1,10 @@
 # Single Instance cezerin2 dockerfile and docker-entrypoint.sh
 
-* [dockerfile](#dockerfile)
-* [docker-entrypoint.sh](#docker-entrypoint.sh)
+- [dockerfile](#dockerfile)
+- [docker-entrypoint.sh](#docker-entrypoint.sh)
 
 ## dockerfile
+
 ```docker-compose
 version: '3'
 
@@ -78,4 +79,3 @@ services:
     restart: always
 
 ```
-

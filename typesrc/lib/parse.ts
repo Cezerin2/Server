@@ -1,60 +1,60 @@
-import { ObjectID } from 'mongodb';
+import { ObjectID } from "mongodb"
 
-const getString = value => (value || '').toString();
+const getString = value => (value || "").toString()
 
 const getDateIfValid = value => {
-	const date = Date.parse(value);
-	return isNaN(date) ? null : new Date(date);
-};
+	const date = Date.parse(value)
+	return isNaN(date) ? null : new Date(date)
+}
 
-const getArrayIfValid = value => (Array.isArray(value) ? value : null);
+const getArrayIfValid = value => (Array.isArray(value) ? value : null)
 
 const getObjectIDIfValid = value =>
-	ObjectID.isValid(value) ? new ObjectID(value) : null;
+	ObjectID.isValid(value) ? new ObjectID(value) : null
 
 const getArrayOfObjectID = value => {
 	if (Array.isArray(value) && value.length > 0) {
-		return value.map(id => getObjectIDIfValid(id)).filter(id => !!id);
+		return value.map(id => getObjectIDIfValid(id)).filter(id => !!id)
 	}
-	return [];
-};
+	return []
+}
 
-const isNumber = value => !isNaN(parseFloat(value)) && isFinite(value);
+const isNumber = value => !isNaN(parseFloat(value)) && isFinite(value)
 
-const getNumberIfValid = value => (isNumber(value) ? parseFloat(value) : null);
+const getNumberIfValid = value => (isNumber(value) ? parseFloat(value) : null)
 
 const getNumberIfPositive = value => {
-	const n = getNumberIfValid(value);
-	return n && n >= 0 ? n : null;
-};
+	const n = getNumberIfValid(value)
+	return n && n >= 0 ? n : null
+}
 
 const getBooleanIfValid = (value, defaultValue = null) => {
-	if (value === 'true' || value === 'false') {
-		return value === 'true';
+	if (value === "true" || value === "false") {
+		return value === "true"
 	}
-	return typeof value === 'boolean' ? value : defaultValue;
-};
+	return typeof value === "boolean" ? value : defaultValue
+}
 
 const getBrowser = browser =>
 	browser
 		? {
 				ip: getString(browser.ip),
-				user_agent: getString(browser.user_agent)
+				user_agent: getString(browser.user_agent),
 		  }
 		: {
-				ip: '',
-				user_agent: ''
-		  };
+				ip: "",
+				user_agent: "",
+		  }
 
 const getCustomerAddress = address => {
 	const coordinates = {
-		latitude: '',
-		longitude: ''
-	};
+		latitude: "",
+		longitude: "",
+	}
 
 	if (address && address.coordinates) {
-		coordinates.latitude = address.coordinates.latitude;
-		coordinates.longitude = address.coordinates.longitude;
+		coordinates.latitude = address.coordinates.latitude
+		coordinates.longitude = address.coordinates.longitude
 	}
 
 	return address
@@ -73,36 +73,36 @@ const getCustomerAddress = address => {
 				coordinates,
 				details: address.details,
 				default_billing: false,
-				default_shipping: false
+				default_shipping: false,
 		  }
-		: {};
-};
+		: {}
+}
 
 const getOrderAddress = address => {
 	const coordinates = {
-		latitude: '',
-		longitude: ''
-	};
+		latitude: "",
+		longitude: "",
+	}
 
 	if (address && address.coordinates) {
-		coordinates.latitude = address.coordinates.latitude;
-		coordinates.longitude = address.coordinates.longitude;
+		coordinates.latitude = address.coordinates.latitude
+		coordinates.longitude = address.coordinates.longitude
 	}
 
 	const emptyAddress = {
-		address1: '',
-		address2: '',
-		city: '',
-		country: '',
-		state: '',
-		phone: '',
-		postal_code: '',
-		full_name: '',
-		company: '',
-		tax_number: '',
+		address1: "",
+		address2: "",
+		city: "",
+		country: "",
+		state: "",
+		phone: "",
+		postal_code: "",
+		full_name: "",
+		company: "",
+		tax_number: "",
 		coordinates,
-		details: null
-	};
+		details: null,
+	}
 
 	return address
 		? Object.assign(
@@ -119,12 +119,12 @@ const getOrderAddress = address => {
 					company: getString(address.company),
 					tax_number: getString(address.tax_number),
 					coordinates,
-					details: address.details
+					details: address.details,
 				},
 				address
 		  )
-		: emptyAddress;
-};
+		: emptyAddress
+}
 
 export default {
 	getString,
@@ -137,5 +137,5 @@ export default {
 	getBooleanIfValid,
 	getBrowser,
 	getCustomerAddress,
-	getOrderAddress
-};
+	getOrderAddress,
+}

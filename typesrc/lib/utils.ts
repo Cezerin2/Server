@@ -1,47 +1,47 @@
-import slug from 'slug';
-import SitemapService from '../services/sitemap';
+import slug from "slug"
+import SitemapService from "../services/sitemap"
 
 const slugConfig = {
 	symbols: false, // replace unicode symbols or not
 	remove: null, // (optional) regex to remove characters
-	lower: true // result in lower case
-};
+	lower: true, // result in lower case
+}
 
-const cleanSlug = text => slug(text || '', slugConfig);
+const cleanSlug = text => slug(text || "", slugConfig)
 
 const getAvailableSlug = (path, resource, enableCleanPath = true) =>
 	SitemapService.getPaths().then(paths => {
 		if (enableCleanPath) {
-			path = cleanSlug(path);
+			path = cleanSlug(path)
 		}
 
 		let pathExists = paths.find(
 			e => e.path === `/${path}` && e.resource != resource
-		);
+		)
 		while (pathExists) {
-			path += '-2';
+			path += "-2"
 			pathExists = paths.find(
 				e => e.path === `/${path}` && e.resource != resource
-			);
+			)
 		}
-		return path;
-	});
+		return path
+	})
 
 const getCorrectFileName = filename => {
 	if (filename) {
 		// replace unsafe characters
-		return filename.replace(/[\s*/:;&?@$()<>#%\{\}|\\\^\~\[\]]/g, '-');
+		return filename.replace(/[\s*/:;&?@$()<>#%\{\}|\\\^\~\[\]]/g, "-")
 	}
-	return filename;
-};
+	return filename
+}
 
 const getProjectionFromFields = fields => {
-	const fieldsArray = fields && fields.length > 0 ? fields.split(',') : [];
-	return Object.assign({}, ...fieldsArray.map(key => ({ [key]: 1 })));
-};
+	const fieldsArray = fields && fields.length > 0 ? fields.split(",") : []
+	return Object.assign({}, ...fieldsArray.map(key => ({ [key]: 1 })))
+}
 
 const deepCopy = obj => {
-	return JSON.parse(JSON.stringify(obj)); 
+	return JSON.parse(JSON.stringify(obj))
 }
 
 export default {
@@ -49,5 +49,5 @@ export default {
 	getAvailableSlug,
 	getCorrectFileName,
 	getProjectionFromFields,
-	deepCopy
-};
+	deepCopy,
+}

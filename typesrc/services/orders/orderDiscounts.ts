@@ -1,97 +1,97 @@
-import { ObjectID } from 'mongodb';
-import { db } from '../../lib/mongo';
-import parse from '../../lib/parse';
-import OrdersService from './orders';
+import { ObjectID } from "mongodb"
+import { db } from "../../lib/mongo"
+import parse from "../../lib/parse"
+import OrdersService from "./orders"
 
 class OrdertDiscountsService {
 	addDiscount(order_id, data) {
 		if (!ObjectID.isValid(order_id)) {
-			return Promise.reject('Invalid identifier');
+			return Promise.reject("Invalid identifier")
 		}
-		const orderObjectID = new ObjectID(order_id);
-		const discount = this.getValidDocumentForInsert(data);
+		const orderObjectID = new ObjectID(order_id)
+		const discount = this.getValidDocumentForInsert(data)
 
-		return db.collection('orders').updateOne(
+		return db.collection("orders").updateOne(
 			{
-				_id: orderObjectID
+				_id: orderObjectID,
 			},
 			{
 				$push: {
-					discounts: discount
-				}
+					discounts: discount,
+				},
 			}
-		);
+		)
 	}
 
 	updateDiscount(order_id, discount_id, data) {
 		if (!ObjectID.isValid(order_id) || !ObjectID.isValid(discount_id)) {
-			return Promise.reject('Invalid identifier');
+			return Promise.reject("Invalid identifier")
 		}
-		const orderObjectID = new ObjectID(order_id);
-		const discountObjectID = new ObjectID(discount_id);
-		const discount = this.getValidDocumentForUpdate(data);
+		const orderObjectID = new ObjectID(order_id)
+		const discountObjectID = new ObjectID(discount_id)
+		const discount = this.getValidDocumentForUpdate(data)
 
 		return db
-			.collection('orders')
+			.collection("orders")
 			.updateOne(
 				{
 					_id: orderObjectID,
-					'discounts.id': discountObjectID
+					"discounts.id": discountObjectID,
 				},
 				{ $set: discount }
 			)
-			.then(res => OrdersService.getSingleOrder(order_id));
+			.then(res => OrdersService.getSingleOrder(order_id))
 	}
 
 	deleteDiscount(order_id, discount_id) {
 		if (!ObjectID.isValid(order_id) || !ObjectID.isValid(discount_id)) {
-			return Promise.reject('Invalid identifier');
+			return Promise.reject("Invalid identifier")
 		}
-		const orderObjectID = new ObjectID(order_id);
-		const discountObjectID = new ObjectID(discount_id);
+		const orderObjectID = new ObjectID(order_id)
+		const discountObjectID = new ObjectID(discount_id)
 
 		return db
-			.collection('orders')
+			.collection("orders")
 			.updateOne(
 				{
-					_id: orderObjectID
+					_id: orderObjectID,
 				},
 				{
 					$pull: {
 						discounts: {
-							id: discountObjectID
-						}
-					}
+							id: discountObjectID,
+						},
+					},
 				}
 			)
-			.then(res => OrdersService.getSingleOrder(order_id));
+			.then(res => OrdersService.getSingleOrder(order_id))
 	}
 
 	getValidDocumentForInsert(data) {
 		return {
 			id: new ObjectID(),
 			name: parse.getString(data.name),
-			amount: parse.getNumberIfPositive(data.amount)
-		};
+			amount: parse.getNumberIfPositive(data.amount),
+		}
 	}
 
 	getValidDocumentForUpdate(data) {
 		if (Object.keys(data).length === 0) {
-			return new Error('Required fields are missing');
+			return new Error("Required fields are missing")
 		}
 
-		const discount = {};
+		const discount = {}
 
 		if (data.variant_id !== undefined) {
-			discount['discounts.$.name'] = parse.getString(data.name);
+			discount["discounts.$.name"] = parse.getString(data.name)
 		}
 
 		if (data.quantity !== undefined) {
-			discount['discounts.$.amount'] = parse.getNumberIfPositive(data.amount);
+			discount["discounts.$.amount"] = parse.getNumberIfPositive(data.amount)
 		}
 
-		return discount;
+		return discount
 	}
 }
 
-export default new OrdertDiscountsService();
+export default new OrdertDiscountsService()

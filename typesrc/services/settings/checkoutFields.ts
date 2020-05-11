@@ -1,77 +1,77 @@
-import { db } from '../../lib/mongo';
-import parse from '../../lib/parse';
+import { db } from "../../lib/mongo"
+import parse from "../../lib/parse"
 
 class CheckoutFieldsService {
 	getCheckoutFields() {
 		return db
-			.collection('checkoutFields')
+			.collection("checkoutFields")
 			.find()
 			.toArray()
 			.then(fields =>
 				fields.map(field => {
-					delete field._id;
-					return field;
+					delete field._id
+					return field
 				})
-			);
+			)
 	}
 
 	getCheckoutField(name) {
 		return db
-			.collection('checkoutFields')
+			.collection("checkoutFields")
 			.findOne({ name })
-			.then(field => this.changeProperties(field));
+			.then(field => this.changeProperties(field))
 	}
 
 	updateCheckoutField(name, data) {
-		const field = this.getValidDocumentForUpdate(data);
+		const field = this.getValidDocumentForUpdate(data)
 		return db
-			.collection('checkoutFields')
+			.collection("checkoutFields")
 			.updateOne(
 				{ name },
 				{
-					$set: field
+					$set: field,
 				},
 				{ upsert: true }
 			)
-			.then(res => this.getCheckoutField(name));
+			.then(res => this.getCheckoutField(name))
 	}
 
 	getValidDocumentForUpdate(data) {
 		if (Object.keys(data).length === 0) {
-			return new Error('Required fields are missing');
+			return new Error("Required fields are missing")
 		}
 
-		const field = {};
+		const field = {}
 
 		if (data.status !== undefined) {
-			field.status = parse.getString(data.status);
+			field.status = parse.getString(data.status)
 		}
 
 		if (data.label !== undefined) {
-			field.label = parse.getString(data.label);
+			field.label = parse.getString(data.label)
 		}
 
 		if (data.placeholder !== undefined) {
-			field.placeholder = parse.getString(data.placeholder);
+			field.placeholder = parse.getString(data.placeholder)
 		}
 
-		return field;
+		return field
 	}
 
 	changeProperties(field) {
 		if (field) {
-			delete field._id;
-			delete field.name;
+			delete field._id
+			delete field.name
 		} else {
 			return {
-				status: 'required',
-				label: '',
-				placeholder: ''
-			};
+				status: "required",
+				label: "",
+				placeholder: "",
+			}
 		}
 
-		return field;
+		return field
 	}
 }
 
-export default new CheckoutFieldsService();
+export default new CheckoutFieldsService()

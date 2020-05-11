@@ -1,15 +1,15 @@
 {
-	"compilerOptions": {
-		"module": "commonjs",
-		"noImplicitReturns": false,
-		"noUnusedLocals": false,
-		"outDir": "build",
-		"sourceMap": true,
-		"strict": false,
-		"target": "es2017",
-		"esModuleInterop": true,
-		"removeComments": true
-	},
-	"compileOnSave": true,
-	"include": ["src"]
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "outDir": "build",
+    "sourceMap": true,
+    "strict": false,
+    "target": "es2017",
+    "esModuleInterop": true,
+    "removeComments": true
+  },
+  "compileOnSave": true,
+  "include": ["src"]
 }
