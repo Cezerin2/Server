@@ -1,9 +1,9 @@
 import security from "../lib/security"
-import SettingsService from "../services/settings/settings"
-import ImportSettingsService from "../services/settings/import"
+import CheckoutFieldsService from "../services/settings/checkoutFields"
 import EmailSettingsService from "../services/settings/email"
 import EmailTemplatesService from "../services/settings/emailTemplates"
-import CheckoutFieldsService from "../services/settings/checkoutFields"
+import ImportSettingsService from "../services/settings/import"
+import SettingsService from "../services/settings/settings"
 
 class SettingsRoute {
   constructor(router) {

@@ -1,6 +1,6 @@
+import settings from "../../lib/settings"
 import LocalService from "./local"
 import S3Service from "./s3"
-import settings from "../../lib/settings"
 
 const service = settings.assetServer.type === "s3" ? S3Service : LocalService
 

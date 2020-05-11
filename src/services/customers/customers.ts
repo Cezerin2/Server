@@ -1,10 +1,9 @@
 import { ObjectID } from "mongodb"
 import { db } from "../../lib/mongo"
 import parse from "../../lib/parse"
+import security from "../../lib/security"
 import webhooks from "../../lib/webhooks"
 import CustomerGroupsService from "./customerGroups"
-import AuthHeader from "../../lib/auth-header"
-import security from "../../lib/security"
 
 class CustomersService {
   getFilter(params = {}) {

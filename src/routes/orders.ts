@@ -1,10 +1,10 @@
 import security from "../lib/security"
-import OrdersService from "../services/orders/orders"
-import OrderAddressService from "../services/orders/orderAddress"
-import OrderItemsService from "../services/orders/orderItems"
-import OrdertTansactionsService from "../services/orders/orderTransactions"
-import OrdertDiscountsService from "../services/orders/orderDiscounts"
 import PaymentGateways from "../paymentGateways"
+import OrderAddressService from "../services/orders/orderAddress"
+import OrdertDiscountsService from "../services/orders/orderDiscounts"
+import OrderItemsService from "../services/orders/orderItems"
+import OrdersService from "../services/orders/orders"
+import OrdertTansactionsService from "../services/orders/orderTransactions"
 
 class OrdersRoute {
   constructor(router) {

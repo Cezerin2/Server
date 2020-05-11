@@ -1,8 +1,8 @@
 import security from "../lib/security"
-import ThemeService from "../services/theme/theme"
-import ThemeSettingsService from "../services/theme/settings"
 import ThemeAssetsService from "../services/theme/assets"
 import ThemePlaceholdersService from "../services/theme/placeholders"
+import ThemeSettingsService from "../services/theme/settings"
+import ThemeService from "../services/theme/theme"
 
 class ThemeRoute {
   constructor(router) {

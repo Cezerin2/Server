@@ -1,12 +1,12 @@
 import { ObjectID } from "mongodb"
 import url from "url"
-import AssertService from "../assets/assets"
-import settings from "../../lib/settings"
 import { db } from "../../lib/mongo"
-import utils from "../../lib/utils"
 import parse from "../../lib/parse"
-import CategoriesService from "./productCategories"
+import settings from "../../lib/settings"
+import utils from "../../lib/utils"
+import AssertService from "../assets/assets"
 import SettingsService from "../settings/settings"
+import CategoriesService from "./productCategories"
 
 class ProductsService {
   async getProducts(params = {}) {

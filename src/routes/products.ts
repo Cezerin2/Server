@@ -1,9 +1,9 @@
 import security from "../lib/security"
-import ProductsService from "../services/products/products"
+import ProductImagesService from "../services/products/images"
 import ProductOptionsService from "../services/products/options"
 import ProductOptionValuesService from "../services/products/optionValues"
+import ProductsService from "../services/products/products"
 import ProductVariantsService from "../services/products/variants"
-import ProductImagesService from "../services/products/images"
 
 class ProductsRoute {
   constructor(router) {

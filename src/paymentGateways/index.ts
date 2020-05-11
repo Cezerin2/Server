@@ -1,8 +1,8 @@
 import OrdersService from "../services/orders/orders"
-import SettingsService from "../services/settings/settings"
 import PaymentGatewaysService from "../services/settings/paymentGateways"
-import PayPalCheckout from "./PayPalCheckout"
+import SettingsService from "../services/settings/settings"
 import LiqPay from "./LiqPay"
+import PayPalCheckout from "./PayPalCheckout"
 import StripeElements from "./StripeElements"
 
 const getOptions = orderId =>

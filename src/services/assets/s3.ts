@@ -1,9 +1,8 @@
 import AWS from "aws-sdk"
-import fs from "fs"
 import formidable from "formidable"
-import path from "path"
-import utils from "../../lib/utils"
+import fs from "fs"
 import settings from "../../lib/settings"
+import utils from "../../lib/utils"
 
 const BUCKET = settings.assetServer.bucket
 const s3 = new AWS.S3()

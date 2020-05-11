@@ -1,13 +1,11 @@
 import { ObjectID } from "mongodb"
-import path from "path"
 import url from "url"
-import formidable from "formidable"
+import { db } from "../../lib/mongo"
+import parse from "../../lib/parse"
 import settings from "../../lib/settings"
+import utils from "../../lib/utils"
 import AssetService from "../assets/assets"
 import SettingsService from "../settings/settings"
-import { db } from "../../lib/mongo"
-import utils from "../../lib/utils"
-import parse from "../../lib/parse"
 
 class ProductCategoriesService {
   getFilter(params = {}) {

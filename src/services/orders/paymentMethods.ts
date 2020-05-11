@@ -1,8 +1,8 @@
 import { ObjectID } from "mongodb"
 import { db } from "../../lib/mongo"
 import parse from "../../lib/parse"
-import PaymentMethodsLightService from "./paymentMethodsLight"
 import OrdersService from "./orders"
+import PaymentMethodsLightService from "./paymentMethodsLight"
 
 class PaymentMethodsService {
   getFilter(params = {}) {

@@ -1,8 +1,8 @@
-import winston from "winston"
 import nodemailer from "nodemailer"
 import smtpTransport from "nodemailer-smtp-transport"
-import settings from "./settings"
+import winston from "winston"
 import EmailSettingsService from "../services/settings/email"
+import settings from "./settings"
 
 const SMTP_FROM_CONFIG_FILE = {
   host: settings.smtpServer.host,

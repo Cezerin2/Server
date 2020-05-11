@@ -1,11 +1,8 @@
-import path from "path"
 import url from "url"
-import formidable from "formidable"
-import AssetService from "../assets/assets"
-import settings from "../../lib/settings"
-import utils from "../../lib/utils"
 import { db } from "../../lib/mongo"
 import parse from "../../lib/parse"
+import settings from "../../lib/settings"
+import AssetService from "../assets/assets"
 
 const ThemeAssetsPath = `${settings.assetServer.themeImageUploadPath}`
 

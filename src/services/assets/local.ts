@@ -1,8 +1,8 @@
-import fse from "fs-extra"
 import formidable from "formidable"
+import fse from "fs-extra"
 import path from "path"
-import utils from "../../lib/utils"
 import settings from "../../lib/settings"
+import utils from "../../lib/utils"
 
 const ResolveSystemPath = (dir, file = "") => {
   const BaseAssetPath = `${settings.assetServer.localBasePath}`

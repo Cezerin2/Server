@@ -1,10 +1,10 @@
 import { ObjectID } from "mongodb"
 import url from "url"
-import settings from "../../lib/settings"
 import { db } from "../../lib/mongo"
 import parse from "../../lib/parse"
-import SettingsService from "../settings/settings"
+import settings from "../../lib/settings"
 import AssetService from "../assets/assets"
+import SettingsService from "../settings/settings"
 
 class ProductImagesService {
   getErrorMessage(err) {
