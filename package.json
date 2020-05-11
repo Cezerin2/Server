@@ -14,7 +14,7 @@
   "bugs": "https://github.com/Cezerin2/cezerin2/issues",
   "license": "Unlicense",
   "author": "Restmount, Himadu and Community",
-  "main": "src/index.js",
+  "main": "src/index.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/Cezerin2/cezerin2"
@@ -22,17 +22,21 @@
   "scripts": {
     "compile": "tsc",
     "test": "jest",
+    "dev": "concurrently \"tsc -w \" \"nodemon -r esm build/index.js\"",
     "setup": "node -r esm build/setup.js",
     "theme:install": "./scripts/theme-install.sh",
     "theme:export": "./scripts/theme-export.sh",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix .",
+    "lint": "eslint --fix . && prettier --write . && jest && tsc",
     "prettier": "prettier --write \"src/**/*.js\" \"theme/**/*.js\"",
     "precommit": "lint-staged",
     "start": "node -r esm build/index.js"
   },
   "lint-staged": {
     "*.js": [
+      "prettier --write .",
+      "git add ."
+    ],
+    "*": [
       "prettier --write .",
       "git add ."
     ]
@@ -49,7 +53,7 @@
     "express": "^4.17.1",
     "express-jwt": "^5.3.3",
     "formidable": "^1.2.2",
-    "fs-extra": "^8.0.0",
+    "fs-extra": "^9.0.0",
     "handlebars": "^4.7.6",
     "helmet": "^3.22.0",
     "husky": "^4.2.3",
@@ -67,22 +71,26 @@
     "sitemap": "^6.1.0",
     "slug": "^2.1.1",
     "stripe": "^8.39.1",
-    "typescript": "^3.8.3",
     "ua-parser-js": "^0.7.21",
     "winston": "^3.2.1",
     "ws": "^7.2.3"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.0",
-    "@babel/polyfill": "^7.8.7",
-    "@babel/preset-env": "^7.9.5",
-    "@babel/preset-react": "^7.9.4",
+    "@types/bcrypt": "^3.0.0",
+    "@types/express": "^4.17.6",
+    "@types/express-jwt": "^0.0.42",
+    "@types/formidable": "^1.0.31",
+    "@types/fs-extra": "^8.1.0",
     "@types/jest": "^25.2.1",
-    "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.1.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "clean-webpack-plugin": "^3.0.0",
+    "@types/jsonwebtoken": "^8.3.9",
+    "@types/lru-cache": "^5.1.0",
+    "@types/mongodb": "^3.5.16",
+    "@types/node-fetch": "^2.5.7",
+    "@types/nodemailer": "^6.4.0",
+    "@types/slug": "^0.9.1",
+    "@types/ws": "^7.2.4",
+    "@typescript-eslint/eslint-plugin": "^2.31.0",
+    "@typescript-eslint/parser": "^2.31.0",
     "concurrently": "^5.1.0",
     "eslint": "^7.0.0",
     "eslint-config-airbnb": "^18.1.0",
@@ -94,14 +102,10 @@
     "html-webpack-plugin": "^4.0.4",
     "jest": "^26.0.1",
     "lint-staged": "^10.1.2",
-    "node-sass": "^4.13.1",
     "nodemon": "^2.0.3",
     "postcss-loader": "^3.0.0",
     "prettier": "^2.0.4",
-    "sass-loader": "^8.0.2",
-    "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11",
-    "workbox-webpack-plugin": "^5.1.2"
+    "typescript": "^3.8.3"
   },
   "engines": {
     "node": ">= 8.0.0",
