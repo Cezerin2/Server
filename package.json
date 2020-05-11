@@ -50,7 +50,7 @@
     "express": "^4.17.1",
     "express-jwt": "^5.3.3",
     "formidable": "^1.2.2",
-    "fs-extra": "^9.0.0",
+    "fs-extra": "^8.0.0",
     "handlebars": "^4.7.6",
     "helmet": "^3.22.0",
     "husky": "^4.2.3",
