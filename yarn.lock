@@ -631,6 +631,13 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.4.tgz#38fd73ddfd9b55abb1e1b2ed578cb55bd7b7d339"
   integrity sha512-8+KAKzEvSUdeo+kmqnKrqgeE+LcA0tjYWFY7RPProVYwnqDjukzO+3b6dLD56rYX5TdWejnEOLJYOIeh4CXKuA==
 
+"@types/jsonwebtoken@^8.3.9":
+  version "8.3.9"
+  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.3.9.tgz#48da9a49997e4eb046733e6878f583d7448f0594"
+  integrity sha512-00rI8GbOKuRtoYxltFSRTVUXCRLbuYwln2/nUMPtFU9JGS7if+nnmLjeoFGmqsNCmblPLAaeQ/zMLVsHr6T5bg==
+  dependencies:
+    "@types/node" "*"
+
 "@types/mime@*":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.1.tgz#dc488842312a7f075149312905b5e3c0b054c79d"
