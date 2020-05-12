@@ -22,7 +22,7 @@ class FilesRoute {
       this.uploadFile.bind(this)
     )
     this.router.delete(
-      "/v1/files/:file",
+      `/v1/files/${settings.assetServer.filesUploadPath}/:file`,
       security.checkUserScope.bind(this, security.scope.WRITE_FILES),
       this.deleteFile.bind(this)
     )

@@ -29,8 +29,8 @@ const Config = {
 
   // assest
   assetServer: {
-    type: enviroment.ASSETS_TYPE || "local", // 'local' | 's3'
-    domain: enviroment.ASSETS_BASE_URL || "http://localhost:3001", // add localBasePath to S3 domain
+    type: process.env.ASSETS_TYPE || "local", // 'local' | 's3' | 'minio'
+    domain: process.env.ASSETS_BASE_URL || "http://localhost:3001", // add localBasePath to S3 domain
     localBasePath: "public/content",
     categoriesUploadPath: "images/categories",
     productsUploadPath: "images/products",
@@ -39,6 +39,15 @@ const Config = {
 
     // S3 Config
     bucket: "cezerin2-asset-test",
+
+    //Minio Config
+    minioHost: 'minio',
+    minioPort: 9000,
+    minioAccessKey: process.env.MINIO_ACCESS_KEY || '',
+    minioSecretKey: process.env.MINIO_SECRET_KEY || '',
+
+    // disable thumbnail resizing suffix, need for s3/minio work because they are no under nginx
+    disableImageResize: process.env.DISABLE_IMAGE_RESIZE || false
   },
 
   // smpt server parameters
