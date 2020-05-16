@@ -1,8 +1,18 @@
 import settings from "../../lib/settings"
 import LocalService from "./local"
 import S3Service from "./s3"
+import MinioService from "./minio"
 
-const service = settings.assetServer.type === "s3" ? S3Service : LocalService
+let service;
+
+if (settings.assetServer.type === 's3') {
+  service = S3Service;
+} else if (settings.assetServer.type === 'minio') {
+  service = MinioService;
+} else {
+  service = LocalService;
+}
+
 
 class AssetsService {
   getFileData(path, fileName) {

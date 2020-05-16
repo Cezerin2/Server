@@ -12,23 +12,25 @@ const upload = (file_name, file) => {
     Bucket: BUCKET,
     Key: file_name,
     Body: file,
-  }
+  };
+
   return new Promise((resolve, reject) => {
     s3.putObject(s3Config, (err, resp) => {
       if (err) {
         console.log(err)
-        reject({ success: false, data: err })
+        reject({success: false, data: err})
       }
-      resolve({ sucess: true, data: resp })
+
+      resolve({success: true, data: resp})
     })
   })
-}
+};
 
 class S3Service {
   getFileData(path, fileName) {
     const filePath = `${path}/${fileName}`
 
-    return s3.headObject({ Key: filePath, Bucket: BUCKET }, (err, data) => {
+    return s3.headObject({Key: filePath, Bucket: BUCKET}, (err, data) => {
       if (err) {
         return null
       }
@@ -43,14 +45,14 @@ class S3Service {
 
   getFilesData(path, files) {
     return files
-      .map(fileName => this.getFileData(fileName))
+      .map(fileName => this.getFileData(path, fileName))
       .filter(fileData => fileData !== null)
       .sort((a, b) => a.modified - b.modified)
   }
 
   getFiles(path) {
     return new Promise((resolve, reject) => {
-      s3.ListObjects({ Key: path, Bucket: BUCKET }, (err, data) => {
+      s3.listObjects({ Key: path, Bucket: BUCKET }, (err, data) => {
         if (err) {
           return reject(err)
         }
@@ -66,7 +68,7 @@ class S3Service {
 
   deleteFile(path, fileName) {
     return new Promise((resolve, reject) => {
-      const params = {
+      const params: any = {
         Bucket: BUCKET,
         Delete: {
           Objects: [
@@ -91,7 +93,7 @@ class S3Service {
   }
 
   emptyDir(path) {
-    let params = {
+    let params: any = {
       Bucket: BUCKET,
       Prefix: path,
     }

@@ -360,7 +360,7 @@ ajaxRouter.post("/register", async (req, res, next) => {
       return false
     }
 
-    ;(async () => {
+    (async () => {
       // decode token parts and check if valid email is the second part of them
       const firstName = await AuthHeader.decodeUserLoginAuth(
         requestTokenArray[0]
