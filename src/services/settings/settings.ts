@@ -204,6 +204,8 @@ class SettingsService {
       data.domain = ""
     }
 
+    data.assetServerDomain = settings.assetServer.domain;
+
     if (data.logo_file && data.logo_file.length > 0) {
       data.logo = url.resolve(
         settings.assetServer.domain,
