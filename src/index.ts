@@ -1,3 +1,4 @@
+import { ApolloServer } from "apollo-server-express"
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 import express from "express"
@@ -6,6 +7,8 @@ import responseTime from "response-time"
 import winston from "winston"
 import ajaxRouter from "./ajaxRouter"
 import apiRouter from "./apiRouter"
+import resolvers from "./graphql/resolvers/index"
+import typeDefs from "./graphql/typeDefs/index"
 import dashboardWebSocket from "./lib/dashboardWebSocket"
 import logger from "./lib/logger"
 import security from "./lib/security"
@@ -56,6 +59,16 @@ app.use("/ajax", ajaxRouter)
 app.use("/api", apiRouter)
 app.use(logger.sendResponse)
 
+//  graphql
+
+const graphServer = new ApolloServer({ typeDefs, resolvers })
+
+graphServer.applyMiddleware({ app })
+
+app.listen({ port: 4000 }, () =>
+  console.log("Now browse to http://localhost:4000" + graphServer.graphqlPath)
+)
+// end of graphql
 const server = app.listen(settings.apiListenPort, () => {
   const serverAddress = server.address()
   winston.info(`API running at http://localhost:${serverAddress.port}`)
