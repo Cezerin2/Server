@@ -365,7 +365,7 @@ ajaxRouter.post("/register", async (req, res) => {
     // if requestToken array has no splitable part response token is wrong
     if (requestTokenArray.length < 2) {
       data.isRightToken = false
-      res.status("200").send(data)
+      res.status(200).send(data)
       return false
     }
 
@@ -463,7 +463,7 @@ ajaxRouter.post("/register", async (req, res) => {
             shop_name: settings.store_name,
           }),
         }),
-        res.status("200").send(data),
+        res.status(200).send(data),
       ])
     }
     return false
@@ -537,7 +537,7 @@ ajaxRouter.put("/customer-account", async (req, res) => {
         if (customerData.saved_addresses === 0) {
           let objJsonB64 = JSON.stringify(customerDataObj)
           objJsonB64 = Buffer.from(objJsonB64).toString("base64")
-          res.status("200").send(JSON.stringify(objJsonB64))
+          res.status(200).send(JSON.stringify(objJsonB64))
           return false
         }
 
@@ -553,12 +553,12 @@ ajaxRouter.put("/customer-account", async (req, res) => {
           (error, result) => {
             if (error) {
               // alert
-              res.status("200").send(error)
+              res.status(200).send(error)
             }
             customerDataObj.order_statuses = result
             let objJsonB64 = JSON.stringify(customerDataObj)
             objJsonB64 = Buffer.from(objJsonB64).toString("base64")
-            res.status("200").send(JSON.stringify(objJsonB64))
+            res.status(200).send(JSON.stringify(objJsonB64))
           }
         )
       }
