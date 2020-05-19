@@ -12,25 +12,25 @@ const upload = (file_name, file) => {
     Bucket: BUCKET,
     Key: file_name,
     Body: file,
-  };
+  }
 
   return new Promise((resolve, reject) => {
     s3.putObject(s3Config, (err, resp) => {
       if (err) {
         console.log(err)
-        reject({success: false, data: err})
+        reject({ success: false, data: err })
       }
 
-      resolve({success: true, data: resp})
+      resolve({ success: true, data: resp })
     })
   })
-};
+}
 
 class S3Service {
   getFileData(path, fileName) {
     const filePath = `${path}/${fileName}`
 
-    return s3.headObject({Key: filePath, Bucket: BUCKET}, (err, data) => {
+    return s3.headObject({ Key: filePath, Bucket: BUCKET }, (err, data) => {
       if (err) {
         return null
       }
