@@ -31,7 +31,7 @@ cd src
 
 ```shell
 npm i
-npm compile
+npm run compile
 ```
 
 - **Setup database**
