@@ -155,14 +155,12 @@ ajaxRouter.post("/reset-password", async (req, res, next) => {
 
     // update customer password after checking customer id
     if ("id" in req.body) {
-      await api.customers
-        .update(userId, customerDraft)
-        .then(({ status, json }) => {
-          data.status = true
-          data.id = userId
-          data.verified = true
-          return res.status(status).send(data)
-        })
+      await api.customers.update(userId, customerDraft).then(({ status }) => {
+        data.status = true
+        data.id = userId
+        data.verified = true
+        return res.status(status).send(data)
+      })
       return false
     }
 
@@ -238,7 +236,7 @@ ajaxRouter.post("/forgot-password", async (req, res, next) => {
 
 ajaxRouter.post("/customer-account", async (req, res, next) => {
   const customerData = {
-    token: "",
+    token: { userId: String },
     authenticated: false,
     customer_settings: null,
     order_statuses: null,
@@ -380,7 +378,7 @@ ajaxRouter.post("/register", async (req, res, next) => {
       ) {
         // if (requestTokenArray.length < 1) {
         data.isRightToken = false
-        res.status("200").send(data)
+        res.status(200).send(data)
         return false
       }
 
@@ -472,7 +470,7 @@ ajaxRouter.post("/register", async (req, res, next) => {
   }
 })
 
-ajaxRouter.put("/customer-account", async (req, res, next) => {
+ajaxRouter.put("/customer-account", async (req, res) => {
   const customerData = req.body
   const token = AuthHeader.decodeUserLoginAuth(req.body.token)
   const userId = JSON.stringify(token.userId).replace(/["']/g, "")
@@ -559,7 +557,6 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
 
 ajaxRouter.post("/cart/items", (req, res, next) => {
   const isHttps = req.protocol === "https"
-  const CART_COOKIE_OPTIONS = getCartCookieOptions(isHttps)
 
   const { order_id } = req.signedCookies
   const item = req.body
@@ -579,7 +576,15 @@ ajaxRouter.post("/cart/items", (req, res, next) => {
         ip: getIP(req),
         user_agent: getUserAgent(req),
       },
-      shipping_address: {},
+      shipping_address: {
+        address1: {},
+        address2: {},
+        country: {},
+        state: {},
+        city: {},
+      },
+      item_tax_included: {},
+      tax_rate: {},
     }
 
     api.settings
@@ -601,7 +606,7 @@ ajaxRouter.post("/cart/items", (req, res, next) => {
       .then(orderDraft => {
         api.orders.create(orderDraft).then(orderResponse => {
           const orderId = orderResponse.json.id
-          res.cookie("order_id", orderId, CART_COOKIE_OPTIONS)
+          res.cookie("order_id", orderId, getCartCookieOptions(isHttps))
           api.orders.items
             .create(orderId, item)
             .then(cartResponse => fillCartItems(cartResponse))
@@ -644,7 +649,7 @@ ajaxRouter.put("/cart/items/:item_id", (req, res, next) => {
   }
 })
 
-ajaxRouter.put("/cart/checkout", (req, res, next) => {
+ajaxRouter.put("/cart/checkout", (req, res) => {
   const { order_id } = req.signedCookies
 
   if (order_id) {
