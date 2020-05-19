@@ -81,6 +81,11 @@ class WebhooksService {
   getValidDocumentForInsert(data) {
     const webhook = {
       date_created: new Date(),
+      description: {},
+      url: {},
+      secret: {},
+      enabled: {},
+      events: {},
     }
 
     webhook.description = parse.getString(data.description)
@@ -99,6 +104,11 @@ class WebhooksService {
 
     const webhook = {
       date_updated: new Date(),
+      description: {},
+      url: {},
+      secret: {},
+      enabled: {},
+      events: {},
     }
 
     if (data.description !== undefined) {
