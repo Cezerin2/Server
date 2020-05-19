@@ -149,7 +149,7 @@ class ProductVariantsService {
 
           if (optionToChange.value_id.toString() === valueId) {
             // don't save same value
-            return option
+            return options
           }
 
           options = options.map(option => {
