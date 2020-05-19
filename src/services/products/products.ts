@@ -9,7 +9,9 @@ import SettingsService from "../settings/settings"
 import CategoriesService from "./productCategories"
 
 class ProductsService {
-  async getProducts(params = {}) {
+  async getProducts(
+    params = { fields: {}, limit: {}, offset: {}, params: {} }
+  ) {
     const categories = await CategoriesService.getCategories({
       fields: "parent_id",
     })
@@ -295,7 +297,7 @@ class ProductsService {
     if (sort && sort.length > 0) {
       const fields = sort.split(",")
       return Object.assign(
-        ...fields.map(field => ({
+        ...fields.map((field: string) => ({
           [field.startsWith("-") ? field.slice(1) : field]: field.startsWith(
             "-"
           )
