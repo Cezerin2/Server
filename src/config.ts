@@ -41,13 +41,13 @@ const Config = {
     bucket: "cezerin2-asset-test",
 
     //Minio Config
-    minioHost: 'minio',
+    minioHost: "minio",
     minioPort: 9000,
-    minioAccessKey: enviroment.MINIO_ACCESS_KEY || '',
-    minioSecretKey: enviroment.MINIO_SECRET_KEY || '',
+    minioAccessKey: enviroment.MINIO_ACCESS_KEY || "",
+    minioSecretKey: enviroment.MINIO_SECRET_KEY || "",
 
     // disable thumbnail resizing suffix, need for s3/minio work because they are no under nginx
-    disableImageResize: enviroment.DISABLE_IMAGE_RESIZE || false
+    disableImageResize: enviroment.DISABLE_IMAGE_RESIZE || false,
   },
 
   // smpt server parameters
@@ -75,7 +75,7 @@ const Config = {
 
   // cost factor, controls how much time is needed to calculate a single BCrypt hash
   // for production: recommended salRounds > 12
-  saltRounds: enviroment.SALT_ROUNDS || 12,
+  saltRounds: parseInt(enviroment.SALT_ROUNDS) || 12,
 
   developerMode: enviroment.DEVELOPER_MODE || true,
 }
