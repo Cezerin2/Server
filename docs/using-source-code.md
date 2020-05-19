@@ -5,17 +5,17 @@
 - **Clone Git repository**
 
 ```shell
-git clone https://github.com/cezerin2/cezerin2
+git clone https://github.com/Cezerin2/cezerin2
 cd cezerin2
 ```
 
 - **Change settings**
 
 ```shell
-cd config
+cd src
 ```
 
-- **Open `server.js` and change**
+- **Open `config.ts` and change**
 
   - MongoDB Creditionals
   - SMTP Settings
@@ -31,6 +31,7 @@ cd config
 
 ```shell
 npm i
+npm compile
 ```
 
 - **Setup database**
@@ -86,10 +87,10 @@ git clone https://github.com/cezerin2/cezerin2-store
 - **Change settings**
 
 ```shell
-cd cezerin2-store/config
+cd cezerin2-store/src
 ```
 
-- **Open `store.js` and change**
+- **Open `config.tsx` and change**
 
   - JWT and Cookie Secret Key
 
@@ -158,6 +159,7 @@ npm i
 - **Build project**
 
 ```shell
+npm run compile
 npm run build
 ```
 
