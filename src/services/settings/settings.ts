@@ -77,7 +77,33 @@ class SettingsService {
       return new Error("Required fields are missing")
     }
 
-    const settings = {}
+    const settings = {
+      store_name: {},
+      language: {},
+      currency_code: {},
+      domain: {},
+      currency_symbol: {},
+      currency_format: {},
+      thousand_separator: {},
+      decimal_separator: {},
+      decimal_number: {},
+      tax_rate: {},
+      tax_included: {},
+      timezone: {},
+      date_format: {},
+      time_format: {},
+      default_shipping_country: {},
+      default_shipping_state: {},
+      default_shipping_city: {},
+      default_product_sorting: {},
+      product_fields: {},
+      products_limit: {},
+      weight_unit: {},
+      length_unit: {},
+      logo_file: {},
+      hide_billing_address: {},
+      order_confirmation_copy_to: {},
+    }
 
     if (data.store_name) {
       settings.store_name = parse.getString(data.store_name)
@@ -204,7 +230,7 @@ class SettingsService {
       data.domain = ""
     }
 
-    data.assetServerDomain = settings.assetServer.domain;
+    data.assetServerDomain = settings.assetServer.domain
 
     if (data.logo_file && data.logo_file.length > 0) {
       data.logo = url.resolve(
