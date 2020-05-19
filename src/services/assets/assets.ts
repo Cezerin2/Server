@@ -3,16 +3,15 @@ import LocalService from "./local"
 import S3Service from "./s3"
 import MinioService from "./minio"
 
-let service;
+let service
 
-if (settings.assetServer.type === 's3') {
-  service = S3Service;
-} else if (settings.assetServer.type === 'minio') {
-  service = MinioService;
+if (settings.assetServer.type === "s3") {
+  service = S3Service
+} else if (settings.assetServer.type === "minio") {
+  service = MinioService
 } else {
-  service = LocalService;
+  service = LocalService
 }
-
 
 class AssetsService {
   getFileData(path, fileName) {
