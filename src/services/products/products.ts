@@ -9,7 +9,9 @@ import SettingsService from "../settings/settings"
 import CategoriesService from "./productCategories"
 
 class ProductsService {
-  async getProducts(params = {}) {
+  async getProducts(
+    params = { fields: {}, limit: {}, offset: {}, params: {} }
+  ) {
     const categories = await CategoriesService.getCategories({
       fields: "parent_id",
     })
@@ -295,7 +297,7 @@ class ProductsService {
     if (sort && sort.length > 0) {
       const fields = sort.split(",")
       return Object.assign(
-        ...fields.map(field => ({
+        ...fields.map((field: string) => ({
           [field.startsWith("-") ? field.slice(1) : field]: field.startsWith(
             "-"
           )
@@ -684,6 +686,37 @@ class ProductsService {
         width: 0,
         height: 0,
       },
+      name: {},
+      description: {},
+      meta_description: {},
+      meta_title: {},
+      tags: {},
+      attributes: {},
+      attenabledributes: {},
+      enabled: {},
+      discontinued: {},
+      slug: { length },
+      sku: {},
+      code: {},
+      tax_class: {},
+      related_product_ids: {},
+      prices: {},
+      cost_price: {},
+      regular_price: {},
+      sale_price: {},
+      quantity_inc: {},
+      weight: {},
+      quantity_min: {},
+      stock_quantity: {},
+      position: {},
+      date_stock_expected: {},
+      date_sale_from: {},
+      date_sale_to: {},
+      stock_tracking: {},
+      stock_preorder: {},
+      stock_backorder: {},
+      category_id: {},
+      category_ids: {},
     }
 
     product.name = parse.getString(data.name)
