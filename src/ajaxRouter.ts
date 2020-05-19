@@ -360,7 +360,7 @@ ajaxRouter.post("/register", async (req, res, next) => {
       return false
     }
 
-    (async () => {
+    ;(async () => {
       // decode token parts and check if valid email is the second part of them
       const firstName = await AuthHeader.decodeUserLoginAuth(
         requestTokenArray[0]
@@ -510,7 +510,7 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
   try {
     // update customer
     await db.collection("customers").updateMany(
-      { _id: ObjectID(userId) },
+      { _id: new ObjectID(userId) },
       {
         $set: customerDraftObj,
       },
@@ -518,7 +518,7 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
       async (error, result) => {
         if (error) {
           // alert
-          res.status("200").send(error)
+          res.status(200).send(error)
         }
         customerDataObj.customer_settings = result
         customerDataObj.customer_settings.password = "*******"
@@ -534,7 +534,7 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
 
         // update orders
         await db.collection("orders").updateMany(
-          { customer_id: ObjectID(userId) },
+          { customer_id: new ObjectID(userId) },
           {
             $set: {
               shipping_address: customerData.shipping_address,
