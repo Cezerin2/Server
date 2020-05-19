@@ -440,8 +440,8 @@ const createAllIndexes = async db => {
   const pagesIndexes = await db.collection("pages").listIndexes().toArray()
 
   if (pagesIndexes.length === 1) {
-    await createIndex(db, "pages", { enabled: 1 })
-    await createIndex(db, "pages", { slug: 1 })
+    await createIndex(db, "pages", { enabled: 1 }, null)
+    await createIndex(db, "pages", { slug: 1 }, null)
     winston.info("- Created indexes for: pages")
   }
 
@@ -451,8 +451,8 @@ const createAllIndexes = async db => {
     .toArray()
 
   if (productCategoriesIndexes.length === 1) {
-    await createIndex(db, "productCategories", { enabled: 1 })
-    await createIndex(db, "productCategories", { slug: 1 })
+    await createIndex(db, "productCategories", { enabled: 1 }, null)
+    await createIndex(db, "productCategories", { slug: 1 }, null)
     winston.info("- Created indexes for: productCategories")
   }
 
@@ -462,14 +462,19 @@ const createAllIndexes = async db => {
     .toArray()
 
   if (productsIndexes.length === 1) {
-    await createIndex(db, "products", { slug: 1 })
-    await createIndex(db, "products", { enabled: 1 })
-    await createIndex(db, "products", { category_id: 1 })
-    await createIndex(db, "products", { sku: 1 })
-    await createIndex(db, "products", {
-      "attributes.name": 1,
-      "attributes.value": 1,
-    })
+    await createIndex(db, "products", { slug: 1 }, null)
+    await createIndex(db, "products", { enabled: 1 }, null)
+    await createIndex(db, "products", { category_id: 1 }, null)
+    await createIndex(db, "products", { sku: 1 }, null)
+    await createIndex(
+      db,
+      "products",
+      {
+        "attributes.name": 1,
+        "attributes.value": 1,
+      },
+      null
+    )
     await createIndex(
       db,
       "products",
@@ -488,12 +493,12 @@ const createAllIndexes = async db => {
     .toArray()
 
   if (customersIndexes.length === 1) {
-    await createIndex(db, "customers", { group_id: 1 })
+    await createIndex(db, "customers", { group_id: 1 }, null)
     await createIndex(db, "customers", { email: 1 }, { unique: true })
-    await createIndex(db, "customers", { mobile: 1 })
-    await createIndex(db, "customers", { first_name: 1 })
-    await createIndex(db, "customers", { last_name: 1 })
-    await createIndex(db, "customers", { password: 1 })
+    await createIndex(db, "customers", { mobile: 1 }, null)
+    await createIndex(db, "customers", { first_name: 1 }, null)
+    await createIndex(db, "customers", { last_name: 1 }, null)
+    await createIndex(db, "customers", { password: 1 }, null)
     await createIndex(
       db,
       "customers",
@@ -509,14 +514,14 @@ const createAllIndexes = async db => {
   const ordersIndexes = await db.collection("orders").listIndexes().toArray()
 
   if (ordersIndexes.length === 1) {
-    await createIndex(db, "orders", { draft: 1 })
-    await createIndex(db, "orders", { number: 1 })
-    await createIndex(db, "orders", { customer_id: 1 })
-    await createIndex(db, "orders", { email: 1 })
-    await createIndex(db, "orders", { mobile: 1 })
-    await createIndex(db, "orders", { first_name: 1 })
-    await createIndex(db, "orders", { last_name: 1 })
-    await createIndex(db, "orders", { password: 1 })
+    await createIndex(db, "orders", { draft: 1 }, null)
+    await createIndex(db, "orders", { number: 1 }, null)
+    await createIndex(db, "orders", { customer_id: 1 }, null)
+    await createIndex(db, "orders", { email: 1 }, null)
+    await createIndex(db, "orders", { mobile: 1 }, null)
+    await createIndex(db, "orders", { first_name: 1 }, null)
+    await createIndex(db, "orders", { last_name: 1 }, null)
+    await createIndex(db, "orders", { password: 1 }, null)
     await createIndex(
       db,
       "orders",
