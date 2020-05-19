@@ -198,10 +198,6 @@ class PaymentMethodsService {
   }
 
   getValidDocumentForUpdate(id, data) {
-    if (Object.keys(data).length === 0) {
-      return new Error("Required fields are missing")
-    }
-
     const method = {}
 
     if (data.name !== undefined) {
@@ -226,6 +222,10 @@ class PaymentMethodsService {
 
     if (data.gateway !== undefined) {
       method.gateway = parse.getString(data.gateway)
+    }
+    
+    if (Object.keys(method).length === 0) {
+      return new Error("Required fields are missing")
     }
 
     return method
