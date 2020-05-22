@@ -23,7 +23,7 @@ class AppSettingsService {
         },
         { upsert: true }
       )
-      .then((res: any) => this.getSettings(appKey))
+      .then(() => this.getSettings(appKey))
   }
 }
 
