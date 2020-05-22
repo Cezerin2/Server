@@ -245,39 +245,38 @@ ajaxRouter.post("/forgot-password", async (req, res) => {
   })
 })
 
-ajaxRouter.post("/customer-account", async (req, res) => {
-  const customerData = {
-    token: { userId: String },
+ajaxRouter.post("/customer-account", async (req, res, next) => {
+  let customerData = {
+    token: "",
     authenticated: false,
     customer_settings: null,
-    order_statuses: null,
+    order_statuses: null
   }
 
   if (req.body.token) {
     customerData.token = AuthHeader.decodeUserLoginAuth(req.body.token)
     if (customerData.token.userId !== undefined) {
-      const userId = JSON.stringify(customerData.token.userId).replace(
-        /["']/g,
-        ""
-      )
+      let userId = null
+      try {
+        userId = JSON.stringify(customerData.token.userId).replace(/["']/g, "")
+      } catch (erro) {}
+
       const filter = {
-        customer_id: userId,
+        customer_id: userId
       }
 
       // retrieve customer data
-      await api.customers.retrieve(userId).then(({ json }) => {
+      await api.customers.retrieve(userId).then(({ status, json }) => {
         customerData.customer_settings = json
         customerData.customer_settings.password = "*******"
         customerData.token = AuthHeader.encodeUserLoginAuth(userId)
-        customerData.authenticated = false
+        customerData.authenticated = true
       })
 
       // retrieve orders data
       await api.orders.list(filter).then(({ status, json }) => {
         customerData.order_statuses = json
-        let objJsonB64 = JSON.stringify(customerData)
-        objJsonB64 = Buffer.from(objJsonB64).toString("base64")
-        return res.status(status).send(JSON.stringify(objJsonB64))
+        return res.status(status).send(JSON.stringify(customerData))
       })
     }
   }
@@ -481,22 +480,30 @@ ajaxRouter.post("/register", async (req, res) => {
   }
 })
 
-ajaxRouter.put("/customer-account", async (req, res) => {
+ajaxRouter.put("/customer-account", async (req, res, next) => {
   const customerData = req.body
   const token = AuthHeader.decodeUserLoginAuth(req.body.token)
-  const userId = JSON.stringify(token.userId).replace(/["']/g, "")
+  let userId = null
+
+  try {
+    userId = JSON.stringify(token.userId).replace(/["']/g, "")
+  } catch (erro) {}
 
   // generate password-hash
-  const inputPassword = customerData.password
-  const salt = bcrypt.genSaltSync(saltRounds)
-  const hashPassword = bcrypt.hashSync(inputPassword, salt)
+  let inputPassword = AuthHeader.decodeUserPassword(customerData.password)
+  let hashPassword = null
+  try {
+    inputPassword = JSON.stringify(inputPassword.password).replace(/["']/g, "")
+    const salt = bcrypt.genSaltSync(saltRounds)
+    hashPassword = bcrypt.hashSync(inputPassword, salt)
+  } catch (error) {}
 
   // setup objects and filter
   const customerDataObj = {
     token: "",
     authenticated: false,
     customer_settings: null,
-    order_statuses: null,
+    order_statuses: null
   }
   const customerDraftObj = {
     full_name: `${customerData.first_name} ${customerData.last_name}`,
@@ -504,13 +511,14 @@ ajaxRouter.put("/customer-account", async (req, res) => {
     last_name: customerData.last_name,
     email: customerData.email.toLowerCase(),
     password: hashPassword,
-    addresses: [customerData.billing_address, customerData.shipping_address],
+    addresses: [customerData.billing_address, customerData.shipping_address]
   }
   const filter = {
-    email: customerData.email,
+    email: customerData.email
   }
+
   // update customer profile and addresses
-  await api.customers.list(filter).then(({ json }) => {
+  await api.customers.list(filter).then(({ status, json }) => {
     // if customer email exists already do not update
     if (json.total_count > 0) {
       delete customerDraftObj.email
@@ -519,51 +527,49 @@ ajaxRouter.put("/customer-account", async (req, res) => {
   try {
     // update customer
     await db.collection("customers").updateMany(
-      { _id: new ObjectID(userId) },
+      { _id: ObjectID(userId) },
       {
-        $set: customerDraftObj,
+        $set: customerDraftObj
       },
       { ordered: false },
       async (error, result) => {
         if (error) {
           // alert
-          res.status(200).send(error)
+          res.status("200").send(error)
         }
-        customerDataObj.customer_settings = result
+        customerDataObj.customer_settings = customerDraftObj
         customerDataObj.customer_settings.password = "*******"
-        customerDataObj.token = AuthHeader.encodeUserLoginAuth(userId)
-        customerData.authenticated = false
-
-        if (customerData.saved_addresses === 0) {
-          let objJsonB64 = JSON.stringify(customerDataObj)
-          objJsonB64 = Buffer.from(objJsonB64).toString("base64")
-          res.status(200).send(JSON.stringify(objJsonB64))
-          return false
-        }
+        customerDataObj.token = req.body.token
+        customerDataObj.authenticated = true
+        customerDataObj.loggedin_failed = false
 
         // update orders
         await db.collection("orders").updateMany(
-          { customer_id: new ObjectID(userId) },
+          { customer_id: ObjectID(userId) },
           {
             $set: {
               shipping_address: customerData.shipping_address,
-              billing_address: customerData.billing_address,
-            },
+              billing_address: customerData.billing_address
+            }
           },
-          (error, result) => {
+          async (error, result) => {
             if (error) {
               // alert
-              res.status(200).send(error)
+              res.status("200").send(error)
             }
-            customerDataObj.order_statuses = result
-            let objJsonB64 = JSON.stringify(customerDataObj)
-            objJsonB64 = Buffer.from(objJsonB64).toString("base64")
-            res.status(200).send(JSON.stringify(objJsonB64))
+
+            // retrieve customer and orders data
+            await api.orders.list(userId).then(({ status, json }) => {
+              customerDataObj.order_statuses = json
+              return res.status(status).send(JSON.stringify(customerDataObj))
+            })
           }
         )
       }
     )
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 })
 
 ajaxRouter.post("/cart/items", (req, res) => {
