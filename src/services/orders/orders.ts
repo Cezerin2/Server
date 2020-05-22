@@ -19,9 +19,37 @@ import ShippingMethodsLightService from "./shippingMethodsLight"
 const { saltRounds } = settings
 
 class OrdersService {
-  getFilter(params = {}) {
+  getFilter(
+    params = {
+      id: {},
+      status_id: {},
+      customer_id: {},
+      payment_method_id: {},
+      shipping_method_id: {},
+      closed: {},
+      cancelled: {},
+      delivered: {},
+      paid: {},
+      draft: {},
+      hold: {},
+      grand_total_min: {},
+      grand_total_max: {},
+      date_placed_min: {},
+      date_placed_max: {},
+      date_closed_min: {},
+      date_closed_max: {},
+      number: {},
+    }
+  ) {
     // TODO: sort, coupon, tag, channel
-    const filter = {}
+    const filter = {
+      _id: {},
+      status_id: {},
+      customer_id: {},
+      payment_method_id: {},
+      shipping_method_id: {},
+      number: {},
+    }
     const id = parse.getObjectIDIfValid(params.id)
     const status_id = parse.getObjectIDIfValid(params.status_id)
     const customer_id = parse.getObjectIDIfValid(params.customer_id)
