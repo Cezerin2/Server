@@ -4,7 +4,7 @@ import parse from "../../lib/parse"
 import OrdersService from "./orders"
 
 class OrderAddressService {
-  updateBillingAddress(id, data) {
+  updateBillingAddress(id: string | number | ObjectID, data: any) {
     if (!ObjectID.isValid(id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -23,10 +23,10 @@ class OrderAddressService {
         },
         { $set: billing_address }
       )
-      .then(res => OrdersService.getSingleOrder(id))
+      .then((res: any) => OrdersService.getSingleOrder(id))
   }
 
-  updateShippingAddress(id, data) {
+  updateShippingAddress(id: string | number | ObjectID, data: any) {
     if (!ObjectID.isValid(id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -45,10 +45,14 @@ class OrderAddressService {
         },
         { $set: shipping_address }
       )
-      .then(res => OrdersService.getSingleOrder(id))
+      .then(() => OrdersService.getSingleOrder(id))
   }
 
-  getValidDocumentForUpdate(id, data, addressTypeName) {
+  getValidDocumentForUpdate(
+    id: any,
+    data: { [x: string]: any },
+    addressTypeName: string
+  ) {
     const keys = Object.keys(data)
     if (keys.length === 0) {
       return new Error("Required fields are missing")
