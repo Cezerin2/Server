@@ -49,6 +49,13 @@ class OrdersService {
       payment_method_id: {},
       shipping_method_id: {},
       number: {},
+      closed: {},
+      cancelled: {},
+      delivered: {},
+      paid: {},
+      draft: {},
+      hold: {},
+      grand_total: {},
     }
     const id = parse.getObjectIDIfValid(params.id)
     const status_id = parse.getObjectIDIfValid(params.status_id)
