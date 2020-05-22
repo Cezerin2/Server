@@ -2,6 +2,7 @@ import { db } from "../../lib/mongo"
 import parse from "../../lib/parse"
 
 class ImportSettingsService {
+  defaultSettings: { apikey: string; sheetid: string; range: string }
   constructor() {
     this.defaultSettings = {
       apikey: "",
@@ -14,12 +15,12 @@ class ImportSettingsService {
     return db
       .collection("importSettings")
       .findOne()
-      .then(settings => {
+      .then((settings: any) => {
         return this.changeProperties(settings)
       })
   }
 
-  updateImportSettings(data) {
+  updateImportSettings(data: any) {
     const settings = this.getValidDocumentForUpdate(data)
     return this.insertDefaultSettingsIfEmpty().then(() =>
       db
@@ -31,7 +32,7 @@ class ImportSettingsService {
           },
           { upsert: true }
         )
-        .then(res => this.getImportSettings())
+        .then((res: any) => this.getImportSettings())
     )
   }
 
@@ -39,19 +40,23 @@ class ImportSettingsService {
     return db
       .collection("importSettings")
       .countDocuments({})
-      .then(count => {
+      .then((count: number) => {
         if (count === 0) {
           return db.collection("importSettings").insertOne(this.defaultSettings)
         }
       })
   }
 
-  getValidDocumentForUpdate(data) {
+  getValidDocumentForUpdate(data: {
+    apikey?: any
+    sheetid?: any
+    range?: any
+  }) {
     if (Object.keys(data).length === 0) {
       return new Error("Required fields are missing")
     }
 
-    const settings = {}
+    const settings = { apikey: {}, sheetid: {}, range: {} }
 
     if (data.apikey !== undefined) {
       settings.apikey = parse.getString(data.apikey)
@@ -68,7 +73,7 @@ class ImportSettingsService {
     return settings
   }
 
-  changeProperties(settings) {
+  changeProperties(settings: { _id: any }) {
     if (settings) {
       delete settings._id
     } else {
