@@ -5,9 +5,9 @@ import OrdersService from "./orders"
 import PaymentMethodsLightService from "./paymentMethodsLight"
 
 class PaymentMethodsService {
-  getFilter(params = {}) {
-    return new Promise((resolve, reject) => {
-      const filter = {}
+  getFilter(params = { id: {}, enabled: {} }) {
+    return new Promise(async resolve => {
+      const filter = { _id: {}, enabled: {} }
       const id = parse.getObjectIDIfValid(params.id)
       const enabled = parse.getBooleanIfValid(params.enabled)
 
@@ -22,91 +22,88 @@ class PaymentMethodsService {
       const order_id = parse.getObjectIDIfValid(params.order_id)
 
       if (order_id) {
-        return OrdersService.getSingleOrder(order_id).then(order => {
-          if (order) {
-            const shippingMethodObjectID = parse.getObjectIDIfValid(
-              order.shipping_method_id
-            )
+        const order = await OrdersService.getSingleOrder(order_id)
+        if (order) {
+          const shippingMethodObjectID = parse.getObjectIDIfValid(
+            order.shipping_method_id
+          )
 
-            filter.$and = []
+          filter.$and = []
+          filter.$and.push({
+            $or: [
+              {
+                "conditions.subtotal_min": 0,
+              },
+              {
+                "conditions.subtotal_min": {
+                  $lte: order.subtotal,
+                },
+              },
+            ],
+          })
+          filter.$and.push({
+            $or: [
+              {
+                "conditions.subtotal_max": 0,
+              },
+              {
+                "conditions.subtotal_max": {
+                  $gte: order.subtotal,
+                },
+              },
+            ],
+          })
+
+          if (
+            order.shipping_address.country &&
+            order.shipping_address.country.length > 0
+          ) {
             filter.$and.push({
               $or: [
                 {
-                  "conditions.subtotal_min": 0,
+                  "conditions.countries": {
+                    $size: 0,
+                  },
                 },
                 {
-                  "conditions.subtotal_min": {
-                    $lte: order.subtotal,
-                  },
+                  "conditions.countries": order.shipping_address.country,
                 },
               ],
             })
-            filter.$and.push({
-              $or: [
-                {
-                  "conditions.subtotal_max": 0,
-                },
-                {
-                  "conditions.subtotal_max": {
-                    $gte: order.subtotal,
-                  },
-                },
-              ],
-            })
-
-            if (
-              order.shipping_address.country &&
-              order.shipping_address.country.length > 0
-            ) {
-              filter.$and.push({
-                $or: [
-                  {
-                    "conditions.countries": {
-                      $size: 0,
-                    },
-                  },
-                  {
-                    "conditions.countries": order.shipping_address.country,
-                  },
-                ],
-              })
-            }
-
-            if (shippingMethodObjectID) {
-              filter.$and.push({
-                $or: [
-                  {
-                    "conditions.shipping_method_ids": {
-                      $size: 0,
-                    },
-                  },
-                  {
-                    "conditions.shipping_method_ids": shippingMethodObjectID,
-                  },
-                ],
-              })
-            }
           }
-          resolve(filter)
-        })
+
+          if (shippingMethodObjectID) {
+            filter.$and.push({
+              $or: [
+                {
+                  "conditions.shipping_method_ids": {
+                    $size: 0,
+                  },
+                },
+                {
+                  "conditions.shipping_method_ids": shippingMethodObjectID,
+                },
+              ],
+            })
+          }
+        }
+        resolve(filter)
       }
       resolve(filter)
     })
   }
 
-  getMethods(params = {}) {
-    return this.getFilter(params).then(filter =>
-      PaymentMethodsLightService.getMethods(filter)
-    )
+  async getMethods(params = {}) {
+    const filter = await this.getFilter(params)
+    return PaymentMethodsLightService.getMethods(filter)
   }
 
-  getSingleMethod(id) {
+  async getSingleMethod(id) {
     if (!ObjectID.isValid(id)) {
       return Promise.reject("Invalid identifier")
     }
-    return this.getMethods({ id }).then(methods =>
-      methods.length > 0 ? methods[0] : null
-    )
+    const methods = await this.getMethods({ id })
+    return methods.length > 0 ? methods[0] : null
   }
 
   addMethod(data) {
@@ -122,7 +119,7 @@ class PaymentMethodsService {
       return Promise.reject("Invalid identifier")
     }
     const methodObjectID = new ObjectID(id)
-    const method = this.getValidDocumentForUpdate(id, data)
+    const method = this.getValidDocumentForUpdate(data)
 
     return db
       .collection("paymentMethods")
@@ -132,7 +129,7 @@ class PaymentMethodsService {
         },
         { $set: method }
       )
-      .then(res => this.getSingleMethod(id))
+      .then(() => this.getSingleMethod(id))
   }
 
   deleteMethod(id) {
@@ -185,7 +182,7 @@ class PaymentMethodsService {
   }
 
   getValidDocumentForInsert(data) {
-    const method = {}
+    const method = { name: {}, description: {} }
 
     method.name = parse.getString(data.name)
     method.description = parse.getString(data.description)
@@ -197,7 +194,7 @@ class PaymentMethodsService {
     return method
   }
 
-  getValidDocumentForUpdate(id, data) {
+  getValidDocumentForUpdate(data) {
     const method = {}
 
     if (data.name !== undefined) {
@@ -223,7 +220,7 @@ class PaymentMethodsService {
     if (data.gateway !== undefined) {
       method.gateway = parse.getString(data.gateway)
     }
-    
+
     if (Object.keys(method).length === 0) {
       return new Error("Required fields are missing")
     }

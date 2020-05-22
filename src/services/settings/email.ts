@@ -17,10 +17,10 @@ class EmailSettingsService {
     return db
       .collection("emailSettings")
       .findOne()
-      .then(settings => this.changeProperties(settings))
+      .then((settings: any) => this.changeProperties(settings))
   }
 
-  updateEmailSettings(data) {
+  updateEmailSettings(data: any) {
     const settings = this.getValidDocumentForUpdate(data)
     return this.insertDefaultSettingsIfEmpty().then(() =>
       db
@@ -32,7 +32,7 @@ class EmailSettingsService {
           },
           { upsert: true }
         )
-        .then(res => this.getEmailSettings())
+        .then(() => this.getEmailSettings())
     )
   }
 
@@ -40,19 +40,33 @@ class EmailSettingsService {
     return db
       .collection("emailSettings")
       .countDocuments({})
-      .then(count => {
+      .then((count: number) => {
         if (count === 0) {
           return db.collection("emailSettings").insertOne(this.defaultSettings)
         }
       })
   }
 
-  getValidDocumentForUpdate(data) {
+  getValidDocumentForUpdate(data: {
+    host?: any
+    port?: any
+    user?: any
+    pass?: any
+    from_name?: any
+    from_address?: any
+  }) {
     if (Object.keys(data).length === 0) {
       return new Error("Required fields are missing")
     }
 
-    const settings = {}
+    const settings = {
+      host: {},
+      port: {},
+      user: {},
+      pass: {},
+      from_name: {},
+      from_address: {},
+    }
 
     if (data.host !== undefined) {
       settings.host = parse.getString(data.host).toLowerCase()
@@ -81,7 +95,7 @@ class EmailSettingsService {
     return settings
   }
 
-  changeProperties(settings) {
+  changeProperties(settings: { _id: any }) {
     if (settings) {
       delete settings._id
     } else {
