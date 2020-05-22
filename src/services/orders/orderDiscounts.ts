@@ -40,7 +40,7 @@ class OrdertDiscountsService {
         },
         { $set: discount }
       )
-      .then(res => OrdersService.getSingleOrder(order_id))
+      .then(() => OrdersService.getSingleOrder(order_id))
   }
 
   deleteDiscount(order_id, discount_id) {
@@ -64,7 +64,7 @@ class OrdertDiscountsService {
           },
         }
       )
-      .then(res => OrdersService.getSingleOrder(order_id))
+      .then(() => OrdersService.getSingleOrder(order_id))
   }
 
   getValidDocumentForInsert(data) {
