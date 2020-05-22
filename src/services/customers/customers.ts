@@ -6,7 +6,7 @@ import webhooks from "../../lib/webhooks"
 import CustomerGroupsService from "./customerGroups"
 
 class CustomersService {
-  getFilter(params = {}) {
+  getFilter(params = { id: {}, group_id: {}, email: {} }) {
     // tag
     // gender
     // date_created_to
@@ -16,7 +16,7 @@ class CustomersService {
     // orders_count_to
     // orders_count_from
 
-    const filter = {}
+    const filter = { _id: {}, group_id: {}, email: {} }
     const id = parse.getObjectIDIfValid(params.id)
     const group_id = parse.getObjectIDIfValid(params.group_id)
 
