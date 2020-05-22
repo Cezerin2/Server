@@ -1,10 +1,10 @@
-import fs from "fs"
 import formidable from "formidable"
+import fs from "fs"
+import { IncomingMessage } from "http"
+import Minio from "minio"
 import pathModule from "path"
-import utils from "../../lib/utils"
 import settings from "../../lib/settings"
-
-const Minio = require("minio")
+import utils from "../../lib/utils"
 
 const minio = new Minio.Client({
   endPoint: settings.assetServer.minioHost,
@@ -18,12 +18,15 @@ const minio = new Minio.Client({
  * Minio has url like http://minio/BUCKET/path/to/object.ext
  * Wе need separate bucket from file path
  */
-function separateBucket(file_name) {
+function separateBucket(file_name: string) {
   const [bucket, ...fileNameRest] = file_name.split("/")
   return [bucket, fileNameRest.join("/") || ""]
 }
 
-const upload = (file_name, fileBuffer) => {
+const upload = (
+  file_name: string,
+  fileBuffer: string | Buffer | import("stream").Stream
+) => {
   const [bucket, file] = separateBucket(file_name)
 
   return new Promise((resolve, reject) => {
@@ -38,7 +41,7 @@ const upload = (file_name, fileBuffer) => {
 }
 
 class MinioService {
-  getFileData(path, fileName) {
+  getFileData(path: any, fileName: any) {
     const filePath = `${path}/${fileName}`
 
     const [bucket, file] = separateBucket(filePath)
@@ -56,14 +59,17 @@ class MinioService {
     })
   }
 
-  getFilesData(path, files) {
+  getFilesData(path: any, files: any[]) {
     return files
-      .map(fileName => this.getFileData(path, fileName))
-      .filter(fileData => fileData !== null)
-      .sort((a, b) => a.modified - b.modified)
+      .map((fileName: any) => this.getFileData(path, fileName))
+      .filter((fileData: any) => fileData !== null)
+      .sort(
+        (a: { modified: number }, b: { modified: number }) =>
+          a.modified - b.modified
+      )
   }
 
-  getFiles(path) {
+  getFiles(path: any) {
     const [bucket, file] = separateBucket(path)
 
     return this.getListObjects(bucket, file).then((objectsList: Array<any>) =>
@@ -75,7 +81,7 @@ class MinioService {
     )
   }
 
-  getListObjects(bucket, file) {
+  getListObjects(bucket: string, file: string) {
     return new Promise((resolve, reject) => {
       const objectsList = []
       const objectsStream = minio.listObjects(bucket, file, true)
@@ -94,11 +100,11 @@ class MinioService {
     })
   }
 
-  deleteFile(path, fileName) {
+  deleteFile(path: any, fileName: any) {
     const [bucket, file] = separateBucket(`${path}/${fileName}`)
 
     return new Promise((resolve, reject) => {
-      minio.removeObject(bucket, file, (err, data) => {
+      minio.removeObject(bucket, file, (err: any, data: any) => {
         if (err) {
           return reject("File not found")
         }
@@ -108,11 +114,11 @@ class MinioService {
     })
   }
 
-  async deleteDir(path) {
+  async deleteDir(path: any) {
     this.emptyDir(path)
   }
 
-  emptyDir(path) {
+  emptyDir(path: any) {
     const [bucket, file] = separateBucket(path)
 
     return this.getListObjects(bucket, file).then((objectsList: Array<any>) =>
@@ -128,7 +134,22 @@ class MinioService {
     )
   }
 
-  uploadFile(req, res, path, onUploadEnd) {
+  uploadFile(
+    req: IncomingMessage,
+    res: {
+      status: (
+        arg0: number
+      ) => {
+        (): any
+        new (): any
+        send: { (arg0: { error: boolean; message: any }): void; new (): any }
+      }
+      json: (arg0: { successful: boolean; fileData: unknown }) => void
+      sendStatus: (arg0: number) => void
+    },
+    path: any,
+    onUploadEnd: (arg0: string) => any
+  ) {
     const form = new formidable.IncomingForm()
     let file_name = null
     let buffer = null
@@ -162,7 +183,22 @@ class MinioService {
     form.parse(req)
   }
 
-  async uploadFiles(req, res, path, onFileUpload, onFilesEnd) {
+  async uploadFiles(
+    req: IncomingMessage,
+    res: {
+      status: (
+        arg0: number
+      ) => {
+        (): any
+        new (): any
+        send: { (arg0: { error: boolean; message: any }): void; new (): any }
+      }
+      send: (arg0: any[]) => void
+    },
+    path: any,
+    onFileUpload: (arg0: any) => any,
+    onFilesEnd: (arg0: any[]) => any
+  ) {
     const uploadedFiles = []
 
     const form = new formidable.IncomingForm()
@@ -197,7 +233,7 @@ class MinioService {
     form.parse(req)
   }
 
-  getErrorMessage(err) {
+  getErrorMessage(err: { toString: () => any }) {
     return { error: true, message: err.toString() }
   }
 }
