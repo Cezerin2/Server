@@ -6,7 +6,7 @@ import ProductStockService from "../products/stock"
 import OrdersService from "./orders"
 
 class OrderItemsService {
-  async addItem(order_id, data) {
+  async addItem(order_id: string | number | ObjectID, data: any) {
     if (!ObjectID.isValid(order_id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -27,7 +27,17 @@ class OrderItemsService {
     return OrdersService.getSingleOrder(order_id)
   }
 
-  async updateItemQuantityIfAvailable(order_id, orderItem, newItem) {
+  async updateItemQuantityIfAvailable(
+    order_id: any,
+    orderItem: { quantity: any; id: any },
+    newItem: {
+      product_image?: any[]
+      id?: ObjectID
+      product_id: any
+      variant_id: any
+      quantity: any
+    }
+  ) {
     const quantityNeeded = orderItem.quantity + newItem.quantity
     const availableQuantity = await this.getAvailableProductQuantity(
       newItem.product_id,
@@ -42,7 +52,16 @@ class OrderItemsService {
     }
   }
 
-  async addNewItem(order_id, newItem) {
+  async addNewItem(
+    order_id: string | number | ObjectID,
+    newItem: {
+      product_image?: any[]
+      id: any
+      product_id: any
+      variant_id: any
+      quantity: any
+    }
+  ) {
     const orderObjectID = new ObjectID(order_id)
     const availableQuantity = await this.getAvailableProductQuantity(
       newItem.product_id,
@@ -68,7 +87,11 @@ class OrderItemsService {
     }
   }
 
-  async getAvailableProductQuantity(product_id, variant_id, quantityNeeded) {
+  async getAvailableProductQuantity(
+    product_id: { toString: () => any },
+    variant_id: any,
+    quantityNeeded: number
+  ) {
     const product = await ProductsService.getSingleProduct(
       product_id.toString()
     )
@@ -96,7 +119,11 @@ class OrderItemsService {
       : product.stock_quantity
   }
 
-  async getOrderItemIfExists(order_id, product_id, variant_id) {
+  async getOrderItemIfExists(
+    order_id: string | number | ObjectID,
+    product_id: ObjectID,
+    variant_id: ObjectID
+  ) {
     const orderObjectID = new ObjectID(order_id)
     const order = await db.collection("orders").findOne(
       {
@@ -109,7 +136,7 @@ class OrderItemsService {
 
     if (order && order.items && order.items.length > 0) {
       return order.items.find(
-        item =>
+        (item: { product_id: { toString: () => any }; variant_id: any }) =>
           item.product_id.toString() === product_id.toString() &&
           (item.variant_id || "").toString() === (variant_id || "").toString()
       )
@@ -117,7 +144,11 @@ class OrderItemsService {
     return null
   }
 
-  async updateItem(order_id, item_id, data) {
+  async updateItem(
+    order_id: string | number | ObjectID,
+    item_id: string | number | ObjectID,
+    data: { quantity: any }
+  ) {
     if (!ObjectID.isValid(order_id) || !ObjectID.isValid(item_id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -146,48 +177,61 @@ class OrderItemsService {
     return OrdersService.getSingleOrder(order_id)
   }
 
-  getVariantFromProduct(product, variantId) {
+  getVariantFromProduct(
+    product: { variants: any[] },
+    variantId: string | any[]
+  ) {
     if (product.variants && product.variants.length > 0) {
       return product.variants.find(
-        variant => variant.id.toString() === variantId.toString()
+        (variant: { id: { toString: () => any } }) =>
+          variant.id.toString() === variantId.toString()
       )
     }
 
     return null
   }
 
-  getOptionFromProduct(product, optionId) {
+  getOptionFromProduct(
+    product: { options: any[] },
+    optionId: { toString: () => any }
+  ) {
     if (product.options && product.options.length > 0) {
       return product.options.find(
-        item => item.id.toString() === optionId.toString()
+        (item: { id: { toString: () => any } }) =>
+          item.id.toString() === optionId.toString()
       )
     }
 
     return null
   }
 
-  getOptionValueFromProduct(product, optionId, valueId) {
+  getOptionValueFromProduct(
+    product: any,
+    optionId: any,
+    valueId: { toString: () => any }
+  ) {
     const option = this.getOptionFromProduct(product, optionId)
     if (option && option.values && option.values.length > 0) {
       return option.values.find(
-        item => item.id.toString() === valueId.toString()
+        (item: { id: { toString: () => any } }) =>
+          item.id.toString() === valueId.toString()
       )
     }
 
     return null
   }
 
-  getOptionNameFromProduct(product, optionId) {
+  getOptionNameFromProduct(product: any, optionId: any) {
     const option = this.getOptionFromProduct(product, optionId)
     return option ? option.name : null
   }
 
-  getOptionValueNameFromProduct(product, optionId, valueId) {
+  getOptionValueNameFromProduct(product: any, optionId: any, valueId: any) {
     const value = this.getOptionValueFromProduct(product, optionId, valueId)
     return value ? value.name : null
   }
 
-  getVariantNameFromProduct(product, variantId) {
+  getVariantNameFromProduct(product: any, variantId: any) {
     const variant = this.getVariantFromProduct(product, variantId)
     if (variant) {
       const optionNames = []
@@ -209,7 +253,10 @@ class OrderItemsService {
     return null
   }
 
-  async calculateAndUpdateItem(orderId, itemId) {
+  async calculateAndUpdateItem(
+    orderId: string | number | ObjectID,
+    itemId: string | number | ObjectID
+  ) {
     // TODO: tax_total, discount_total
 
     const orderObjectID = new ObjectID(orderId)
@@ -218,7 +265,10 @@ class OrderItemsService {
     const order = await OrdersService.getSingleOrder(orderId)
 
     if (order && order.items && order.items.length > 0) {
-      const item = order.items.find(i => i.id.toString() === itemId.toString())
+      const item = order.items.find(
+        (i: { id: { toString: () => any } }) =>
+          i.id.toString() === itemId.toString()
+      )
       if (item) {
         const itemData = await this.getCalculatedData(item)
         await db.collection("orders").updateOne(
@@ -234,7 +284,13 @@ class OrderItemsService {
     }
   }
 
-  async getCalculatedData(item) {
+  async getCalculatedData(item: {
+    product_id: { toString: () => any }
+    custom_price: number
+    custom_note: any
+    quantity: number
+    variant_id: any
+  }) {
     const product = await ProductsService.getSingleProduct(
       item.product_id.toString()
     )
@@ -297,7 +353,7 @@ class OrderItemsService {
     }
   }
 
-  async calculateAndUpdateAllItems(order_id) {
+  async calculateAndUpdateAllItems(order_id: any) {
     const order = await OrdersService.getSingleOrder(order_id)
 
     if (order && order.items) {
@@ -311,7 +367,10 @@ class OrderItemsService {
     return null
   }
 
-  async deleteItem(order_id, item_id) {
+  async deleteItem(
+    order_id: string | number | ObjectID,
+    item_id: string | number | ObjectID
+  ) {
     if (!ObjectID.isValid(order_id) || !ObjectID.isValid(item_id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -335,7 +394,13 @@ class OrderItemsService {
     return OrdersService.getSingleOrder(order_id)
   }
 
-  getValidDocumentForInsert(data) {
+  getValidDocumentForInsert(data: {
+    product_id: any
+    variant_id: any
+    quantity: any
+    custom_price: any
+    custom_note: any
+  }) {
     const productImage = parse.getObjectIDIfValid(data.product_id)
     const item = {
       product_image: [],
@@ -343,6 +408,8 @@ class OrderItemsService {
       product_id: parse.getObjectIDIfValid(data.product_id),
       variant_id: parse.getObjectIDIfValid(data.variant_id),
       quantity: parse.getNumberIfPositive(data.quantity) || 1,
+      custom_price: {},
+      custom_note: {},
     }
 
     if (data.custom_price) {
@@ -356,7 +423,7 @@ class OrderItemsService {
     return item
   }
 
-  getValidDocumentForUpdate(data) {
+  getValidDocumentForUpdate(data: { variant_id?: any; quantity?: any }) {
     if (Object.keys(data).length === 0) {
       return new Error("Required fields are missing")
     }
