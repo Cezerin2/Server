@@ -1,11 +1,10 @@
 import formidable from "formidable"
 import fse from "fs-extra"
-import { IncomingMessage } from "http"
 import path from "path"
 import settings from "../../lib/settings"
 import utils from "../../lib/utils"
 
-const ResolveSystemPath = (dir: any, file = "") => {
+const ResolveSystemPath = (dir, file = "") => {
   const BaseAssetPath = `${settings.assetServer.localBasePath}`
 
   const paths = [BaseAssetPath, dir, file].filter(
@@ -15,7 +14,7 @@ const ResolveSystemPath = (dir: any, file = "") => {
   return path.resolve(paths.join("/"))
 }
 
-const ResolveUrlPath = (dir: any, file: any) => {
+const ResolveUrlPath = (dir, file) => {
   const BaseAssetPath = `${settings.assetServer.domain}`
 
   const paths = [BaseAssetPath, dir, file].filter(
@@ -26,7 +25,7 @@ const ResolveUrlPath = (dir: any, file: any) => {
 }
 
 class LocalService {
-  getFileData(dir: any, fileName: string) {
+  getFileData(dir, fileName) {
     const fileSystemPath = ResolveSystemPath(dir, fileName)
     const fileUrlPath = ResolveUrlPath(dir, fileName)
     const stats = fse.statSync(fileSystemPath)
@@ -42,17 +41,14 @@ class LocalService {
     return null
   }
 
-  getFilesData(dir: any, files: any[]) {
+  getFilesData(dir, files) {
     return files
-      .map((fileName: any) => this.getFileData(dir, fileName))
-      .filter((fileData: any) => fileData !== null)
-      .sort(
-        (a: { modified: number }, b: { modified: number }) =>
-          a.modified - b.modified
-      )
+      .map(fileName => this.getFileData(dir, fileName))
+      .filter(fileData => fileData !== null)
+      .sort((a, b) => a.modified - b.modified)
   }
 
-  getFiles(dir: any) {
+  getFiles(dir) {
     return new Promise((resolve, reject) => {
       const folderPath = ResolveSystemPath(dir)
 
@@ -70,7 +66,7 @@ class LocalService {
     })
   }
 
-  deleteFile(dir: any, fileName: string) {
+  deleteFile(dir, fileName) {
     return new Promise((resolve, reject) => {
       const filePath = ResolveSystemPath(dir, fileName)
       if (fse.existsSync(filePath)) {
@@ -83,31 +79,17 @@ class LocalService {
     })
   }
 
-  deleteDir(dir: any) {
+  deleteDir(dir) {
     const dirPath = ResolveSystemPath(dir)
     fse.remove(dirPath, err => {})
   }
 
-  emptyDir(dir: any) {
+  emptyDir(dir) {
     const dirPath = ResolveSystemPath(dir)
     fse.emptyDirSync(dirPath)
   }
 
-  uploadFile(
-    req: IncomingMessage,
-    res: {
-      status: (
-        arg0: number
-      ) => {
-        (): any
-        new (): any
-        send: { (arg0: { error: boolean; message: any }): void; new (): any }
-      }
-      send: (arg0: { file: any; size: number; url: string }) => void
-    },
-    dir: any,
-    onUploadEnd: (arg0: any) => any
-  ) {
+  uploadFile(req, res, dir, onUploadEnd) {
     const uploadDir = ResolveSystemPath(dir)
     fse.ensureDirSync(uploadDir)
 
@@ -150,22 +132,7 @@ class LocalService {
     form.parse(req)
   }
 
-  uploadFiles(
-    req: IncomingMessage,
-    res: {
-      status: (
-        arg0: number
-      ) => {
-        (): any
-        new (): any
-        send: { (arg0: { error: boolean; message: any }): void; new (): any }
-      }
-      send: (arg0: any[]) => void
-    },
-    dir: any,
-    onFileUpload: (arg0: any) => any,
-    onFilesEnd: (arg0: any[]) => any
-  ) {
+  uploadFiles(req, res, dir, onFileUpload, onFilesEnd) {
     const uploadedFiles = []
     const uploadDir = ResolveSystemPath(dir)
 
@@ -199,7 +166,7 @@ class LocalService {
     form.parse(req)
   }
 
-  getErrorMessage(err: string) {
+  getErrorMessage(err) {
     return { error: true, message: err.toString() }
   }
 }

@@ -87,7 +87,6 @@
     "@types/jest": "^25.2.3",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/lru-cache": "^5.1.0",
-    "@types/minio": "^7.0.5",
     "@types/mongodb": "^3.5.18",
     "@types/node-fetch": "^2.5.7",
     "@types/nodemailer": "^6.4.0",

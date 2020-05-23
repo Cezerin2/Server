@@ -6,7 +6,7 @@ import webhooks from "../../lib/webhooks"
 import CustomerGroupsService from "./customerGroups"
 
 class CustomersService {
-  getFilter(params = { id: {}, group_id: {}, email: {} }) {
+  getFilter(params = {}) {
     // tag
     // gender
     // date_created_to
@@ -16,7 +16,7 @@ class CustomersService {
     // orders_count_to
     // orders_count_from
 
-    const filter = { _id: {}, group_id: {}, email: {} }
+    const filter = {}
     const id = parse.getObjectIDIfValid(params.id)
     const group_id = parse.getObjectIDIfValid(params.group_id)
 
@@ -59,7 +59,7 @@ class CustomersService {
         .toArray(),
       db.collection("customers").countDocuments(filter),
     ]).then(([customerGroups, customers, customersCount]) => {
-      const items = customers.map((customer: any) =>
+      const items = customers.map(customer =>
         this.changeProperties(customer, customerGroups)
       )
       const result = {
@@ -71,7 +71,7 @@ class CustomersService {
     })
   }
 
-  getSingleCustomer(id: string | number | ObjectID) {
+  getSingleCustomer(id) {
     if (!ObjectID.isValid(id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -80,16 +80,7 @@ class CustomersService {
     )
   }
 
-  async addCustomer(data: {
-    first_name: any
-    last_name: any
-    password: string
-    email: any
-    full_name: string
-    mobile: any
-    browser: any
-    addresses: any
-  }) {
+  async addCustomer(data) {
     const customer = this.getValidDocumentForInsert(data)
 
     // is email unique
@@ -114,7 +105,7 @@ class CustomersService {
     return newCustomer
   }
 
-  async updateCustomer(id: string | number | ObjectID, data: any) {
+  async updateCustomer(id, data) {
     if (!ObjectID.isValid(id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -152,11 +143,7 @@ class CustomersService {
     return updatedCustomer
   }
 
-  updateCustomerStatistics(
-    customerId: string | number | ObjectID,
-    totalSpent: number,
-    ordersCount: number
-  ) {
+  updateCustomerStatistics(customerId, totalSpent, ordersCount) {
     if (!ObjectID.isValid(customerId)) {
       return Promise.reject("Invalid identifier")
     }
@@ -171,7 +158,7 @@ class CustomersService {
       .updateOne({ _id: customerObjectID }, { $set: customerData })
   }
 
-  async deleteCustomer(customerId: string | number | ObjectID) {
+  async deleteCustomer(customerId) {
     if (!ObjectID.isValid(customerId)) {
       return Promise.reject("Invalid identifier")
     }
@@ -187,49 +174,35 @@ class CustomersService {
     return deleteResponse.deletedCount > 0
   }
 
-  getValidDocumentForInsert(data: {
-    note: any
-    email: any
-    mobile: any
-    full_name: any
-    first_name: any
-    last_name: any
-    password: any
-    gender: any
-    group_id: any
-    tags: any
-    social_accounts: any
-    birthdate: any
-    addresses: any
-    browser: any
-  }) {
+  getValidDocumentForInsert(data) {
     const customer = {
       date_created: new Date(),
       date_updated: null,
       total_spent: 0,
       orders_count: 0,
-      note: {} = parse.getString(data.note),
-      email: {} = parse.getString(data.email).toLowerCase(),
-      mobile: {} = parse.getString(data.mobile).toLowerCase(),
-      full_name: {} = parse.getString(data.full_name),
-      first_name: {} = parse.getString(data.first_name),
-      last_name: {} = parse.getString(data.last_name),
-      password: {} = parse.getString(data.password),
-      gender: {} = parse.getString(data.gender).toLowerCase(),
-      group_id: {} = parse.getObjectIDIfValid(data.group_id),
-      tags: {} = parse.getArrayIfValid(data.tags) || [],
-      social_accounts: {} = parse.getArrayIfValid(data.social_accounts) || [],
-      birthdate: {} = parse.getDateIfValid(data.birthdate),
-      addresses: {} = this.validateAddresses(data.addresses),
-      browser: {} = parse.getBrowser(data.browser),
     }
+
+    customer.note = parse.getString(data.note)
+    customer.email = parse.getString(data.email).toLowerCase()
+    customer.mobile = parse.getString(data.mobile).toLowerCase()
+    customer.full_name = parse.getString(data.full_name)
+    customer.first_name = parse.getString(data.first_name)
+    customer.last_name = parse.getString(data.last_name)
+    customer.password = parse.getString(data.password)
+    customer.gender = parse.getString(data.gender).toLowerCase()
+    customer.group_id = parse.getObjectIDIfValid(data.group_id)
+    customer.tags = parse.getArrayIfValid(data.tags) || []
+    customer.social_accounts = parse.getArrayIfValid(data.social_accounts) || []
+    customer.birthdate = parse.getDateIfValid(data.birthdate)
+    customer.addresses = this.validateAddresses(data.addresses)
+    customer.browser = parse.getBrowser(data.browser)
 
     return customer
   }
 
-  validateAddresses(addresses: any[]) {
+  validateAddresses(addresses) {
     if (addresses && addresses.length > 0) {
-      const validAddresses = addresses.map((addressItem: any) =>
+      const validAddresses = addresses.map(addressItem =>
         parse.getCustomerAddress(addressItem)
       )
       return validAddresses
@@ -237,25 +210,7 @@ class CustomersService {
     return []
   }
 
-  getValidDocumentForUpdate(
-    id: any,
-    data: {
-      note?: any
-      email?: any
-      mobile?: any
-      full_name?: any
-      first_name?: any
-      last_name?: any
-      password?: any
-      gender?: any
-      group_id?: any
-      tags?: any
-      social_accounts?: any
-      birthdate?: any
-      addresses?: any
-      browser?: any
-    }
-  ) {
+  getValidDocumentForUpdate(id, data) {
     if (Object.keys(data).length === 0) {
       return new Error("Required fields are missing")
     }
@@ -324,25 +279,14 @@ class CustomersService {
     return customer
   }
 
-  changeProperties(
-    customer: {
-      id: any
-      _id: { toString: () => any }
-      group_id: { toString: () => any }
-      group_name: any
-      addresses: any[]
-      billing: {}
-      shipping: {}
-    },
-    customerGroups: any[]
-  ) {
+  changeProperties(customer, customerGroups) {
     if (customer) {
       customer.id = customer._id.toString()
       delete customer._id
 
       const customerGroup = customer.group_id
         ? customerGroups.find(
-            (group: { id: any }) => group.id === customer.group_id.toString()
+            group => group.id === customer.group_id.toString()
           )
         : null
 
@@ -353,10 +297,10 @@ class CustomersService {
         customer.billing = customer.shipping = customer.addresses[0]
       } else if (customer.addresses && customer.addresses.length > 1) {
         const default_billing = customer.addresses.find(
-          (address: { default_billing: any }) => address.default_billing
+          address => address.default_billing
         )
         const default_shipping = customer.addresses.find(
-          (address: { default_shipping: any }) => address.default_shipping
+          address => address.default_shipping
         )
         customer.billing = default_billing || customer.addresses[0]
         customer.shipping = default_shipping || customer.addresses[0]
@@ -369,7 +313,7 @@ class CustomersService {
     return customer
   }
 
-  addAddress(customer_id: string | number | ObjectID, address: any) {
+  addAddress(customer_id, address) {
     if (!ObjectID.isValid(customer_id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -388,22 +332,7 @@ class CustomersService {
     )
   }
 
-  createObjectToUpdateAddressFields(address: {
-    address1: any
-    address2: any
-    city: any
-    country: any
-    state: any
-    phone: any
-    postal_code: any
-    full_name: any
-    company: any
-    tax_number: any
-    coordinates: any
-    details: any
-    default_billing: any
-    default_shipping: any
-  }) {
+  createObjectToUpdateAddressFields(address) {
     const fields = {}
 
     if (address.address1 !== undefined) {
@@ -473,11 +402,7 @@ class CustomersService {
     return fields
   }
 
-  updateAddress(
-    customer_id: string | number | ObjectID,
-    address_id: string | number | ObjectID,
-    data: any
-  ) {
+  updateAddress(customer_id, address_id, data) {
     if (!ObjectID.isValid(customer_id) || !ObjectID.isValid(address_id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -494,10 +419,7 @@ class CustomersService {
     )
   }
 
-  deleteAddress(
-    customer_id: string | number | ObjectID,
-    address_id: string | number | ObjectID
-  ) {
+  deleteAddress(customer_id, address_id) {
     if (!ObjectID.isValid(customer_id) || !ObjectID.isValid(address_id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -518,10 +440,7 @@ class CustomersService {
     )
   }
 
-  setDefaultBilling(
-    customer_id: string | number | ObjectID,
-    address_id: string | number | ObjectID
-  ) {
+  setDefaultBilling(customer_id, address_id) {
     if (!ObjectID.isValid(customer_id) || !ObjectID.isValid(address_id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -541,7 +460,7 @@ class CustomersService {
           },
         }
       )
-      .then((res: any) =>
+      .then(res =>
         db.collection("customers").updateOne(
           {
             _id: customerObjectID,
@@ -556,10 +475,7 @@ class CustomersService {
       )
   }
 
-  setDefaultShipping(
-    customer_id: string | number | ObjectID,
-    address_id: string | number | ObjectID
-  ) {
+  setDefaultShipping(customer_id, address_id) {
     if (!ObjectID.isValid(customer_id) || !ObjectID.isValid(address_id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -579,7 +495,7 @@ class CustomersService {
           },
         }
       )
-      .then((res: any) =>
+      .then(res =>
         db.collection("customers").updateOne(
           {
             _id: customerObjectID,
@@ -610,13 +526,8 @@ class CustomersService {
     )
   }
 
-  handleResponse(response: {
-    text: () => Promise<any>
-    ok: any
-    status: number
-    statusText: any
-  }) {
-    return response.text().then((text: string) => {
+  handleResponse(response) {
+    return response.text().then(text => {
       const data = text && JSON.parse(text)
       if (!response.ok) {
         if (response.status === 401) {

@@ -63,8 +63,6 @@ class CustomerGroupsService {
   getValidDocumentForInsert(data) {
     const group = {
       date_created: new Date(),
-      name: {},
-      description: {},
     }
 
     group.name = parse.getString(data.name)
@@ -80,8 +78,6 @@ class CustomerGroupsService {
 
     const group = {
       date_updated: new Date(),
-      name: {},
-      description: {},
     }
 
     if (data.name !== undefined) {

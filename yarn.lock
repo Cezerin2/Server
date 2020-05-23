@@ -870,13 +870,6 @@
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.2.tgz#857a118d8634c84bba7ae14088e4508490cd5da5"
   integrity sha512-4kPlzbljFcsttWEq6aBW0OZe6BDajAmyvr2xknBG92tejQnvdGtT9+kXSZ580DqpxY9qG2xeQVF9Dq0ymUTo5Q==
 
-"@types/minio@^7.0.5":
-  version "7.0.5"
-  resolved "https://registry.yarnpkg.com/@types/minio/-/minio-7.0.5.tgz#9b4da55935a1159438ae038ec4a8bc7035dd11c4"
-  integrity sha512-lbZSyinS73XTJ9u4PTO3oVbv1qKzubqtp4hDCxfG36fAGNLPMBDMNcxC8jfs6ezc3kliGXwZy4/8eh4HvyVO4Q==
-  dependencies:
-    "@types/node" "*"
-
 "@types/mongodb@^3.5.18":
   version "3.5.18"
   resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.5.18.tgz#79b1b8119e035980a4b4412239e0d05b367ec647"

@@ -8,7 +8,7 @@ import SettingsService from "../settings/settings"
 const DEFAULT_SORT = { is_system: -1, date_created: 1 }
 
 class PagesService {
-  getFilter(params = { id: {}, tags: {} }) {
+  getFilter(params = {}) {
     const filter = {}
     const id = parse.getObjectIDIfValid(params.id)
     const tags = parse.getString(params.tags)
