@@ -6,12 +6,10 @@ class PaymentMethodsLightService {
       .collection("paymentMethods")
       .find(filter)
       .toArray()
-      .then((items: any[]) =>
-        items.map((item: any) => this.changeProperties(item))
-      )
+      .then(items => items.map(item => this.changeProperties(item)))
   }
 
-  changeProperties(item: { id: any; _id: { toString: () => any } }) {
+  changeProperties(item) {
     if (item) {
       item.id = item._id.toString()
       delete item._id

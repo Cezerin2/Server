@@ -4,7 +4,7 @@ import parse from "../../lib/parse"
 import OrdersService from "./orders"
 
 class OrdertDiscountsService {
-  addDiscount(order_id: string | number | ObjectID, data: any) {
+  addDiscount(order_id, data) {
     if (!ObjectID.isValid(order_id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -23,11 +23,7 @@ class OrdertDiscountsService {
     )
   }
 
-  updateDiscount(
-    order_id: string | number | ObjectID,
-    discount_id: string | number | ObjectID,
-    data: any
-  ) {
+  updateDiscount(order_id, discount_id, data) {
     if (!ObjectID.isValid(order_id) || !ObjectID.isValid(discount_id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -47,10 +43,7 @@ class OrdertDiscountsService {
       .then(() => OrdersService.getSingleOrder(order_id))
   }
 
-  deleteDiscount(
-    order_id: string | number | ObjectID,
-    discount_id: string | number | ObjectID
-  ) {
+  deleteDiscount(order_id, discount_id) {
     if (!ObjectID.isValid(order_id) || !ObjectID.isValid(discount_id)) {
       return Promise.reject("Invalid identifier")
     }
@@ -74,7 +67,7 @@ class OrdertDiscountsService {
       .then(() => OrdersService.getSingleOrder(order_id))
   }
 
-  getValidDocumentForInsert(data: { name: any; amount: any }) {
+  getValidDocumentForInsert(data) {
     return {
       id: new ObjectID(),
       name: parse.getString(data.name),
@@ -82,12 +75,7 @@ class OrdertDiscountsService {
     }
   }
 
-  getValidDocumentForUpdate(data: {
-    variant_id?: any
-    name?: any
-    quantity?: any
-    amount?: any
-  }) {
+  getValidDocumentForUpdate(data) {
     if (Object.keys(data).length === 0) {
       return new Error("Required fields are missing")
     }

@@ -1,13 +1,13 @@
 import { db } from "../../lib/mongo"
 
 class AppSettingsService {
-  getSettings(appKey: any) {
+  getSettings(appKey) {
     return db
       .collection("appSettings")
       .findOne({ key: appKey }, { _id: 0, key: 0 })
   }
 
-  updateSettings(appKey: any, data: { key?: any }) {
+  updateSettings(appKey, data) {
     if (Object.keys(data).length === 0) {
       return new Error("Required fields are missing")
     }
@@ -23,7 +23,7 @@ class AppSettingsService {
         },
         { upsert: true }
       )
-      .then(() => this.getSettings(appKey))
+      .then(res => this.getSettings(appKey))
   }
 }
 

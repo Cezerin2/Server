@@ -3,8 +3,8 @@ import { db } from "../../lib/mongo"
 import parse from "../../lib/parse"
 
 class OrderStatusesService {
-  getStatuses(params = { id: {} }) {
-    const filter = { _id: {} }
+  getStatuses(params = {}) {
+    const filter = {}
     const id = parse.getObjectIDIfValid(params.id)
     if (id) {
       filter._id = new ObjectID(id)

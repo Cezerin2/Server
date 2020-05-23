@@ -1,10 +1,8 @@
-import { Router } from "express-serve-static-core"
 import security from "../lib/security"
 import PaymentMethodsService from "../services/orders/paymentMethods"
 
 class PaymentMethodsRoute {
-  router: any
-  constructor(router: Router) {
+  constructor(router) {
     this.router = router
     this.registerRoutes()
   }
@@ -37,26 +35,13 @@ class PaymentMethodsRoute {
     )
   }
 
-  getMethods(
-    req: { query: {} },
-    res: { send: (arg0: any) => any },
-    next: (reason: any) => PromiseLike<never>
-  ) {
+  getMethods(req, res, next) {
     PaymentMethodsService.getMethods(req.query)
       .then(data => res.send(data))
       .catch(next)
   }
 
-  getSingleMethod(
-    req: { params: { id: any } },
-    res: {
-      send: (arg0: any) => any
-      status: (
-        arg0: number
-      ) => { (): any; new (): any; end: { (): any; new (): any } }
-    },
-    next: (reason: any) => PromiseLike<never>
-  ) {
+  getSingleMethod(req, res, next) {
     PaymentMethodsService.getSingleMethod(req.params.id)
       .then(data => {
         if (data) {
@@ -67,24 +52,15 @@ class PaymentMethodsRoute {
       .catch(next)
   }
 
-  addMethod(req: { body: any }, res: { send: (arg0: any) => any }, next: any) {
+  addMethod(req, res, next) {
     PaymentMethodsService.addMethod(req.body)
-      .then((data: any) => res.send(data))
+      .then(data => res.send(data))
       .catch(next)
   }
 
-  updateMethod(
-    req: { params: { id: any }; body: any },
-    res: {
-      send: (arg0: any) => any
-      status: (
-        arg0: number
-      ) => { (): any; new (): any; end: { (): any; new (): any } }
-    },
-    next: any
-  ) {
+  updateMethod(req, res, next) {
     PaymentMethodsService.updateMethod(req.params.id, req.body)
-      .then((data: any) => {
+      .then(data => {
         if (data) {
           return res.send(data)
         }
@@ -93,17 +69,9 @@ class PaymentMethodsRoute {
       .catch(next)
   }
 
-  deleteMethod(
-    req: { params: { id: any } },
-    res: {
-      status: (
-        arg0: number
-      ) => { (): any; new (): any; end: { (): any; new (): any } }
-    },
-    next: any
-  ) {
+  deleteMethod(req, res, next) {
     PaymentMethodsService.deleteMethod(req.params.id)
-      .then((data: any) => res.status(data ? 200 : 404).end())
+      .then(data => res.status(data ? 200 : 404).end())
       .catch(next)
   }
 }

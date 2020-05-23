@@ -1,7 +1,7 @@
 import settings from "../../lib/settings"
 import LocalService from "./local"
-import MinioService from "./minio"
 import S3Service from "./s3"
+import MinioService from "./minio"
 
 let service
 
@@ -14,51 +14,35 @@ if (settings.assetServer.type === "s3") {
 }
 
 class AssetsService {
-  getFileData(path: any, fileName: any) {
+  getFileData(path, fileName) {
     return service.getFileData(path, fileName)
   }
 
-  getFilesData(path: any, files: any) {
+  getFilesData(path, files) {
     return service.getFilesData(path, files)
   }
 
-  getFiles(path: string) {
+  getFiles(path) {
     return service.getFiles(path)
   }
 
-  deleteFile(path: string, fileName: any) {
+  deleteFile(path, fileName) {
     return service.deleteFile(path, fileName)
   }
 
-  deleteDir(path: string) {
+  deleteDir(path) {
     return service.deleteDir(path)
   }
 
-  emptyDir(path: string) {
+  emptyDir(path) {
     return service.emptyDir(path)
   }
 
-  uploadFile(
-    req: any,
-    res: any,
-    path: string,
-    onUploadEnd: {
-      (file_name: any): void
-      (file_name: any): void
-      (): void
-      (): void
-    }
-  ) {
+  uploadFile(req, res, path, onUploadEnd) {
     return service.uploadFile(req, res, path, onUploadEnd)
   }
 
-  uploadFiles(
-    req: any,
-    res: any,
-    path: string,
-    onFileUpload: (filename: any) => Promise<void>,
-    onFilesEnd: () => void
-  ) {
+  uploadFiles(req, res, path, onFileUpload, onFilesEnd) {
     return service.uploadFiles(req, res, path, onFileUpload, onFilesEnd)
   }
 }
