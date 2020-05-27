@@ -18,7 +18,7 @@ RUN echo "deb http://nginx.org/packages/debian/ ${NGINX_CODENAME} nginx" >> /etc
 	nginx-module-image-filter
 
 # install PM2
-RUN npm i pm2 -g
+RUN yarn global add pm2
 
 # download project
 ADD . /var/www/cezerin2
@@ -33,7 +33,7 @@ RUN chmod +x "/usr/local/bin/docker-entrypoint.sh"
 
 # build project
 RUN cd /var/www/cezerin2 \
-	&& npm i
+	&& yarn
 
 EXPOSE 80
 
