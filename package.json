@@ -47,7 +47,7 @@
     "aws-sdk": "^2.679.0",
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
-    "cezerin2-client": "^0.37.0",
+    "cezerin2-client": "^0.38.0",
     "chart.js": "^2.9.3",
     "cookie-parser": "^1.4.5",
     "cryptr": "^6.0.2",
