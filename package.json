@@ -24,13 +24,13 @@
     "compile": "tsc",
     "test": "jest",
     "dev": "concurrently \"tsc -w \" \"nodemon -r esm build/index.js\"",
-    "setup": "node -r esm build/setup.js",
+    "setup": "tsc && node -r esm build/setup.js",
     "theme:install": "./scripts/theme-install.sh",
     "theme:export": "./scripts/theme-export.sh",
     "lint": "eslint --fix . && prettier --write . && jest && tsc",
     "prettier": "prettier --write \"src/**/*.js\" \"theme/**/*.js\"",
     "precommit": "lint-staged",
-    "start": "node -r esm build/index.js"
+    "start": "tsc && node -r esm build/index.js"
   },
   "lint-staged": {
     "*.js": [
