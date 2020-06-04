@@ -1,7 +1,7 @@
-import { MongoClient } from "mongodb"
 import url from "url"
-import winston from "winston"
+import { mongodb, winston } from "./deps"
 import settings from "./lib/settings"
+const { MongoClient } = mongodb
 
 const mongodbConnection = settings.mongodbServerUrl
 const mongoPathName = url.parse(mongodbConnection).pathname
