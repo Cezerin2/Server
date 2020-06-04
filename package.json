@@ -30,7 +30,8 @@
     "lint": "eslint --fix . && prettier --write . && jest && tsc",
     "prettier": "prettier --write \"src/**/*.js\" \"theme/**/*.js\"",
     "precommit": "lint-staged",
-    "start": "node -r esm build/index.js"
+    "nodeStart": "node -r esm build/index.js",
+    "start": "deno run src/index.ts --allow-all"
   },
   "lint-staged": {
     "*.js": [
