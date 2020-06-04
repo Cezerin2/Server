@@ -1,9 +1,11 @@
-import bcrypt from "bcrypt"
-import CezerinClient from "cezerin2-client"
-import express from "express"
-import handlebars from "handlebars"
-import jwt from "jsonwebtoken"
-import { ObjectID } from "mongodb"
+import {
+  bcrypt,
+  cezerin2Client,
+  express,
+  handlebars,
+  jsonwebtoken,
+  mongodb,
+} from "./deps"
 import AuthHeader from "./lib/auth-header"
 import mailer from "./lib/mailer"
 import { db } from "./lib/mongo"
@@ -11,6 +13,9 @@ import serverSettings from "./lib/settings"
 import OrderItemsService from "./services/orders/orderItems"
 import EmailTemplatesService from "./services/settings/emailTemplates"
 import SettingsService from "./services/settings/settings"
+const { ObjectID } = mongodb
+const jwt = jsonwebtoken
+const CezerinClient = cezerin2Client
 
 // cost factor for hashes
 const { saltRounds } = serverSettings
@@ -250,7 +255,7 @@ ajaxRouter.post("/customer-account", async (req, res, next) => {
     token: "",
     authenticated: false,
     customer_settings: null,
-    order_statuses: null
+    order_statuses: null,
   }
 
   if (req.body.token) {
@@ -262,7 +267,7 @@ ajaxRouter.post("/customer-account", async (req, res, next) => {
       } catch (erro) {}
 
       const filter = {
-        customer_id: userId
+        customer_id: userId,
       }
 
       // retrieve customer data
@@ -503,7 +508,7 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
     token: "",
     authenticated: false,
     customer_settings: null,
-    order_statuses: null
+    order_statuses: null,
   }
   const customerDraftObj = {
     full_name: `${customerData.first_name} ${customerData.last_name}`,
@@ -511,10 +516,10 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
     last_name: customerData.last_name,
     email: customerData.email.toLowerCase(),
     password: hashPassword,
-    addresses: [customerData.billing_address, customerData.shipping_address]
+    addresses: [customerData.billing_address, customerData.shipping_address],
   }
   const filter = {
-    email: customerData.email
+    email: customerData.email,
   }
 
   // update customer profile and addresses
@@ -529,7 +534,7 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
     await db.collection("customers").updateMany(
       { _id: ObjectID(userId) },
       {
-        $set: customerDraftObj
+        $set: customerDraftObj,
       },
       { ordered: false },
       async (error, result) => {
@@ -549,8 +554,8 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
           {
             $set: {
               shipping_address: customerData.shipping_address,
-              billing_address: customerData.billing_address
-            }
+              billing_address: customerData.billing_address,
+            },
           },
           async (error, result) => {
             if (error) {

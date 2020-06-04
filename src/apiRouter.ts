@@ -1,4 +1,4 @@
-import express from "express"
+import { express } from "./deps"
 import AppsRoute from "./routes/apps"
 import CustomerGroupsRoute from "./routes/customerGroups"
 import CustomersRoute from "./routes/customers"

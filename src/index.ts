@@ -1,18 +1,21 @@
-import { ApolloServer } from "apollo-server-express"
-import bodyParser from "body-parser"
-import cookieParser from "cookie-parser"
-import express from "express"
-import helmet from "helmet"
-import responseTime from "response-time"
-import winston from "winston"
 import ajaxRouter from "./ajaxRouter"
 import apiRouter from "./apiRouter"
+import {
+  apolloServerExpress,
+  bodyParser,
+  cookieParser,
+  express,
+  helmet,
+  responseTime,
+  winston,
+} from "./deps"
 import resolvers from "./graphql/resolvers/index"
 import typeDefs from "./graphql/typeDefs/index"
 import dashboardWebSocket from "./lib/dashboardWebSocket"
 import logger from "./lib/logger"
 import security from "./lib/security"
 import settings from "./lib/settings"
+const { ApolloServer } = apolloServerExpress
 const app = express()
 
 const STATIC_OPTIONS = {
