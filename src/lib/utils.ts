@@ -1,5 +1,5 @@
-import slug from "slug"
-import SitemapService from "../services/sitemap"
+import { slug } from "../deps.ts"
+import SitemapService from "../services/sitemap.ts"
 
 const slugConfig = {
   symbols: false, // replace unicode symbols or not

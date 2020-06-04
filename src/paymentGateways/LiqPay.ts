@@ -1,6 +1,6 @@
-import { crypto } from "../deps"
-import OrdersService from "../services/orders/orders"
-import OrdertTansactionsService from "../services/orders/orderTransactions"
+import { crypto } from "../deps.ts"
+import OrdersService from "../services/orders/orders.ts"
+import OrdertTansactionsService from "../services/orders/orderTransactions.ts"
 
 const getPaymentFormSettings = options => {
   const { gateway, gatewaySettings, order, amount, currency } = options

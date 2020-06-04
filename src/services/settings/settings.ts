@@ -1,8 +1,8 @@
-import { url } from "../../deps"
-import { db } from "../../lib/mongo"
-import parse from "../../lib/parse"
-import settings from "../../lib/settings"
-import AssetService from "../assets/assets"
+import { url } from "../../deps.ts"
+import { db } from "../../lib/mongo.ts"
+import parse from "../../lib/parse.ts"
+import settings from "../../lib/settings.ts"
+import AssetService from "../assets/assets.ts"
 
 const ThemeAssetsPath = `${settings.assetServer.themeImageUploadPath}`
 

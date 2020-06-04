@@ -1,5 +1,4 @@
-import https from "https"
-import qs from "query-string"
+import { https, qs } from "../deps.ts"
 import OrdersService from "../services/orders/orders"
 import OrdertTansactionsService from "../services/orders/orderTransactions"
 

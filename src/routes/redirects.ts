@@ -1,5 +1,5 @@
-import security from "../lib/security"
-import RedirectsService from "../services/redirects"
+import security from "../lib/security.ts"
+import RedirectsService from "../services/redirects.ts"
 
 class RedirectsRoute {
   constructor(router) {

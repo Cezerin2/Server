@@ -1,9 +1,9 @@
-import { ObjectID } from "mongodb"
-import url from "url"
-import { db } from "../../lib/mongo"
-import parse from "../../lib/parse"
-import utils from "../../lib/utils"
-import SettingsService from "../settings/settings"
+import { mongodb, url } from "../../deps.ts"
+import { db } from "../../lib/mongo.ts"
+import parse from "../../lib/parse.ts"
+import utils from "../../lib/utils.ts"
+import SettingsService from "../settings/settings.ts"
+const { ObjectID } = mongodb
 
 const DEFAULT_SORT = { is_system: -1, date_created: 1 }
 

@@ -1,5 +1,5 @@
-import security from "../lib/security"
-import AppSettingsService from "../services/apps/settings"
+import security from "../lib/security.ts"
+import AppSettingsService from "../services/apps/settings.ts"
 
 class AppsRoute {
   constructor(router) {

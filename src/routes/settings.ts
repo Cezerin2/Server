@@ -1,9 +1,9 @@
-import security from "../lib/security"
-import CheckoutFieldsService from "../services/settings/checkoutFields"
-import EmailSettingsService from "../services/settings/email"
-import EmailTemplatesService from "../services/settings/emailTemplates"
-import ImportSettingsService from "../services/settings/import"
-import SettingsService from "../services/settings/settings"
+import security from "../lib/security.ts"
+import CheckoutFieldsService from "../services/settings/checkoutFields.ts"
+import EmailSettingsService from "../services/settings/email.ts"
+import EmailTemplatesService from "../services/settings/emailTemplates.ts"
+import ImportSettingsService from "../services/settings/import.ts"
+import SettingsService from "../services/settings/settings.ts"
 
 class SettingsRoute {
   constructor(router) {

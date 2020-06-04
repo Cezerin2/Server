@@ -1,5 +1,6 @@
-import { ObjectID } from "mongodb"
-import { db } from "../../lib/mongo"
+import { mongodb } from "../../deps.ts"
+import { db } from "../../lib/mongo.ts"
+const { ObjectID } = mongodb
 
 class ShippingMethodsLightService {
   getMethods(filter = {}) {

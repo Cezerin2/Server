@@ -1,4 +1,4 @@
-import winston from "winston"
+import { winston } from "../deps.ts"
 const LOGS_FILE = "logs/server.log"
 
 winston.configure({

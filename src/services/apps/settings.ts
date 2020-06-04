@@ -1,4 +1,4 @@
-import { db } from "../../lib/mongo"
+import { db } from "../../lib/mongo.ts"
 
 class AppSettingsService {
   getSettings(appKey) {

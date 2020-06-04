@@ -1,5 +1,5 @@
-import security from "../lib/security"
-import SitemapService from "../services/sitemap"
+import security from "../lib/security.ts"
+import SitemapService from "../services/sitemap.ts"
 
 class SitemapRoute {
   constructor(router) {

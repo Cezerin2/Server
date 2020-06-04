@@ -1,6 +1,6 @@
-import { fs, lruCache, path } from "../../deps"
-import serverSettings from "../../lib/settings"
-import utils from "../../lib/utils"
+import { fs, lruCache, path } from "../../deps.ts"
+import serverSettings from "../../lib/settings.ts"
+import utils from "../../lib/utils.ts"
 
 const cache = new lruCache({
   max: 10000,

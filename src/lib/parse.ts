@@ -1,5 +1,5 @@
-import { ObjectID } from "mongodb"
-
+import { mongodb } from "../deps.ts"
+const { ObjectID } = mongodb
 const getString = value => (value || "").toString()
 
 const getDateIfValid = value => {

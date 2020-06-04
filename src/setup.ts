@@ -1,5 +1,5 @@
-import { mongodb, url, winston } from "./deps"
-import settings from "./lib/settings"
+import { mongodb, url, winston } from "./deps.ts"
+import settings from "./lib/settings.ts"
 const { MongoClient } = mongodb
 
 const mongodbConnection = settings.mongodbServerUrl

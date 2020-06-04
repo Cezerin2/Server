@@ -1,5 +1,5 @@
-import settings from "../../lib/settings"
-import AssetService from "../assets/assets"
+import settings from "../../lib/settings.ts"
+import AssetService from "../assets/assets.ts"
 
 const ThemeAssetPath = `${settings.assetServer.themeImageUploadPath}`
 

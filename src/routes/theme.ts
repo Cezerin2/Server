@@ -1,8 +1,8 @@
-import security from "../lib/security"
-import ThemeAssetsService from "../services/theme/assets"
-import ThemePlaceholdersService from "../services/theme/placeholders"
-import ThemeSettingsService from "../services/theme/settings"
-import ThemeService from "../services/theme/theme"
+import security from "../lib/security.ts"
+import ThemeAssetsService from "../services/theme/assets.ts"
+import ThemePlaceholdersService from "../services/theme/placeholders.ts"
+import ThemeSettingsService from "../services/theme/settings.ts"
+import ThemeService from "../services/theme/theme.ts"
 
 class ThemeRoute {
   constructor(router) {

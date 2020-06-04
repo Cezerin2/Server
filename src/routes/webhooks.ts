@@ -1,5 +1,5 @@
-import security from "../lib/security"
-import WebhooksService from "../services/webhooks"
+import security from "../lib/security.ts"
+import WebhooksService from "../services/webhooks.ts"
 
 class WebhooksRoute {
   constructor(router) {

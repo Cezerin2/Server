@@ -1,15 +1,10 @@
-import handlebars from "handlebars"
-import jwt from "jsonwebtoken"
-import lruCache from "lru-cache"
-import moment from "moment"
-import { ObjectID } from "mongodb"
-import uaParser from "ua-parser-js"
-import url from "url"
-import mailer from "../../lib/mailer"
-import { db } from "../../lib/mongo"
-import parse from "../../lib/parse"
-import settings from "../../lib/settings"
-import SettingsService from "../settings/settings"
+import { handlebars, jwt, lruCache, moment, mongodb, url } from "../../deps.ts"
+import mailer from "../../lib/mailer.ts"
+import { db } from "../../lib/mongo.ts"
+import parse from "../../lib/parse.ts"
+import settings from "../../lib/settings.ts"
+import SettingsService from "../settings/settings.ts"
+const { ObjectID } = mongodb
 
 const cache = new lruCache({
   max: 10000,

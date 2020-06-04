@@ -1,5 +1,5 @@
-import ajaxRouter from "./ajaxRouter"
-import apiRouter from "./apiRouter"
+import ajaxRouter from "./ajaxRouter.ts"
+import apiRouter from "./apiRouter.ts"
 import {
   apolloServerExpress,
   bodyParser,
@@ -8,13 +8,13 @@ import {
   helmet,
   responseTime,
   winston,
-} from "./deps"
-import resolvers from "./graphql/resolvers/index"
-import typeDefs from "./graphql/typeDefs/index"
-import dashboardWebSocket from "./lib/dashboardWebSocket"
-import logger from "./lib/logger"
-import security from "./lib/security"
-import settings from "./lib/settings"
+} from "./deps.ts"
+import resolvers from "./graphql/resolvers/index.ts"
+import typeDefs from "./graphql/typeDefs/index.ts"
+import dashboardWebSocket from "./lib/dashboardWebSocket.ts"
+import logger from "./lib/logger.ts"
+import security from "./lib/security.ts"
+import settings from "./lib/settings.ts"
 const { ApolloServer } = apolloServerExpress
 const app = express()
 

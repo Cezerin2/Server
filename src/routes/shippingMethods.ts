@@ -1,5 +1,5 @@
-import security from "../lib/security"
-import ShippingMethodsService from "../services/orders/shippingMethods"
+import security from "../lib/security.ts"
+import ShippingMethodsService from "../services/orders/shippingMethods.ts"
 
 class ShippingMethodsRoute {
   constructor(router) {

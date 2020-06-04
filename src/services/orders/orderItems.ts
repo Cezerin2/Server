@@ -1,9 +1,10 @@
-import { ObjectID } from "mongodb"
-import { db } from "../../lib/mongo"
-import parse from "../../lib/parse"
-import ProductsService from "../products/products"
-import ProductStockService from "../products/stock"
-import OrdersService from "./orders"
+import { mongodb } from "../../deps.ts"
+import { db } from "../../lib/mongo.ts"
+import parse from "../../lib/parse.ts"
+import ProductsService from "../products/products.ts"
+import ProductStockService from "../products/stock.ts"
+import OrdersService from "./orders.ts"
+const { ObjectID } = mongodb
 
 class OrderItemsService {
   async addItem(order_id: string | number | ObjectID, data: any) {

@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken"
-import serverConfigs from "../config"
+import serverConfigs from "../config.ts"
+import { jwt } from "../deps.ts"
 
 const cert = serverConfigs.jwtSecretKey
 class AuthHeader {

@@ -1,6 +1,5 @@
-import crypto from "crypto"
-import fetch from "node-fetch"
-import WebhooksService from "../services/webhooks"
+import { crypto, fetch } from "../deps.ts"
+import WebhooksService from "../services/webhooks.ts"
 
 const sign = ({ data, secret }) => {
   if (secret && secret.length > 0) {

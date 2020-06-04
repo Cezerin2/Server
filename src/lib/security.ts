@@ -1,7 +1,6 @@
-import expressJwt from "express-jwt"
-import jwt from "jsonwebtoken"
-import SecurityTokensService from "../services/security/tokens"
-import settings from "./settings"
+import { expressJwt, jwt } from "../deps.ts"
+import SecurityTokensService from "../services/security/tokens.ts"
+import settings from "./settings.ts"
 
 const DEVELOPER_MODE = settings.developerMode === true
 const SET_TOKEN_AS_REVOKEN_ON_EXCEPTION = true

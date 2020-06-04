@@ -1,6 +1,6 @@
-import { lruCache, mongodb } from "../deps"
-import { db } from "../lib/mongo"
-import parse from "../lib/parse"
+import { lruCache, mongodb } from "../deps.ts"
+import { db } from "../lib/mongo.ts"
+import parse from "../lib/parse.ts"
 
 const { ObjectID } = mongodb
 

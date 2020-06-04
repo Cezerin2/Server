@@ -1,6 +1,7 @@
-import stripePackage from "stripe"
-import OrdersService from "../services/orders/orders"
-import OrdertTansactionsService from "../services/orders/orderTransactions"
+import { stripe } from "../deps.ts"
+import OrdersService from "../services/orders/orders.ts"
+import OrdertTansactionsService from "../services/orders/orderTransactions.ts"
+const stripePackage = stripe
 
 const getPaymentFormSettings = options => {
   const { gatewaySettings, order, amount, currency } = options

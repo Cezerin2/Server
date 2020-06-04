@@ -1,6 +1,6 @@
-import security from "../lib/security"
-import settings from "../lib/settings"
-import AssetsService from "../services/assets/assets"
+import security from "../lib/security.ts"
+import settings from "../lib/settings.ts"
+import AssetsService from "../services/assets/assets.ts"
 
 const filesPath = settings.assetServer.filesUploadPath
 

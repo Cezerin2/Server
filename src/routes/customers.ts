@@ -1,5 +1,5 @@
-import security from "../lib/security"
-import CustomersService from "../services/customers/customers"
+import security from "../lib/security.ts"
+import CustomersService from "../services/customers/customers.ts"
 
 class CustomersRoute {
   constructor(router) {

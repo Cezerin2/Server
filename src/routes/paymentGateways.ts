@@ -1,5 +1,5 @@
-import security from "../lib/security"
-import PaymentGatewaysService from "../services/settings/paymentGateways"
+import security from "../lib/security.ts"
+import PaymentGatewaysService from "../services/settings/paymentGateways.ts"
 
 class PaymentGatewaysRoute {
   constructor(router) {

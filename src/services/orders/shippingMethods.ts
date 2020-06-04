@@ -1,9 +1,10 @@
-import { ObjectID } from "mongodb"
-import { db } from "../../lib/mongo"
-import parse from "../../lib/parse"
-import OrdersService from "./orders"
-import PaymentMethodsService from "./paymentMethods"
-import ShippingMethodsLightService from "./shippingMethodsLight"
+import { mongodb } from "../../deps.ts"
+import { db } from "../../lib/mongo.ts"
+import parse from "../../lib/parse.ts"
+import OrdersService from "./orders.ts"
+import PaymentMethodsService from "./paymentMethods.ts"
+import ShippingMethodsLightService from "./shippingMethodsLight.ts"
+const { ObjectID } = mongodb
 
 class ShippingMethodsService {
   getFilter(params = {}) {

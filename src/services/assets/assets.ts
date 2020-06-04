@@ -1,7 +1,7 @@
-import settings from "../../lib/settings"
-import LocalService from "./local"
-import S3Service from "./s3"
-import MinioService from "./minio"
+import settings from "../../lib/settings.ts"
+import LocalService from "./local.ts"
+import MinioService from "./minio.ts"
+import S3Service from "./s3.ts"
 
 let service
 

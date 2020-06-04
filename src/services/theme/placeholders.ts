@@ -1,5 +1,5 @@
-import { db } from "../../lib/mongo"
-import parse from "../../lib/parse"
+import { db } from "../../lib/mongo.ts"
+import parse from "../../lib/parse.ts"
 
 class ThemePlaceholdersService {
   getPlaceholders() {

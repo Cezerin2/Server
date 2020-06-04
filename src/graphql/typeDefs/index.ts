@@ -1,4 +1,5 @@
-import { gql } from "apollo-server-express"
+import { apolloServerExpress } from "../../deps.ts"
+const { gql } = apolloServerExpress
 
 const typeDefs = gql`
   type Query {

@@ -1,5 +1,5 @@
-import security from "../lib/security"
-import SecurityTokensService from "../services/security/tokens"
+import security from "../lib/security.ts"
+import SecurityTokensService from "../services/security/tokens.ts"
 
 class SecurityTokensRoute {
   constructor(router) {

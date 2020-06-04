@@ -1,5 +1,5 @@
-import security from "../lib/security"
-import PagesService from "../services/pages/pages"
+import security from "../lib/security.ts"
+import PagesService from "../services/pages/pages.ts"
 
 class PagesRoute {
   constructor(router) {

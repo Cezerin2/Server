@@ -1,5 +1,5 @@
-import security from "../lib/security"
-import PaymentMethodsService from "../services/orders/paymentMethods"
+import security from "../lib/security.ts"
+import PaymentMethodsService from "../services/orders/paymentMethods.ts"
 
 class PaymentMethodsRoute {
   constructor(router) {

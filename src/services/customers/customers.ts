@@ -1,9 +1,10 @@
-import { ObjectID } from "mongodb"
-import { db } from "../../lib/mongo"
-import parse from "../../lib/parse"
-import security from "../../lib/security"
-import webhooks from "../../lib/webhooks"
-import CustomerGroupsService from "./customerGroups"
+import { mongodb } from "../../deps.ts"
+import { db } from "../../lib/mongo.ts"
+import parse from "../../lib/parse.ts"
+import security from "../../lib/security.ts"
+import webhooks from "../../lib/webhooks.ts"
+import CustomerGroupsService from "./customerGroups.ts"
+const { ObjectID } = mongodb
 
 class CustomersService {
   getFilter(params = {}) {

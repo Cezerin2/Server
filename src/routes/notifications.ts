@@ -1,4 +1,4 @@
-import PaymentGateways from "../paymentGateways"
+import PaymentGateways from "../paymentGateways.ts"
 
 class NotificationsRoute {
   constructor(router) {

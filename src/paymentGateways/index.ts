@@ -1,9 +1,9 @@
-import OrdersService from "../services/orders/orders"
-import PaymentGatewaysService from "../services/settings/paymentGateways"
-import SettingsService from "../services/settings/settings"
-import LiqPay from "./LiqPay"
-import PayPalCheckout from "./PayPalCheckout"
-import StripeElements from "./StripeElements"
+import OrdersService from "../services/orders/orders.ts"
+import PaymentGatewaysService from "../services/settings/paymentGateways.ts"
+import SettingsService from "../services/settings/settings.ts"
+import LiqPay from "./LiqPay.ts"
+import PayPalCheckout from "./PayPalCheckout.ts"
+import StripeElements from "./StripeElements.ts"
 
 const getOptions = orderId =>
   Promise.all([

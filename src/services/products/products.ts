@@ -1,12 +1,12 @@
-import { ObjectID } from "mongodb"
-import url from "url"
-import { db } from "../../lib/mongo"
-import parse from "../../lib/parse"
-import settings from "../../lib/settings"
-import utils from "../../lib/utils"
-import AssertService from "../assets/assets"
-import SettingsService from "../settings/settings"
-import CategoriesService from "./productCategories"
+import { mongodb } from "../../deps.ts"
+import { db } from "../../lib/mongo.ts"
+import parse from "../../lib/parse.ts"
+import settings from "../../lib/settings.ts"
+import utils from "../../lib/utils.ts"
+import AssertService from "../assets/assets.ts"
+import SettingsService from "../settings/settings.ts"
+import CategoriesService from "./productCategories.ts"
+const { ObjectID } = mongodb
 
 class ProductsService {
   async getProducts(

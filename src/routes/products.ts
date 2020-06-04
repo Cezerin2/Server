@@ -1,9 +1,9 @@
-import security from "../lib/security"
-import ProductImagesService from "../services/products/images"
-import ProductOptionsService from "../services/products/options"
-import ProductOptionValuesService from "../services/products/optionValues"
-import ProductsService from "../services/products/products"
-import ProductVariantsService from "../services/products/variants"
+import security from "../lib/security.ts"
+import ProductImagesService from "../services/products/images.ts"
+import ProductOptionsService from "../services/products/options.ts"
+import ProductOptionValuesService from "../services/products/optionValues.ts"
+import ProductsService from "../services/products/products.ts"
+import ProductVariantsService from "../services/products/variants.ts"
 
 class ProductsRoute {
   constructor(router) {

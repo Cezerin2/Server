@@ -1,5 +1,5 @@
-import security from "../lib/security"
-import OrderStatusesService from "../services/orders/orderStatuses"
+import security from "../lib/security.ts"
+import OrderStatusesService from "../services/orders/orderStatuses.ts"
 
 class OrderStatusesRoute {
   constructor(router) {

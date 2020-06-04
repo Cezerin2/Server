@@ -1,6 +1,6 @@
-import { childProcess, formidable, path, winston } from "../../deps"
-import dashboardWebSocket from "../../lib/dashboardWebSocket"
-import settings from "../../lib/settings"
+import { childProcess, formidable, path, winston } from "../../deps.ts"
+import dashboardWebSocket from "../../lib/dashboardWebSocket.ts"
+import settings from "../../lib/settings.ts"
 const { exec } = childProcess
 
 class ThemesService {

@@ -5,14 +5,14 @@ import {
   handlebars,
   jsonwebtoken,
   mongodb,
-} from "./deps"
-import AuthHeader from "./lib/auth-header"
-import mailer from "./lib/mailer"
-import { db } from "./lib/mongo"
-import serverSettings from "./lib/settings"
-import OrderItemsService from "./services/orders/orderItems"
-import EmailTemplatesService from "./services/settings/emailTemplates"
-import SettingsService from "./services/settings/settings"
+} from "./deps.ts"
+import AuthHeader from "./lib/auth-header.ts"
+import mailer from "./lib/mailer.ts"
+import { db } from "./lib/mongo.ts"
+import serverSettings from "./lib/settings.ts"
+import OrderItemsService from "./services/orders/orderItems.ts"
+import EmailTemplatesService from "./services/settings/emailTemplates.ts"
+import SettingsService from "./services/settings/settings.ts"
 const { ObjectID } = mongodb
 const jwt = jsonwebtoken
 const CezerinClient = cezerin2Client

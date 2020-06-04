@@ -1,6 +1,6 @@
-import { awsSdk, formidable, fs } from "../../deps"
-import settings from "../../lib/settings"
-import utils from "../../lib/utils"
+import { awsSdk, formidable, fs } from "../../deps.ts"
+import settings from "../../lib/settings.ts"
+import utils from "../../lib/utils.ts"
 const AWS = awsSdk
 
 const BUCKET = settings.assetServer.bucket

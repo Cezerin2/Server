@@ -1,6 +1,7 @@
-import { ObjectID } from "mongodb"
-import { db } from "../../lib/mongo"
-import parse from "../../lib/parse"
+import { mongodb } from "../../deps.ts"
+import { db } from "../../lib/mongo.ts"
+import parse from "../../lib/parse.ts"
+const { ObjectID } = mongodb
 
 class ProductVariantsService {
   getVariants(productId) {

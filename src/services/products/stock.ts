@@ -1,7 +1,8 @@
-import { ObjectID } from "mongodb"
-import { db } from "../../lib/mongo"
-import ProductsService from "./products"
-import ProductVariantsService from "./variants"
+import { mongodb } from "../../deps.ts"
+import { db } from "../../lib/mongo.ts"
+import ProductsService from "./products.ts"
+import ProductVariantsService from "./variants.ts"
+const { ObjectID } = mongodb
 
 class ProductStockService {
   async handleOrderCheckout(orderId) {

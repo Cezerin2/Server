@@ -1,6 +1,6 @@
-import { formidable, fs, minio, path } from "../../deps"
-import settings from "../../lib/settings"
-import utils from "../../lib/utils"
+import { formidable, fs, minio, path } from "../../deps.ts"
+import settings from "../../lib/settings.ts"
+import utils from "../../lib/utils.ts"
 const { pathModule } = path
 
 const Minio = minio

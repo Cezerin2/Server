@@ -1,10 +1,10 @@
-import security from "../lib/security"
-import PaymentGateways from "../paymentGateways"
-import OrderAddressService from "../services/orders/orderAddress"
-import OrdertDiscountsService from "../services/orders/orderDiscounts"
-import OrderItemsService from "../services/orders/orderItems"
-import OrdersService from "../services/orders/orders"
-import OrdertTansactionsService from "../services/orders/orderTransactions"
+import security from "../lib/security.ts"
+import PaymentGateways from "../paymentGateways.ts"
+import OrderAddressService from "../services/orders/orderAddress.ts"
+import OrdertDiscountsService from "../services/orders/orderDiscounts.ts"
+import OrderItemsService from "../services/orders/orderItems.ts"
+import OrdersService from "../services/orders/orders.ts"
+import OrdertTansactionsService from "../services/orders/orderTransactions.ts"
 
 class OrdersRoute {
   constructor(router) {

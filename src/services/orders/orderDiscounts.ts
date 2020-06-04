@@ -1,7 +1,8 @@
-import { ObjectID } from "mongodb"
-import { db } from "../../lib/mongo"
-import parse from "../../lib/parse"
-import OrdersService from "./orders"
+import { mongodb } from "../../deps.ts"
+import { db } from "../../lib/mongo.ts"
+import parse from "../../lib/parse.ts"
+import OrdersService from "./orders.ts"
+const { ObjectID } = mongodb
 
 class OrdertDiscountsService {
   addDiscount(order_id, data) {

@@ -1,8 +1,9 @@
-import { ObjectID } from "mongodb"
-import { db } from "../../lib/mongo"
-import parse from "../../lib/parse"
-import OrdersService from "./orders"
-import PaymentMethodsLightService from "./paymentMethodsLight"
+import { mongodb } from "../../deps.ts"
+import { db } from "../../lib/mongo.ts"
+import parse from "../../lib/parse.ts"
+import OrdersService from "./orders.ts"
+import PaymentMethodsLightService from "./paymentMethodsLight.ts"
+const { ObjectID } = mongodb
 
 class PaymentMethodsService {
   getFilter(params = {}) {
@@ -223,7 +224,7 @@ class PaymentMethodsService {
     if (data.gateway !== undefined) {
       method.gateway = parse.getString(data.gateway)
     }
-    
+
     if (Object.keys(method).length === 0) {
       return new Error("Required fields are missing")
     }
