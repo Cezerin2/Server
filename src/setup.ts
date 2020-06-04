@@ -1,5 +1,4 @@
-import url from "url"
-import { mongodb, winston } from "./deps"
+import { mongodb, url, winston } from "./deps"
 import settings from "./lib/settings"
 const { MongoClient } = mongodb
 

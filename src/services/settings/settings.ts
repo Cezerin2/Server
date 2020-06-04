@@ -1,4 +1,4 @@
-import url from "url"
+import { url } from "../../deps"
 import { db } from "../../lib/mongo"
 import parse from "../../lib/parse"
 import settings from "../../lib/settings"

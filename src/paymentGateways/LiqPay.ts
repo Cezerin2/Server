@@ -1,4 +1,4 @@
-import crypto from "crypto"
+import { crypto } from "../deps"
 import OrdersService from "../services/orders/orders"
 import OrdertTansactionsService from "../services/orders/orderTransactions"
 

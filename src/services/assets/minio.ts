@@ -1,10 +1,9 @@
-import fs from "fs"
-import formidable from "formidable"
-import pathModule from "path"
-import utils from "../../lib/utils"
+import { formidable, fs, minio, path } from "../../deps"
 import settings from "../../lib/settings"
+import utils from "../../lib/utils"
+const { pathModule } = path
 
-const Minio = require("minio")
+const Minio = minio
 
 const minio = new Minio.Client({
   endPoint: settings.assetServer.minioHost,

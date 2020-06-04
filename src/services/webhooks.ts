@@ -1,7 +1,8 @@
-import lruCache from "lru-cache"
-import { ObjectID } from "mongodb"
+import { lruCache, mongodb } from "../deps"
 import { db } from "../lib/mongo"
 import parse from "../lib/parse"
+
+const { ObjectID } = mongodb
 
 const cache = new lruCache({
   max: 10000,

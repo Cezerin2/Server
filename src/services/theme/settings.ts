@@ -1,6 +1,4 @@
-import fs from "fs"
-import lruCache from "lru-cache"
-import path from "path"
+import { fs, lruCache, path } from "../../deps"
 import serverSettings from "../../lib/settings"
 import utils from "../../lib/utils"
 

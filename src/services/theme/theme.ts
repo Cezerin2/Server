@@ -1,9 +1,7 @@
-import { exec } from "child_process"
-import formidable from "formidable"
-import path from "path"
-import winston from "winston"
+import { childProcess, formidable, path, winston } from "../../deps"
 import dashboardWebSocket from "../../lib/dashboardWebSocket"
 import settings from "../../lib/settings"
+const { exec } = childProcess
 
 class ThemesService {
   exportTheme(req, res) {
