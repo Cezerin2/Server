@@ -31,7 +31,7 @@
     "prettier": "prettier --write \"src/**/*.js\" \"theme/**/*.js\"",
     "precommit": "lint-staged",
     "nodeStart": "node -r esm build/index.js",
-    "start": "deno run src/index.ts --allow-all"
+    "start": "deno run --unstable --allow-all src/index.ts"
   },
   "lint-staged": {
     "*.js": [

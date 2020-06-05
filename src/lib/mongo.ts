@@ -1,6 +1,7 @@
-import { mongodb, url, winston } from "../deps"
+import { mongodb, url, winston } from "../deps.ts"
 import settings from "./settings.ts"
 const { MongoClient } = mongodb
+
 const mongodbConnection = settings.mongodbServerUrl
 const mongoPathName = url.parse(mongodbConnection).pathname
 const dbName = mongoPathName.substring(mongoPathName.lastIndexOf("/") + 1)

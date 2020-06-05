@@ -1,6 +1,6 @@
-import url from "url"
-import WebSocket from "ws"
-import security from "./security"
+import { url, ws } from "../deps.ts"
+import security from "./security.ts"
+const { WebSocket } = ws
 
 let wss = null
 

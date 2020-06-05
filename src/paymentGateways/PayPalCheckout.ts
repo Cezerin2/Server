@@ -1,6 +1,6 @@
 import { https, qs } from "../deps.ts"
-import OrdersService from "../services/orders/orders"
-import OrdertTansactionsService from "../services/orders/orderTransactions"
+import OrdersService from "../services/orders/orders.ts"
+import OrdertTansactionsService from "../services/orders/orderTransactions.ts"
 
 const SANDBOX_URL = "www.sandbox.paypal.com"
 const REGULAR_URL = "www.paypal.com"

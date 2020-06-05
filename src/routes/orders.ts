@@ -1,5 +1,5 @@
 import security from "../lib/security.ts"
-import PaymentGateways from "../paymentGateways.ts"
+import PaymentGateways from "../paymentGateways/index.ts"
 import OrderAddressService from "../services/orders/orderAddress.ts"
 import OrdertDiscountsService from "../services/orders/orderDiscounts.ts"
 import OrderItemsService from "../services/orders/orderItems.ts"
