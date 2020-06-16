@@ -6,6 +6,34 @@ import AssetService from "../assets/assets"
 
 const ThemeAssetsPath = `${settings.assetServer.themeImageUploadPath}`
 
+interface Settings {
+  store_name?: any,
+  language?: any,
+  currency_code?: any,
+  domain?: any,
+  currency_symbol?: any,
+  currency_format?: any,
+  thousand_separator?: any,
+  decimal_separator?: any,
+  decimal_number?: any,
+  tax_rate?: any,
+  tax_included?: any,
+  timezone?: any,
+  date_format?: any,
+  time_format?: any,
+  default_shipping_country?: any,
+  default_shipping_state?: any,
+  default_shipping_city?: any,
+  default_product_sorting?: any,
+  product_fields?: any,
+  products_limit?: any,
+  weight_unit?: any,
+  length_unit?: any,
+  logo_file?: any,
+  hide_billing_address?: any,
+  order_confirmation_copy_to?: any,
+}
+
 class SettingsService {
   constructor() {
     this.defaultSettings = {
@@ -77,33 +105,7 @@ class SettingsService {
       return new Error("Required fields are missing")
     }
 
-    const settings = {
-      store_name: {},
-      language: {},
-      currency_code: {},
-      domain: {},
-      currency_symbol: {},
-      currency_format: {},
-      thousand_separator: {},
-      decimal_separator: {},
-      decimal_number: {},
-      tax_rate: {},
-      tax_included: {},
-      timezone: {},
-      date_format: {},
-      time_format: {},
-      default_shipping_country: {},
-      default_shipping_state: {},
-      default_shipping_city: {},
-      default_product_sorting: {},
-      product_fields: {},
-      products_limit: {},
-      weight_unit: {},
-      length_unit: {},
-      logo_file: {},
-      hide_billing_address: {},
-      order_confirmation_copy_to: {},
-    }
+    const settings: Settings = {}
 
     if (data.store_name) {
       settings.store_name = parse.getString(data.store_name)
