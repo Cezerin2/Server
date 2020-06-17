@@ -15,6 +15,63 @@ const minio = new Minio.Client({
 })
 
 /*
+ * Creates minio buckets if they not exists
+ */
+function bucketsCreator(bucketName) {
+  let policy = JSON.stringify({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": {"AWS": ["*"]},
+        "Action": ["s3:GetBucketLocation", "s3:ListBucket"],
+        "Resource": [`arn:aws:s3:::${bucketName}`]
+      },
+      {
+        "Effect": "Allow",
+        "Principal": {"AWS": ["*"]},
+        "Action": ["s3:GetObject"],
+        "Resource": [`arn:aws:s3:::${bucketName}/*`]
+      }
+    ]
+  });
+
+  return new Promise(resolve => minio.bucketExists(bucketName, function (err, exists) {
+    if (err) {
+      resolve();
+      return console.log(err)
+    }
+
+    if (!exists) {
+      minio.makeBucket(bucketName, 'us-east-1', function (err) {
+        if (err) {
+          resolve();
+          return console.log('Error creating bucket.', err)
+        }
+
+        minio.setBucketPolicy(bucketName, policy, function (err) {
+          if (err) {
+            resolve();
+            throw err;
+          }
+          resolve();
+        })
+      })
+    }
+
+    resolve();
+  }))
+}
+
+/*
+ * Create buckets
+ */
+bucketsCreator(separateBucket(settings.assetServer.categoriesUploadPath)[0])
+  .then(() => bucketsCreator(separateBucket(settings.assetServer.productsUploadPath)[0]))
+  .then(() => bucketsCreator(separateBucket(settings.assetServer.themeImageUploadPath)[0]))
+  .then(() => bucketsCreator(separateBucket(settings.assetServer.filesUploadPath)[0]));
+
+/*
  * Minio has url like http://minio/BUCKET/path/to/object.ext
  * Wе need separate bucket from file path
  */
