@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "outDir": "build",
+    "sourceMap": true,
+    "strict": false,
+    "target": "es2017",
+    "esModuleInterop": true,
+    "noEmitOnError": false,
+    "removeComments": true
+    // // Older
+    //  "lib": ["dom", "dom.iterable", "esnext"],
+    // "allowJs": true,
+    //   "skipLibCheck": true,
+    // "esModuleInterop": true,
+    //   "allowSyntheticDefaultImports": true,\
+    //  "noImplicitReturns": false,
+    //  "noUnusedLocals": false,\
+    //  "sourceMap": true,
+    //  "strict": false,
+    //  "forceConsistentCasingInFileNames": false,\
+    //  "moduleResolution": "node",
+    //  "resolveJsonModule": true,
+    //   "isolatedModules": true,
+    //   "noEmit": true,
+    // "noEmitOnError": false,
+    //  "noImplicitAny": false,
+    //  "strictNullChecks": false,\
+    //  "noUnusedParameters": false,
+    //  "downlevelIteration": true
+  },
+  "compileOnSave": true,
+  "include": ["src"]
+}
