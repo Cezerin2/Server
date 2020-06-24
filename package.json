@@ -75,7 +75,7 @@
     "slug": "^3.3.0",
     "stripe": "^8.64.0",
     "ua-parser-js": "^0.7.21",
-    "winston": "^3.2.1",
+    "winston": "^3.3.3",
     "ws": "^7.2.3"
   },
   "devDependencies": {
