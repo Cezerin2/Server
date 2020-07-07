@@ -84,7 +84,7 @@
     "@types/express-jwt": "^0.0.42",
     "@types/formidable": "^1.0.31",
     "@types/fs-extra": "^9.0.1",
-    "@types/jest": "^26.0.0",
+    "@types/jest": "^26.0.4",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/lru-cache": "^5.1.0",
     "@types/mongodb": "^3.5.18",
