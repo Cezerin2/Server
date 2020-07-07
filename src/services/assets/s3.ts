@@ -70,13 +70,7 @@ class S3Service {
     return new Promise((resolve, reject) => {
       const params: any = {
         Bucket: BUCKET,
-        Delete: {
-          Objects: [
-            {
-              Key: `${path}/${fileName}`,
-            },
-          ],
-        },
+        Key: `${path}/${fileName}`,
       }
 
       s3.deleteObject(params, (err, data) => {
