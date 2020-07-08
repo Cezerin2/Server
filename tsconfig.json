@@ -12,7 +12,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "removeComments": true
+    "removeComments": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false
   },
   "include": ["src"]
 }
